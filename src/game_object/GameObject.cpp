@@ -1,5 +1,5 @@
 #include "game_object/GameObject.h"
- GameObject::GameObject()
+ GameObject::GameObject(InputManager* m_input, Time* m_time)
     :vertices{
     // positions          // colors           // texture coords
      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
@@ -10,15 +10,19 @@
     indices{    
         0, 1, 3,   // first triangle
         1, 2, 3    // second triangle
-    }
+    },
+    m_input(m_input),
+    m_time(m_time)
 {
 
 }
 
 //Updates the data and send it to GPU
- void GameObject::Update(){
+ void GameObject::UpdateAndBuffer(){
+        ///Updaets the vertex data
+        this->Update();
 
-        //Updaets the vertex data
+        //Updaets saves data on buffers
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,this->texture);
         this->shader->UseShader();
@@ -49,15 +53,12 @@
     glEnableVertexAttribArray(2);  
     //Unbids VAO ----------------------------------------------------------------------------
     glBindVertexArray(0);
-    this->shader = new Shader();
-    this->shader->LoadShader("shaders/vertex_shaders/texture_vertex.vert",GL_VERTEX_SHADER);
-    this->shader->LoadShader("shaders/fragment_shaders/texture_fragment.frag",GL_FRAGMENT_SHADER);
-    this->shader->LinkShaders();
-    this->LoadTexture();
 
+    this->CreateShaderObject("shaders/vertex_shaders/texture_vertex.vert","shaders/fragment_shaders/texture_fragment.frag");
+    this->CreateTexture("container.jpg");
  }
 
- void GameObject::LoadTexture(){
+ void GameObject::CreateTexture(std::string texture_path){
 
     //Creates and binds the Texture object
     glGenTextures(1, &this->texture);
@@ -71,7 +72,7 @@
     //stbi_set_flip_vertically_on_load(true);  
     int width, height, nrChannels;
     //Loads image
-    unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0); 
+    unsigned char *data = stbi_load(texture_path.data(), &width, &height, &nrChannels, 0); 
     if(data){
     //Creats the texture image on the current bound texture object
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
@@ -84,6 +85,38 @@
     }
     stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D,0);
+    //Set the uninoform of texture of the shader to be 0
     this->shader->UseShader();
     this->shader->SetUniform1i("texture1",0);
  }
+
+ void GameObject::CreateShaderObject(std::string vertex_shader, std::string fragment_shader){
+    this->shader = new Shader();
+    this->shader->LoadShader(vertex_shader,GL_VERTEX_SHADER);
+    this->shader->LoadShader(fragment_shader,GL_FRAGMENT_SHADER);
+    this->shader->LinkShaders();
+ }
+
+
+void GameObject::Update(){
+    if(this->m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS)){
+        this->vertices[0] = this->vertices[0] + 1.0f*m_time->delta_time;
+    }
+    else if(this->m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS)){
+        this->vertices[0] = this->vertices[0] - 1.0f*m_time->delta_time;
+    }if(this->m_input->ProcessInput(GLFW_KEY_UP,GLFW_PRESS)){
+        this->vertices[1] = this->vertices[1] + 1.0f*m_time->delta_time;
+    }
+    else if(this->m_input->ProcessInput(GLFW_KEY_DOWN,GLFW_PRESS)){
+        this->vertices[1] = this->vertices[1] - 1.0f*m_time->delta_time;
+    }
+    else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
+        Debugging::SetPoly2Fill();
+    }else if(this->m_input->ProcessInput(GLFW_KEY_2,GLFW_PRESS)){
+        Debugging::SetPoly2Line();
+    }
+    else if(this->m_input->ProcessInput(GLFW_KEY_3,GLFW_PRESS)){
+        Debugging::SetPoly2Points();
+    }
+
+}
