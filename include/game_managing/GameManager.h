@@ -1,9 +1,12 @@
+#pragma once
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<string>
 #include"game_object/GameObject.h"
 #include"game_managing/InputManager.h"
+#include "game_tools/Debugging.h"
+#include "game_managing/Time.h"
 
 class GameManager{
     private:
@@ -31,6 +34,9 @@ class GameManager{
 
         //Game object to render (Will have multiple in the future)
         GameObject* go;
+
+        //Global time manager
+        Time* main_time;
 
         //------------------------------------- Methods ----------------------------------------------------------------
         

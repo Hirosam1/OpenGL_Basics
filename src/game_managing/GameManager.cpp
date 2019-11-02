@@ -1,13 +1,7 @@
 #include "game_managing/GameManager.h"
 
-GameManager::GameManager(std::string game_name,int width, int height){
-    this->game_name = game_name;
-    this->width = width;
-    this->height = height;
-    this->current_width = width;
-    this->current_height = height;
-    this->ready_to_start = false;
-    //this->go = new GameObject();
+GameManager::GameManager(std::string game_name,int width, int height)
+:game_name(game_name),width(width),height(height),current_width(width),current_height(height),ready_to_start(false){
 }
 
 void GameManager::EngineInit(){
@@ -33,14 +27,16 @@ void GameManager::EngineInit(){
     glfwSetWindowUserPointer(main_windown,this);
     glfwSetErrorCallback(this->ErrorCallback);
     glfwSetFramebufferSizeCallback(this->main_windown,this->FrameBufferSizeCallback);
-    this->main_input = new InputManager();
-    
+    this->main_input = new InputManager(this->main_windown);
+    this->main_time = new Time();
 
 
-    this->go = new GameObject();
+    this->go = new GameObject(this->main_input,this->main_time);
     this->go->SetUpObject();
 
     this->ready_to_start = true;
+
+    Debugging::SetPointsSize(4);
 
 }
 
@@ -53,15 +49,17 @@ void GameManager::EngnieStart(){
     glPointSize(4);
     std::cout<<"Ready to start!\n";
     while(!glfwWindowShouldClose(this->main_windown)){
-        //Proccess the inputs
-        this->main_input->ProcessInput(this->main_windown);
+        
+        if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
+            glfwSetWindowShouldClose(this->main_windown,true);
+        }
 
         //Clear the screen
         glClearColor(0.58f,0.32f,0.69f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
+        this->main_time->UpdateDelta();
         //Render Objects
-        this->go->Update();
+        this->go->UpdateAndBuffer();
 
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
 
@@ -72,7 +70,7 @@ void GameManager::EngnieStart(){
         glfwSwapBuffers(this->main_windown);
 
         glfwPollEvents();
-        glBindVertexArray(0);
+        //glBindVertexArray(0);
 
 
     }
@@ -103,7 +101,6 @@ GLFWwindow* GameManager::CreateContextWindow(int width, int height,std::string w
         std::cout<<"Error at creating windown!\n";
         glfwTerminate();
         exit(-1);
-        return NULL;
     }
 
     return window;

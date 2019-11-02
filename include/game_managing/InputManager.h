@@ -1,3 +1,4 @@
+#pragma once
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -5,6 +6,8 @@
 
 class InputManager{
     public:
-        InputManager();
-        static void ProcessInput(GLFWwindow* window);
+        InputManager(GLFWwindow*& window);
+        bool ProcessInput(int key, int action) const;
+    private:
+        GLFWwindow* window;
 };
