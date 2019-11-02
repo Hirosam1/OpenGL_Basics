@@ -12,18 +12,28 @@
 
 class GameObject{
     public:
-        //Vertices of a triangle
-        float vertices[32];
-        unsigned int indices[6];
-        float texCoords[6];
-
+        //Constructors
         GameObject(InputManager* m_imput, Time* m_time);
+        GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int indices_count,unsigned int* indices);
+
+        //Public Updates
         void UpdateAndBuffer();
+
+        //Shaders Management
+        //Creates the shader object, ready to use
         void CreateShaderObject(std::string vertex_shader,std::string fragment_shader);
+
+        //Sets up the object to be ready to update/render
         void SetUpObject();
         //Create the texture object
         void CreateTexture(std::string texture_path);
     private:
+
+        //Vertices of a triangle along with their indices and numberof points and indices
+        float* vertex;
+        unsigned int* indices;
+        unsigned int vertex_count;
+        unsigned int indices_count;
         //Window where the object will get inputs
         InputManager* m_input;
         //Vertex Buffer Object

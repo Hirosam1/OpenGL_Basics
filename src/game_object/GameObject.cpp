@@ -1,19 +1,26 @@
 #include "game_object/GameObject.h"
- GameObject::GameObject(InputManager* m_input, Time* m_time)
-    :vertices{
-    // positions          // colors           // texture coords
+ GameObject::GameObject(InputManager* m_input, Time* m_time): 
+    m_input(m_input),
+    m_time(m_time){
+    this->vertex = new float[32]{
+            // positions          // colors           // texture coords
      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
      0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-        },
-    indices{    
+    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+    };
+
+    this->indices = new unsigned int[6]{
         0, 1, 3,   // first triangle
         1, 2, 3    // second triangle
-    },
-    m_input(m_input),
-    m_time(m_time)
-{
+    };
+    std::cout<<"Why u no work!!!\n";
+    this->vertex_count = 32;
+    this->indices_count = 6;
+}
+
+GameObject::GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int indices_count,unsigned int* indices):
+m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(vertex_count),indices_count(indices_count){
 
 }
 
@@ -21,19 +28,22 @@
  void GameObject::UpdateAndBuffer(){
         ///Updaets the vertex data
         this->Update();
-
+        
         //Updaets saves data on buffers
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,this->texture);
+
         this->shader->UseShader();
         //Puts data into GPU and uses VAO
         glBindVertexArray(this->VAO);
-        glBufferData(GL_ARRAY_BUFFER,sizeof(this->vertices),this->vertices,GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(this->indices),this->indices,GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,sizeof(float)*this->vertex_count,this->vertex,GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*this->indices_count,this->indices,GL_STATIC_DRAW);
+             
 
  }
 
  void GameObject::SetUpObject(){
+     
     //Creates VAO
     glGenVertexArrays(1,&this->VAO);
     //Creates and sets the Buffers
@@ -45,6 +55,7 @@
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,this->EBO);
 
     //Defines how openGL should intepret vertex buffer data using the binded VBO
+    
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,8*sizeof(float),(void*)(3*sizeof(float)));
@@ -53,7 +64,7 @@
     glEnableVertexAttribArray(2);  
     //Unbids VAO ----------------------------------------------------------------------------
     glBindVertexArray(0);
-
+    
     this->CreateShaderObject("shaders/vertex_shaders/texture_vertex.vert","shaders/fragment_shaders/texture_fragment.frag");
     this->CreateTexture("container.jpg");
  }
@@ -100,15 +111,15 @@
 
 void GameObject::Update(){
     if(this->m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS)){
-        this->vertices[0] = this->vertices[0] + 1.0f*m_time->delta_time;
+        this->vertex[0] = this->vertex[0] + 1.0f*m_time->delta_time;
     }
     else if(this->m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS)){
-        this->vertices[0] = this->vertices[0] - 1.0f*m_time->delta_time;
+        this->vertex[0] = this->vertex[0] - 1.0f*m_time->delta_time;
     }if(this->m_input->ProcessInput(GLFW_KEY_UP,GLFW_PRESS)){
-        this->vertices[1] = this->vertices[1] + 1.0f*m_time->delta_time;
+        this->vertex[1] = this->vertex[1] + 1.0f*m_time->delta_time;
     }
     else if(this->m_input->ProcessInput(GLFW_KEY_DOWN,GLFW_PRESS)){
-        this->vertices[1] = this->vertices[1] - 1.0f*m_time->delta_time;
+        this->vertex[1] = this->vertex[1] - 1.0f*m_time->delta_time;
     }
     else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
         Debugging::SetPoly2Fill();
