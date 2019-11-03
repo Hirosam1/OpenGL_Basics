@@ -14,7 +14,7 @@ class GameObject{
     public:
         //Constructors
         GameObject(InputManager* m_imput, Time* m_time);
-        GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int indices_count,unsigned int* indices);
+        GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count);
 
         //Public Updates
         void UpdateAndBuffer();
@@ -27,6 +27,8 @@ class GameObject{
         void SetUpObject();
         //Create the texture object
         void CreateTexture(std::string texture_path);
+
+        bool test = false;
     private:
 
         //Vertices of a triangle along with their indices and numberof points and indices

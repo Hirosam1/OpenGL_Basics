@@ -30,9 +30,22 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_windown);
     this->main_time = new Time();
 
+    float* vertices = new float[32]{
+    // positions          // colors           // texture coords
+     1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+     1.0f,  0.75f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+     0.75f, 0.75f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+     0.75f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
+    };
 
+    unsigned int* indices = new unsigned int[6]{
+        0, 1, 3,   // first triangle
+        1, 2, 3    // second triangle
+    };
     this->go = new GameObject(this->main_input,this->main_time);
     this->go->SetUpObject();
+    this->go2 = new GameObject(main_input,main_time,vertices,32,indices,6);
+    this->go2->SetUpObject();
 
     this->ready_to_start = true;
 
@@ -60,7 +73,8 @@ void GameManager::EngnieStart(){
         this->main_time->UpdateDelta();
         //Render Objects
         this->go->UpdateAndBuffer();
-
+        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+        this->go2->UpdateAndBuffer();
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
 
         glBindVertexArray(0);

@@ -33,6 +33,7 @@ class GameManager{
         std::string game_name;
 
         //Game object to render (Will have multiple in the future)
+        GameObject* go2;
         GameObject* go;
 
         //Global time manager
