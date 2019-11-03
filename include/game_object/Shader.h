@@ -4,6 +4,8 @@
 #include<string>
 #include <cstring>
 #include"game_tools/FileManagementTools.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader{
     public:
@@ -12,6 +14,7 @@ class Shader{
         int LinkShaders();
         void UseShader();
         void SetUniform1i(std::string uniform_name,int i);
+        void SetUniformMat4fv(std::string uniform_name,glm::mat4 m_mat4);
     protected:
         unsigned int shader_comp;
         unsigned int vertex_shader;

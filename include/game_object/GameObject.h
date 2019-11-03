@@ -9,6 +9,9 @@
 #include "game_managing/InputManager.h"
 #include "game_tools/Debugging.h"
 #include "game_managing/Time.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class GameObject{
     public:
@@ -30,7 +33,12 @@ class GameObject{
 
         bool test = false;
     private:
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 projection;
 
+        glm::mat4 trans;
+        float rot =0;
         //Vertices of a triangle along with their indices and numberof points and indices
         float* vertex;
         unsigned int* indices;

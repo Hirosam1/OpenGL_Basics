@@ -44,8 +44,8 @@ void GameManager::EngineInit(){
     };
     this->go = new GameObject(this->main_input,this->main_time);
     this->go->SetUpObject();
-    this->go2 = new GameObject(main_input,main_time,vertices,32,indices,6);
-    this->go2->SetUpObject();
+    //this->go2 = new GameObject(main_input,main_time,vertices,32,indices,6);
+    //this->go2->SetUpObject();
 
     this->ready_to_start = true;
 
@@ -74,8 +74,8 @@ void GameManager::EngnieStart(){
         //Render Objects
         this->go->UpdateAndBuffer();
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-        this->go2->UpdateAndBuffer();
-        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+        //this->go2->UpdateAndBuffer();
+        //glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
 
         glBindVertexArray(0);
 
