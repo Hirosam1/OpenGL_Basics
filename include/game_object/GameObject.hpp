@@ -6,13 +6,14 @@
 #include<string>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 #include"game_object/Shader.hpp"
 #include "game_tools/stb_image.h"
 #include "game_managing/InputManager.hpp"
 #include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
 #include "game_object/Window.hpp"
+#include "game_object/Texture.hpp"
 
 
 
@@ -32,8 +33,6 @@ class GameObject{
 
         //Sets up the object to be ready to update/render
         void SetUpObject();
-        //Create the texture object
-        void CreateTexture(std::string texture_path);
 
         bool test = false;
     private:
@@ -50,17 +49,21 @@ class GameObject{
         unsigned int* indices;
         unsigned int vertex_count;
         unsigned int indices_count;
-        //Window where the object will get inputs
-        InputManager* m_input;
+
         //Vertex Buffer Object
         unsigned int VBO;
         //Element Buffer Objects
         unsigned int EBO;
         //Vertex Array Object
         unsigned int VAO;
+
+        //Window where the object will get inputs
+        InputManager* m_input;
+        //Shader Object
         Shader* shader;
-        //Texture ID
-        unsigned int texture;
+        //Texture Object
+        Texture* m_texture;
+        //Time object
         Time* m_time;
     protected:
         Window* m_window;

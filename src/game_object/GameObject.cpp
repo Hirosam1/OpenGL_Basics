@@ -55,7 +55,9 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
     view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,3.0f,-5.0f));
     //The prjection matrix
     projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
-    //1024.0f/768.0f
+    
+
+
 
 }
 
@@ -68,7 +70,7 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
         glBindVertexArray(this->VAO);
         
         //Saves data on texture buffers
-        glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D,this->texture);
+        m_texture->UseTexture();
 
         //Pass position parameters to shader
         this->shader->SetUniformMat4fv("MVP",projection*view*model);
@@ -114,40 +116,11 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
     
 
     this->CreateShaderObject("shaders/vertex_shaders/MVP_vertex.vert","shaders/fragment_shaders/texture_fragment.frag");
-    this->CreateTexture("container.jpg");
+    this->m_texture = new Texture(this->shader,"container.jpg");
+
  }
 
- void GameObject::CreateTexture(std::string texture_path){
 
-    //Creates and binds the Texture object
-    glGenTextures(1, &this->texture);
-    glBindTexture(GL_TEXTURE_2D,this->texture);
-
-    //Sets the parameters for warapping and filtering
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
-    //stbi_set_flip_vertically_on_load(true);  
-    int width, height, nrChannels;
-    //Loads image
-    unsigned char *data = stbi_load(texture_path.data(), &width, &height, &nrChannels, 0); 
-    if(data){
-    //Creats the texture image on the current bound texture object
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
-    //Genetates mip maps automatacly
-    glGenerateMipmap(GL_TEXTURE_2D);
-    //Free loaded image
-    }else{
-        std::cout<<"Failed to load texture\n";
-        exit(-1);
-    }
-    stbi_image_free(data);
-    glBindTexture(GL_TEXTURE_2D,0);
-    //Set the uninoform of texture of the shader to be 0
-    this->shader->UseShader();
-    this->shader->SetUniform1i("texture1",0);
- }
 
  void GameObject::CreateShaderObject(std::string vertex_shader, std::string fragment_shader){
     this->shader = new Shader();
