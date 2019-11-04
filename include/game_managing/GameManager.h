@@ -7,6 +7,7 @@
 #include"game_managing/InputManager.h"
 #include "game_tools/Debugging.h"
 #include "game_managing/Time.h"
+#include "game_object/Shape.h"
 
 class GameManager{
     private:

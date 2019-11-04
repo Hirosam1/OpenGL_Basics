@@ -30,26 +30,19 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_windown);
     this->main_time = new Time();
 
-    float* vertices = new float[32]{
-    // positions          // colors           // texture coords
-     1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-     1.0f,  0.75f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-     0.75f, 0.75f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-     0.75f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
-    };
 
-    unsigned int* indices = new unsigned int[6]{
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
-    };
+    Shape *cube  = new Cube();
+
+
     this->go = new GameObject(this->main_input,this->main_time);
     this->go->SetUpObject();
-    //this->go2 = new GameObject(main_input,main_time,vertices,32,indices,6);
-    //this->go2->SetUpObject();
+    this->go2 = new GameObject(main_input,main_time,cube->vertex,cube->vertex_count,cube->indices,cube->indices_count, new float[3]{0.5,-0.8,-3});
+    this->go2->SetUpObject();
 
     this->ready_to_start = true;
 
-    Debugging::SetPointsSize(4);
+    Debugging::SetPointsSize(10);    
+    glEnable(GL_DEPTH_TEST);
 
 }
 
@@ -58,8 +51,6 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
-    glEnable(GL_PROGRAM_POINT_SIZE);
-    glPointSize(4);
     std::cout<<"Ready to start!\n";
     while(!glfwWindowShouldClose(this->main_windown)){
         
@@ -69,13 +60,11 @@ void GameManager::EngnieStart(){
 
         //Clear the screen
         glClearColor(0.58f,0.32f,0.69f,1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         this->main_time->UpdateDelta();
         //Render Objects
         this->go->UpdateAndBuffer();
-        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-        //this->go2->UpdateAndBuffer();
-        //glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+        this->go2->UpdateAndBuffer();
 
         glBindVertexArray(0);
 

@@ -18,6 +18,7 @@ class GameObject{
         //Constructors
         GameObject(InputManager* m_imput, Time* m_time);
         GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count);
+        GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count, float initial_pos[3]);
 
         //Public Updates
         void UpdateAndBuffer();
@@ -33,7 +34,7 @@ class GameObject{
 
         bool test = false;
     private:
-        glm::mat4 model;
+        glm::mat4 model; 
         glm::mat4 view;
         glm::mat4 projection;
 

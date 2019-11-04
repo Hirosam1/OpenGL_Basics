@@ -1,6 +1,6 @@
 #include "game_object/GameObject.h"
  GameObject::GameObject(InputManager* m_input, Time* m_time): 
-    m_input(m_input),m_time(m_time),trans(glm::mat4(1.0)){
+    m_input(m_input),m_time(m_time){
     this->vertex = new float[32]{
             // positions          // colors           // texture coords
      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
@@ -18,27 +18,45 @@
 
     //This is the world space matrix
     model = glm::mat4(1.0f);
-    model = glm::rotate(model,glm::radians(-40.0f),glm::vec3(1.0f,0.0f,0.0));
+    model = glm::rotate(model,glm::radians(-25.0f),glm::vec3(1.0f,0.0f,0.0));
     //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
     view = glm::mat4(1.0f);
-    view = glm::translate(view,glm::vec3(0.0f,0.0f,-3.0f));
+    view = glm::translate(view,glm::vec3(0.0f,0.0f,-5.0f));
     //The prjection matrix
     projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f),1024.0f/768.0f,0.1f,100.0f);
 
 }
 GameObject::GameObject(InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count):
-m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(vertex_count),indices_count(indices_count),trans(glm::mat4(1.0)){
+m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(vertex_count),indices_count(indices_count){
 
     //This is the world space matrix
     model = glm::mat4(1.0f);
-    model = glm::rotate(model,glm::radians(-55.0f),glm::vec3(1.0f,0.0f,0.0));
+    model = glm::rotate(model,glm::radians(-30.0f),glm::vec3(1.0f,0.0f,0.0));
     //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
-    view = glm::translate(view,glm::vec3(0.0f,0.0f,-3.0f));
+    view = glm::mat4(1.0f);
+    view = glm::translate(view,glm::vec3(0.0f,0.0f,-5.0f));
     //The prjection matrix
+    projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f),1024.0f/768.0f,0.1f,100.0f);
     
-    test = true;
+}
+
+
+GameObject::GameObject(InputManager* m_input, Time* m_time, 
+float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count, float initial_pos[3]):
+m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(vertex_count),indices_count(indices_count){
+
+    //This is the world space matrix
+    model = glm::mat4(1.0f);
+    model = glm::rotate(model,glm::radians(30.0f),glm::vec3(1.0f,0.0f,0.0));
+    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
+    //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
+    view = glm::mat4(1.0f);
+    view = glm::translate(view,glm::vec3(0.0f,0.0f,-5.0f));
+    //The prjection matrix
+    projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f),1024.0f/768.0f,0.1f,100.0f);
 
 }
 
@@ -46,9 +64,6 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
  void GameObject::UpdateAndBuffer(){
         ///Updaets the vertex data
         this->Update();
-        //Updates the data of the Vertex Buffer
-        //glBindBuffer(GL_ARRAY_BUFFER,this->VBO);
-        //glBufferData(GL_ARRAY_BUFFER,sizeof(float)*this->vertex_count,this->vertex,GL_DYNAMIC_DRAW);   
 
         //Tells OpenGl how to intepret the data(?????)
         glBindVertexArray(this->VAO);
@@ -56,12 +71,12 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
         //Saves data on texture buffers
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,this->texture);
-        /*
-        this->shader->UseShader();
-        trans = glm::mat4(1.0f);
-        trans = glm::rotate(trans,(float)m_time->GetTime(),glm::vec3(0.0,0.0,1.0));
-        trans = glm::scale(trans,glm::vec3(0.5,0.5,0.5));*/
+
+        //Pass position parameters to shader
         this->shader->SetUniformMat4fv("MVP",projection*view*model);
+
+        //Draws the cube
+        glDrawElements(GL_TRIANGLES,this->indices_count,GL_UNSIGNED_INT,0);
 
  }
 
@@ -75,11 +90,11 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
     //Binds the VAO -----------------------------------------------------------------------
     glBindVertexArray(this->VAO);
     glBindBuffer(GL_ARRAY_BUFFER,this->VBO);
-    //This buffer data is saved on VAO
+        //This buffer data is saved on VAO
     glBufferData(GL_ARRAY_BUFFER,sizeof(float)*this->vertex_count,this->vertex,GL_DYNAMIC_DRAW);     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,this->EBO);
-    //As well the indices Buffer data
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*this->indices_count,this->indices,GL_STATIC_DRAW);
+        //As well the indices Buffer data
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*this->indices_count,this->indices,GL_DYNAMIC_DRAW);
     //Defines how openGL should intepret vertex buffer data using the binded VBO
         //This is also saved on VAO
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8 * sizeof(float),(void*)0);
@@ -137,17 +152,17 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
 
 
 void GameObject::Update(){
-    if(test) return;
+    //if(test) return;
 
     if(this->m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS)){
             rot = 3 * m_time->delta_time;
 
-            model = glm::rotate(model,-this->rot,glm::vec3(0,0,1));
+            model = glm::rotate(model,-this->rot,glm::vec3(0,1,0));
     }else if(this->m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS)){
             rot = 3 * m_time->delta_time;
             //trans = glm::mat4(1.0f);
             //anticlock-wise
-            model = glm::rotate(model,this->rot,glm::vec3(0,0,1));
+            model = glm::rotate(model,this->rot,glm::vec3(0,1,0));
     }
 
     else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
