@@ -1,4 +1,4 @@
-#include "game_managing/Time.h"
+#include "game_managing/Time.hpp"
 
 Time::Time():delta_time(0.0),last_value(0.0){
 

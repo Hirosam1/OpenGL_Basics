@@ -6,7 +6,7 @@
 
 class InputManager{
     public:
-        InputManager(GLFWwindow*& window);
+        InputManager(GLFWwindow* window);
         bool ProcessInput(int key, int action) const;
     private:
         GLFWwindow* window;

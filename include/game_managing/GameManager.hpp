@@ -3,16 +3,17 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<string>
-#include"game_object/GameObject.h"
-#include"game_managing/InputManager.h"
-#include "game_tools/Debugging.h"
-#include "game_managing/Time.h"
-#include "game_object/Shape.h"
+#include"game_object/GameObject.hpp"
+#include"game_managing/InputManager.hpp"
+#include "game_tools/Debugging.hpp"
+#include "game_managing/Time.hpp"
+#include "game_object/Shape.hpp"
+#include "game_object/Window.hpp"
 
 class GameManager{
     private:
         //------------------------------------- Variables ---------------------------------------------------------------
-        GLFWwindow* main_windown;
+        Window* main_window;
         //default width and height of game window
         int width;
         int height;
@@ -42,9 +43,6 @@ class GameManager{
 
         //------------------------------------- Methods ----------------------------------------------------------------
         
-        //Creates the contex window
-        GLFWwindow* CreateContextWindow(int version_major, int version_minor,std::string window_name);
-
         //Error handler of GLFW
         static void ErrorCallback(int error, const char* description);
 

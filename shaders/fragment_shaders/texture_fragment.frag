@@ -13,5 +13,5 @@ void main()
     //This defines the final color
     //FragColor = vec4(ourColor,1.0);
     //build in function that does the sampling
-    FragColor = texture(texture1,TexCoord);
+    FragColor = texture(texture1,TexCoord) * vec4(ourColor,1);
 } 

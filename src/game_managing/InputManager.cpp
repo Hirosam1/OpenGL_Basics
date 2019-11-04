@@ -1,6 +1,6 @@
-#include "game_managing/InputManager.h"
+#include "game_managing/InputManager.hpp"
 
-InputManager::InputManager(GLFWwindow*& window):window(window){
+InputManager::InputManager(GLFWwindow* window):window(window){
 
 }
 

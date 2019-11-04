@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game_managing/GameManager.h"
+#include "game_managing/GameManager.hpp"
 
 
 int main(int arc, char* argv[]){

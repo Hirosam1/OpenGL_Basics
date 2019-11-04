@@ -1,4 +1,4 @@
-#include "game_managing/GameManager.h"
+#include "game_managing/GameManager.hpp"
 
 GameManager::GameManager(std::string game_name,int width, int height)
 :game_name(game_name),width(width),height(height),current_width(width),current_height(height),ready_to_start(false){
@@ -12,31 +12,29 @@ void GameManager::EngineInit(){
         exit(-1);
     }
 
-    //Creating window
-    std::cout<<"creating window...\n";
-    this->main_windown = this->CreateContextWindow(this->width,this->height,this->game_name);
-    glfwMakeContextCurrent(this->main_windown);
+    this->main_window = new Window(this->width,this->height,this->game_name);
 
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
     std::cout<<"Error while initilazing GLAD\n";
     exit(-1);
     }
-
+    
+    this->main_window->GetWindow();
     //setting up callbacks
     std::cout<<"setting up callbacks...\n";
-    glfwSetWindowUserPointer(main_windown,this);
+    glfwSetWindowUserPointer(this->main_window->GetWindow(),this);
     glfwSetErrorCallback(this->ErrorCallback);
-    glfwSetFramebufferSizeCallback(this->main_windown,this->FrameBufferSizeCallback);
-    this->main_input = new InputManager(this->main_windown);
+    glfwSetFramebufferSizeCallback(this->main_window->GetWindow(),this->FrameBufferSizeCallback);
+    this->main_input = new InputManager(this->main_window->GetWindow());
     this->main_time = new Time();
 
 
-    Shape *cube  = new Cube();
+    Shape *cube1  = new Cube();
+    Shape *cube2 = new Cube();
 
-
-    this->go = new GameObject(this->main_input,this->main_time);
+    this->go = new GameObject(this->main_window,main_input,main_time,cube1->vertex,cube2->vertex_count,cube2->indices,cube2->indices_count, new float[3]{-0.5,0.2,-10});
     this->go->SetUpObject();
-    this->go2 = new GameObject(main_input,main_time,cube->vertex,cube->vertex_count,cube->indices,cube->indices_count, new float[3]{0.5,-0.8,-3});
+    this->go2 = new GameObject(this->main_window,main_input,main_time,cube1->vertex,cube1->vertex_count,cube1->indices,cube1->indices_count, new float[3]{0.5,-0.8,-3});
     this->go2->SetUpObject();
 
     this->ready_to_start = true;
@@ -52,10 +50,10 @@ void GameManager::EngnieStart(){
         exit(-1);
     }
     std::cout<<"Ready to start!\n";
-    while(!glfwWindowShouldClose(this->main_windown)){
+    while(!glfwWindowShouldClose(this->main_window->GetWindow())){
         
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
-            glfwSetWindowShouldClose(this->main_windown,true);
+            glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
         }
 
         //Clear the screen
@@ -70,7 +68,7 @@ void GameManager::EngnieStart(){
 
 
         //Swap the buffers
-        glfwSwapBuffers(this->main_windown);
+        glfwSwapBuffers(this->main_window->GetWindow());
 
         glfwPollEvents();
         //glBindVertexArray(0);
@@ -91,24 +89,10 @@ void GameManager::ErrorCallback(int error, const char* description){
 void GameManager::FrameBufferSizeCallback(GLFWwindow* windown, int width, int height){
     glViewport(0,0,width,height);
     GameManager* here = static_cast<GameManager*>(glfwGetWindowUserPointer(windown));
-    here->current_width = width;
-    here->current_height = height;
-}
-
-GLFWwindow* GameManager::CreateContextWindow(int width, int height,std::string window_name){
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
-
-    GLFWwindow* window = glfwCreateWindow(width,height,this->game_name.c_str(),NULL,NULL);
-        if(!window){
-        std::cout<<"Error at creating windown!\n";
-        glfwTerminate();
-        exit(-1);
-    }
-
-    return window;
+    here->main_window->SetWidthHeight(width,height);
     
 }
+
 
 
 

@@ -1,4 +1,4 @@
-#include "game_object/Window.h"
+#include "game_object/Window.hpp"
 
 Window::Window(unsigned int width, unsigned int height,std::string w_name):
 width(width), height(height), window_name(w_name) {

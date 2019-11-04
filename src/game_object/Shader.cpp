@@ -1,4 +1,4 @@
-#include "game_object/Shader.h"
+#include "game_object/Shader.hpp"
 
 Shader::Shader(){
     this->shader_comp = 0;

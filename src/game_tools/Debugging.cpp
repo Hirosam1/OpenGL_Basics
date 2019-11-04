@@ -1,4 +1,4 @@
-#include "game_tools/Debugging.h"
+#include "game_tools/Debugging.hpp"
 
 void Debugging::SetPoly2Line(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);

@@ -1,4 +1,4 @@
-#include "game_object/Shape.h"
+#include "game_object/Shape.hpp"
 
 
 Cube::Cube():Shape(64,36){

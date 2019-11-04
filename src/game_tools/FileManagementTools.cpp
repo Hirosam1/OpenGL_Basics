@@ -1,4 +1,4 @@
-#include "game_tools/FileManagementTools.h"
+#include "game_tools/FileManagementTools.hpp"
 
 char* FileManagementTools::GetFilesContents(const char *filename,int* lenght)
 {
