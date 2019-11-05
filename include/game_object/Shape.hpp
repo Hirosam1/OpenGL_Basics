@@ -14,3 +14,8 @@ class Cube : public Shape{
     public:
         Cube();
 };
+
+class Triangle : public Shape{
+    public:
+        Triangle();
+};
