@@ -16,6 +16,7 @@ class Shader{
         void UseShader();
         void SetUniform1i(std::string uniform_name,int i);
         void SetUniformMat4fv(std::string uniform_name,glm::mat4 m_mat4);
+        void SetFloat(std::string shader_name, float i);
     protected:
         unsigned int shader_comp;
         unsigned int vertex_shader;
