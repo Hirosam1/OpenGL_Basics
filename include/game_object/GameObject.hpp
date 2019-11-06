@@ -13,7 +13,6 @@
 #include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
 #include "game_object/Window.hpp"
-#include "game_object/Texture.hpp"
 
 
 
@@ -62,7 +61,7 @@ class GameObject{
         //Shader Object
         Shader* shader;
         //Texture Object
-        Texture* m_texture;
+        //Texture* m_texture;
         //Time object
         Time* m_time;
     protected:

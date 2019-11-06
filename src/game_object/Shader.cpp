@@ -1,4 +1,5 @@
 #include "game_object/Shader.hpp"
+#include"game_object/Texture.hpp"
 
 Shader::Shader(){
     this->shader_comp = 0;
@@ -68,7 +69,13 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
     return shader_program;
 }
 
-void Shader::UseShader(){
+void Shader::SetTexture(std::string texture_name){
+    this->m_texture = new Texture(this,texture_name,"texture1",0);
+}
+
+void Shader::UseShader(bool use_texture){
+    if(this->m_texture && use_texture)
+        this->m_texture->UseTexture();
     glUseProgram(this->shader_program);
 }
 

@@ -1,5 +1,5 @@
 #include "game_object/Texture.hpp"
-
+#include "game_object/Shader.hpp"
 
 Texture::Texture(Shader* m_shader, std::string texture_path, std::string uniform_name,unsigned int uniform_index):
 m_shader(m_shader){
@@ -24,18 +24,19 @@ void Texture::CreateTexture(std::string texture_path,std::string uniform_name,un
     if(data){
     //Creats the texture image on the current bound texture object
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
-    //Genetates mip maps automatacly
-    //glGenerateMipmap(GL_TEXTURE_2D);
+    //Genetates mip maps automaticaly
+    glGenerateMipmap(GL_TEXTURE_2D);
     //Free loaded image
     }else{
-        std::cout<<"Failed to load texture\n";
+        std::cout<<"Failed to load image texture\n";
         exit(-1);
     }
     stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D,0);
     //Set the uninoform of texture of the shader to be 0
-    this->m_shader->UseShader();
-    this->m_shader->SetUniform1i(uniform_name.data(),0);
+    this->m_shader->UseShader(false);
+    this->m_shader->SetUniform1i(uniform_name.data(),uniform_index);
+    
  }
  
  void Texture::UseTexture(){

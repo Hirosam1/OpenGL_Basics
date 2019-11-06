@@ -20,7 +20,7 @@
     //This is the world space matrix
     model = glm::mat4(1.0f); model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
     //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
-    view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,7.0f,-5.0f));
+    view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,2.0f,-5.0f));
     //The prjection matrix
     projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
 
@@ -34,7 +34,7 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
    //This is the world space matrix
     model = glm::mat4(1.0f); model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
     //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
-    view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,7.0f,-5.0f));
+    view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,2.0f,-5.0f));
     //The prjection matrix
     projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
     
@@ -52,12 +52,10 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
     model = glm::mat4(1.0f); model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
     model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
     //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
-    view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,3.0f,-5.0f));
+    view = glm::mat4(1.0f); view = glm::translate(view,glm::vec3(0.0f,2.0f,-5.0f));
     //The prjection matrix
     projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
     
-
-
 
 }
 
@@ -69,11 +67,11 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
         //Tells OpenGl how to intepret the data(?????)
         glBindVertexArray(this->VAO);
         
-        //Saves data on texture buffers
-        m_texture->UseTexture();
 
         //Pass position parameters to shader
         this->shader->SetUniformMat4fv("MVP",projection*view*model);
+
+        this->shader->UseShader();
 
         //Checks foe changes in the aspect ratio given a threshold
         if(this->width > (this->m_window->GetWidth() + 40) || this->height > (this->m_window->GetHeight() + 40) ||
@@ -116,17 +114,16 @@ m_input(m_input),m_time(m_time),vertex(vertex),indices(indices),vertex_count(ver
     
 
     this->CreateShaderObject("shaders/vertex_shaders/MVP_vertex.vert","shaders/fragment_shaders/texture_fragment.frag");
-    this->m_texture = new Texture(this->shader,"container.jpg");
+    //this->m_texture = new Texture(this->shader,"Arrow.png","texture1",0);
 
  }
-
-
 
  void GameObject::CreateShaderObject(std::string vertex_shader, std::string fragment_shader){
     this->shader = new Shader();
     this->shader->LoadShader(vertex_shader,GL_VERTEX_SHADER);
     this->shader->LoadShader(fragment_shader,GL_FRAGMENT_SHADER);
     this->shader->LinkShaders();
+    this->shader->SetTexture("Arrow.png");
  }
 
 
@@ -134,12 +131,21 @@ void GameObject::Update(){
     //if(test) return;
 
     if(this->m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS)){
-        //clock-wise
-        model = glm::rotate(model,-3.0f * (float)m_time->delta_time, glm::vec3(0,1,0));
+
+        model = glm::rotate(model,3.0f * (float)m_time->delta_time, glm::vec3(0,1,0));
     }else if(this->m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS)){
         //anticlock-wise
-        model = glm::rotate(model,3.0f * (float)m_time->delta_time,glm::vec3(0,1,0));
+        model = glm::rotate(model,-3.0f * (float)m_time->delta_time,glm::vec3(0,1,0));
     }
+
+    if(this->m_input->ProcessInput(GLFW_KEY_UP,GLFW_PRESS)){
+        //Down
+        model = glm::translate(model,glm::vec3(0,3.0f*m_time->delta_time,0));
+    }else if(this->m_input->ProcessInput(GLFW_KEY_DOWN,GLFW_PRESS)){
+        //Up
+        model = glm::translate(model,glm::vec3(0,-3.0f*m_time->delta_time,0));
+    }
+
 
     else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
         Debugging::SetPoly2Fill();

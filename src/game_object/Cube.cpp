@@ -5,15 +5,15 @@ Cube::Cube():Shape(64,36){
     vertex = new float[64]{
     // positions          // colors        // texture coords    //Front
     0.5f,  0.5f, 0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,           // top right    0
-    0.5f, -0.5f, 0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,           // bottom right 1
+    0.5f, -0.5f, 0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,           // bottom right 1
     -0.5f,-0.5f, 0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,           // bottom left  2
-    -0.5f, 0.5f, 0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,           // top left     3
+    -0.5f, 0.5f, 0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,           // top left     3
 
                                                                //Back
     0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   1.0f, 0.0f,           // top right    4                                      
-    0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,           // bottom right 5
+    0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   0.0f, 1.0f,           // bottom right 5
     -0.5f,-0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,           // bottom left  6
-    -0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f            // top left     7
+    -0.5f, 0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f            // top left     7
     };
 
     indices = new unsigned int[36]{

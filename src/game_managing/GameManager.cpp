@@ -31,12 +31,13 @@ void GameManager::EngineInit(){
 
     Shape *cube1  = new Cube();
     Shape *cube2 = new Cube();
-
-    this->go = new GameObject(this->main_window,main_input,main_time,cube1->vertex,cube2->vertex_count,cube2->indices,cube2->indices_count, new float[3]{-0.5,0.2,-10});
+    std::cout<<"creating game objects...\n";
+    this->go = new GameObject(this->main_window,this->main_input,this->main_time,
+    cube2->vertex,cube2->vertex_count,cube2->indices,cube2->indices_count,new float[3]{0.5,-0.8,-3});
     this->go->SetUpObject();
-    this->go2 = new GameObject(this->main_window,main_input,main_time,cube1->vertex,cube1->vertex_count,cube1->indices,cube1->indices_count, new float[3]{0.5,-0.8,-3});
+    this->go2 = new GameObject(this->main_window,this->main_input,this->main_time,
+    cube1->vertex,cube1->vertex_count,cube1->indices,cube1->indices_count);
     this->go2->SetUpObject();
-
     this->ready_to_start = true;
 
     Debugging::SetPointsSize(10);    
