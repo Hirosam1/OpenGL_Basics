@@ -34,11 +34,9 @@ class GameObject{
         //Sets up the object to be ready to update/render
         void SetUpObject();
 
-        bool test = false;
     private:
+       
         void SetInitialMVP();
-        //The transformation matrixes
-        glm::mat4 model; 
         glm::mat4 view;
         glm::mat4 projection;
         //Window size for the projection
@@ -51,27 +49,26 @@ class GameObject{
         unsigned int vertex_count;
         unsigned int indices_count;
 
-
-        unsigned int VAOt;
         //Vertex Buffer Object
         unsigned int VBO;
         //Element Buffer Objects
-        unsigned int EBO;
-
-        //Window where the object will get inputs
-        InputManager* m_input;
-        //Shader Object
-        Shader* shader;
-        //Time object
-        Time* m_time;
-
+        unsigned int EBO; 
         //VAO game objectdf
         VAO* m_vao;
 
+
     protected:
+        //The transformation matrixes
+        glm::mat4 model; 
+        //Shader Object
+        Shader* shader;
+        InputManager* m_input;
+        //Time object
+        Time* m_time;
+        //Window where the object will get inputs
         Window* m_window;
         //Children of GameObject class will inherit this method. This is where you update the data within GameObject
-        void Update(); //Supposed to be virtual, in the future
+        virtual void Update()=0; //Pure virtual function, you need to create sub classes to implement it
 
         
 };
