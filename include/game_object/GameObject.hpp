@@ -13,6 +13,7 @@
 #include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
 #include "game_object/Window.hpp"
+#include "game_object/VAO.hpp"
 
 
 
@@ -20,8 +21,8 @@ class GameObject{
     public:
         //Constructors
         GameObject(Window* aWindow,InputManager* m_imput, Time* m_time);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time, float* vertex, unsigned int vertex_count,unsigned int* indices, unsigned int indices_count, float initial_pos[3]);
+        GameObject(Window* aWindow,InputManager* m_input, Time* m_time, GLfloat* vertex, unsigned int vertex_count,GLuint* indices, unsigned int indices_count);
+        GameObject(Window* aWindow,InputManager* m_input, Time* m_time, GLfloat* vertex, unsigned int vertex_count,GLuint* indices, unsigned int indices_count, float initial_pos[3]);
 
         //Public Updates
         void UpdateAndBuffer();
@@ -35,6 +36,7 @@ class GameObject{
 
         bool test = false;
     private:
+        void SetInitialMVP();
         //The transformation matrixes
         glm::mat4 model; 
         glm::mat4 view;
@@ -44,26 +46,28 @@ class GameObject{
         unsigned int height;
 
         //Vertices of a triangle along with their indices and numberof points and indices
-        float* vertex;
-        unsigned int* indices;
+        GLfloat* vertex;
+        GLuint* indices;
         unsigned int vertex_count;
         unsigned int indices_count;
 
+
+        unsigned int VAOt;
         //Vertex Buffer Object
         unsigned int VBO;
         //Element Buffer Objects
         unsigned int EBO;
-        //Vertex Array Object
-        unsigned int VAO;
 
         //Window where the object will get inputs
         InputManager* m_input;
         //Shader Object
         Shader* shader;
-        //Texture Object
-        //Texture* m_texture;
         //Time object
         Time* m_time;
+
+        //VAO game objectdf
+        VAO* m_vao;
+
     protected:
         Window* m_window;
         //Children of GameObject class will inherit this method. This is where you update the data within GameObject

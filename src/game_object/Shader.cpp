@@ -2,6 +2,7 @@
 #include"game_object/Texture.hpp"
 
 Shader::Shader(){
+    this->m_texture = nullptr;
     this->shader_comp = 0;
 }
 
@@ -74,8 +75,9 @@ void Shader::SetTexture(std::string texture_name){
 }
 
 void Shader::UseShader(bool use_texture){
-    if(this->m_texture && use_texture)
+    if(this->m_texture != nullptr && use_texture){
         this->m_texture->UseTexture();
+    }
     glUseProgram(this->shader_program);
 }
 
