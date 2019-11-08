@@ -3,6 +3,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<string>
+#include<deque>
 #include"game_object/GameObject.hpp"
 #include"game_managing/InputManager.hpp"
 #include "game_tools/Debugging.hpp"
@@ -38,6 +39,8 @@ class GameManager{
         //Game object to render (Will have multiple in the future)
         GameObject* go2;
         GameObject* go;
+
+        std::deque<GameObject*>* all_objs;
 
         //Global time manager
         Time* main_time;

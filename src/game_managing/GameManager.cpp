@@ -32,14 +32,24 @@ void GameManager::EngineInit(){
     std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
     std::string* tex = new std::string("Arrow.png");
-    Shape *cube  = new Cube();
-    Shape *triag = new Plane();
+
+    this->all_objs = new std::deque<GameObject*>();
+
+    Shape* cube  = new Cube();
+    Shape* plane = new Plane();
+    Shape* triag = new Triangle();
     std::cout<<"creating game objects...\n";
     this->go = new aObject(this->main_window,this->main_input,this->main_time,cube,new float[3]{0.5,-0.8,2});
     this->go->SetUpObject();
-    this->go2 = new aObject(this->main_window,this->main_input,this->main_time,triag,new float[3]{-0.7,+0.3,0},vert,frag);
+    this->go2 = new aObject(this->main_window,this->main_input,this->main_time,plane,new float[3]{-0.7,+0.3,0},vert,frag);
     this->go2->SetUpObject();
     this->go2->SetTexture(tex);
+    GameObject* go3 = new aObject(this->main_window,this->main_input,this->main_time,triag,new float[3]{0.1,0.2,-1});
+    go3->SetUpObject();
+
+    all_objs->push_back(go);
+    all_objs->push_back(go2);
+    all_objs->push_back(go3);
 
     delete vert;
     delete frag;
@@ -69,10 +79,10 @@ void GameManager::EngnieStart(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         this->main_time->UpdateDelta();
         //Render Objects
-        this->go->UpdateAndBuffer();
-        this->go2->UpdateAndBuffer();
+        for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
+            (*it)->UpdateAndBuffer();
+        }
 
-        //Swap the buffers
         glfwSwapBuffers(this->main_window->GetWindow());
 
         glfwPollEvents();
