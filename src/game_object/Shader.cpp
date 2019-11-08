@@ -4,14 +4,17 @@
 Shader::Shader(){
     this->m_texture = nullptr;
     this->shader_comp = 0;
+    this->vertex_shader = 0;
+    this->fragment_shader = 0;
+    this->shader_program = 0;
 }
 
-unsigned int Shader::LoadShader(std::string shader_path, GLenum shader_type){
+unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
     unsigned int shader_id;
     //Create and compile shder
     shader_id = glCreateShader(shader_type);
     int size;
-    const char* shader_source = FileManagementTools::GetFilesContents(shader_path.data(),&size);
+    const char* shader_source = FileManagementTools::GetFilesContents(shader_path->data(),&size);
     glShaderSource(shader_id,1,&shader_source,&size);
     glCompileShader(shader_id);
 
@@ -35,7 +38,7 @@ unsigned int Shader::LoadShader(std::string shader_path, GLenum shader_type){
 }
 
 int Shader::LinkShaders(){
-    if(shader_comp < 2){
+    if(shader_comp < 2 || this->fragment_shader == 0 || this->vertex_shader == 0){
         std::cout<<"Not enought compiled shaders!";
         throw "Not enought compiled shaders!";
         return -1;
@@ -70,8 +73,8 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
     return shader_program;
 }
 
-void Shader::SetTexture(std::string texture_name){
-    this->m_texture = new Texture(this,texture_name,"texture1",0);
+void Shader::SetTexture(std::string* texture_name){
+    this->m_texture = new Texture(this,texture_name,new std::string("texture1"),0);
 }
 
 void Shader::UseShader(bool use_texture){
@@ -81,14 +84,14 @@ void Shader::UseShader(bool use_texture){
     glUseProgram(this->shader_program);
 }
 
-void Shader::SetUniform1i(std::string uniform_name,int i){
-    glUniform1f(glGetUniformLocation(this->shader_program,uniform_name.data()),i);
+void Shader::SetUniform1i(std::string* uniform_name,int i){
+    glUniform1f(glGetUniformLocation(this->shader_program,uniform_name->data()),i);
 }
 
-void Shader::SetUniformMat4fv(std::string uniform_name,glm::mat4 m_mat4){
-    glUniformMatrix4fv(glGetUniformLocation(this->shader_program,uniform_name.data()),1,GL_FALSE,glm::value_ptr(m_mat4));
+void Shader::SetUniformMat4fv(std::string* uniform_name,glm::mat4 m_mat4){
+    glUniformMatrix4fv(glGetUniformLocation(this->shader_program,uniform_name->data()),1,GL_FALSE,glm::value_ptr(m_mat4));
 }
 
-void Shader::SetFloat(std::string uniform_name, float i ){
-    glUniform1f(glGetUniformLocation(this->shader_program,uniform_name.data()),i);
+void Shader::SetFloat(std::string* uniform_name, float i ){
+    glUniform1f(glGetUniformLocation(this->shader_program,uniform_name->data()),i);
 }

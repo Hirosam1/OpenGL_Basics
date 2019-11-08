@@ -21,3 +21,8 @@ class Triangle : public Shape{
     public:
         Triangle();
 };
+
+class Plane : public Shape{
+    public:
+        Plane();
+};

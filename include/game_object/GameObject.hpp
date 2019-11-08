@@ -14,29 +14,32 @@
 #include "game_managing/Time.hpp"
 #include "game_object/Window.hpp"
 #include "game_object/VAO.hpp"
-
+#include "game_object/Shape.hpp"
 
 
 class GameObject{
     public:
         //Constructors
         GameObject(Window* aWindow,InputManager* m_imput, Time* m_time);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time, GLfloat* vertex, unsigned int vertex_count,GLuint* indices, unsigned int indices_count);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time, GLfloat* vertex, unsigned int vertex_count,GLuint* indices, unsigned int indices_count, float initial_pos[3]);
+        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape, float initial_pos[3],
+        std::string* vert_shader_path,std::string* frag_shader_path);
 
         //Public Updates
         void UpdateAndBuffer();
 
         //Shaders Management
         //Creates the shader object, ready to use
-        void CreateShaderObject(std::string vertex_shader,std::string fragment_shader);
+        void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
 
         //Sets up the object to be ready to update/render
         void SetUpObject();
 
     private:
-       
+        //Sets the MVP to its initial position
         void SetInitialMVP();
+        std::string* MVP_string;
+
+        //View (camera) and projection (perspective) matrixes
         glm::mat4 view;
         glm::mat4 projection;
         //Window size for the projection
@@ -53,12 +56,14 @@ class GameObject{
         unsigned int VBO;
         //Element Buffer Objects
         unsigned int EBO; 
-        //VAO game objectdf
+        //VAO game object
         VAO* m_vao;
 
+        std::string* vertex_shader_path;
+        std::string* fragment_shader_path;
 
     protected:
-        //The transformation matrixes
+        //The model matrix
         glm::mat4 model; 
         //Shader Object
         Shader* shader;

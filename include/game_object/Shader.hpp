@@ -13,13 +13,13 @@ class Texture;
 class Shader{
     public:
         Shader();
-        unsigned int LoadShader(std::string shader_path, GLenum shder_type);
+        unsigned int LoadShader(std::string* shader_path, GLenum shder_type);
         int LinkShaders();
         void UseShader(bool use_texture = true);
-        void SetUniform1i(std::string uniform_name,int i);
-        void SetUniformMat4fv(std::string uniform_name,glm::mat4 m_mat4);
-        void SetFloat(std::string shader_name, float i);
-        void SetTexture(std::string texture_name);
+        void SetUniform1i(std::string* uniform_name,int i);
+        void SetUniformMat4fv(std::string* uniform_name,glm::mat4 m_mat4);
+        void SetFloat(std::string* shader_name, float i);
+        void SetTexture(std::string* texture_name);
     protected:
         unsigned int shader_comp;
         unsigned int vertex_shader;

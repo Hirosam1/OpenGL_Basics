@@ -9,6 +9,7 @@
 #include "game_managing/Time.hpp"
 #include "game_object/Shape.hpp"
 #include "game_object/Window.hpp"
+#include "game_object/aObject.hpp"
 
 class GameManager{
     private:

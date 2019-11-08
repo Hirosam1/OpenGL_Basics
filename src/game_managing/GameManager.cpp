@@ -1,5 +1,6 @@
 #include "game_managing/GameManager.hpp"
 
+
 GameManager::GameManager(std::string game_name,int width, int height)
 :game_name(game_name),width(width),height(height),current_width(width),current_height(height),ready_to_start(false){
 }
@@ -28,16 +29,19 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_window->GetWindow());
     this->main_time = new Time();
 
-
-    Shape *cube1  = new Cube();
-    Shape *cube2 = new Cube();
+    std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
+    std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
+    Shape *cube  = new Cube();
+    Shape *triag = new Plane();
     std::cout<<"creating game objects...\n";
-    this->go = new GameObject(this->main_window,this->main_input,this->main_time,
-    cube2->vertex,cube2->vertex_count,cube2->indices,cube2->indices_count,new float[3]{0.5,-0.8,-3});
+    this->go = new aObject(this->main_window,this->main_input,this->main_time,cube,new float[3]{0.5,-0.8,2});
     this->go->SetUpObject();
-    this->go2 = new GameObject(this->main_window,this->main_input,this->main_time,
-    cube2->vertex,cube2->vertex_count,cube2->indices,cube2->indices_count,new float[3]{-0.7,+0.3,-2});
+    this->go2 = new aObject(this->main_window,this->main_input,this->main_time,triag,new float[3]{-0.7,+0.3,0},vert,frag);
     this->go2->SetUpObject();
+
+    delete vert;
+    delete frag;
+
     this->ready_to_start = true;
 
     Debugging::SetPointsSize(10);    
@@ -65,16 +69,10 @@ void GameManager::EngnieStart(){
         this->go->UpdateAndBuffer();
         this->go2->UpdateAndBuffer();
 
-        glBindVertexArray(0);
-
-
         //Swap the buffers
         glfwSwapBuffers(this->main_window->GetWindow());
 
         glfwPollEvents();
-        //glBindVertexArray(0);
-
-
     }
 
 

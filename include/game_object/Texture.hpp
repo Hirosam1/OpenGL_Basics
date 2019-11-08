@@ -12,8 +12,8 @@ class Shader;
 class Texture{
     
     public:
-        Texture(Shader* m_shader, std::string texture_path, std::string uniform_name,unsigned int uniform_index);
-        void CreateTexture(std::string texture_name,std::string uniform_name,unsigned int uniform_index);
+        Texture(Shader* m_shader, std::string* texture_path, std::string* uniform_name,unsigned int uniform_index);
+        void CreateTexture(std::string* texture_name,std::string* uniform_name,unsigned int uniform_index);
         void UseTexture();
         
     private:
