@@ -7,7 +7,7 @@
 #include"game_managing/InputManager.hpp"
 #include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
-#include "game_object/Shape.hpp"
+#include "geometry/Shape.hpp"
 #include "game_object/Window.hpp"
 #include "game_object/aObject.hpp"
 

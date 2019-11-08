@@ -1,4 +1,4 @@
-#include "game_object/Shape.hpp"
+#include "geometry/Shape.hpp"
 
 Plane::Plane():Shape(32,6){
     vertex = new float[32]{

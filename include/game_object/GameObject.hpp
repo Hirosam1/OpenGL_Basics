@@ -14,7 +14,7 @@
 #include "game_managing/Time.hpp"
 #include "game_object/Window.hpp"
 #include "game_object/VAO.hpp"
-#include "game_object/Shape.hpp"
+#include "geometry/Shape.hpp"
 
 
 class GameObject{

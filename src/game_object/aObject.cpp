@@ -1,10 +1,5 @@
 #include "game_object/aObject.hpp"
 
-aObject::aObject(Window* aWindow,InputManager* m_input, Time* m_time, 
-Shape* m_shape, float initial_pos[3]):GameObject
-(aWindow,m_input,m_time,m_shape,initial_pos){
-
-}
 
 aObject::aObject(Window* aWindow,InputManager* m_input, Time* m_time, 
 Shape* m_shape, float initial_pos[3], std::string* vert_shader_path,std::string* frag_shader_path):GameObject
