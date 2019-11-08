@@ -34,6 +34,9 @@ class GameObject{
         //Sets up the object to be ready to update/render
         void SetUpObject();
 
+        //Sets the texture to use
+        void SetTexture(std::string* tex_path);
+
     private:
         //Sets the MVP to its initial position
         void SetInitialMVP();
@@ -59,8 +62,11 @@ class GameObject{
         //VAO game object
         VAO* m_vao;
 
+        //path to the shaders
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
+
+        //path to the texture
 
     protected:
         //The model matrix

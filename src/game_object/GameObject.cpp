@@ -73,8 +73,14 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path){
     this->shader->LoadShader(vertex_shader,GL_VERTEX_SHADER);
     this->shader->LoadShader(fragment_shader,GL_FRAGMENT_SHADER);
     this->shader->LinkShaders();
-    this->shader->SetTexture(new std::string("Arrow.png"));
+    
  }
+
+void GameObject::SetTexture(std::string* tex_path){
+   if(this->shader != nullptr){
+   this->shader->SetTexture(tex_path);
+   }
+}
 
  void GameObject::SetInitialMVP(){
     //This is the world space matrix

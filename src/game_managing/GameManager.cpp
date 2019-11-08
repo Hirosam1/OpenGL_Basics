@@ -31,6 +31,7 @@ void GameManager::EngineInit(){
 
     std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
+    std::string* tex = new std::string("Arrow.png");
     Shape *cube  = new Cube();
     Shape *triag = new Plane();
     std::cout<<"creating game objects...\n";
@@ -38,9 +39,11 @@ void GameManager::EngineInit(){
     this->go->SetUpObject();
     this->go2 = new aObject(this->main_window,this->main_input,this->main_time,triag,new float[3]{-0.7,+0.3,0},vert,frag);
     this->go2->SetUpObject();
+    this->go2->SetTexture(tex);
 
     delete vert;
     delete frag;
+    delete tex;
 
     this->ready_to_start = true;
 
