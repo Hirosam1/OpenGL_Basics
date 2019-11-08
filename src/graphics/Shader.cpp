@@ -1,5 +1,5 @@
-#include "game_object/Shader.hpp"
-#include"game_object/Texture.hpp"
+#include "graphics/Shader.hpp"
+#include"graphics/Texture.hpp"
 
 Shader::Shader(){
     this->m_texture = nullptr;

@@ -7,14 +7,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include"game_object/Shader.hpp"
-#include "game_tools/stb_image.h"
 #include "game_managing/InputManager.hpp"
-#include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
-#include "game_object/Window.hpp"
 #include "game_object/VAO.hpp"
+#include "game_tools/Debugging.hpp"
+#include "game_tools/stb_image.h"
 #include "geometry/Shape.hpp"
+#include "graphics/Shader.hpp"
+#include "graphics/Window.hpp"
+
+
 
 
 class GameObject{
@@ -55,10 +57,6 @@ class GameObject{
         unsigned int vertex_count;
         unsigned int indices_count;
 
-        //Vertex Buffer Object
-        unsigned int VBO;
-        //Element Buffer Objects
-        unsigned int EBO; 
         //VAO game object
         VAO* m_vao;
 

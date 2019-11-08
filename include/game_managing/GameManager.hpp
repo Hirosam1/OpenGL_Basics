@@ -4,13 +4,15 @@
 #include<GLFW/glfw3.h>
 #include<string>
 #include<deque>
-#include"game_object/GameObject.hpp"
+
 #include"game_managing/InputManager.hpp"
-#include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
-#include "geometry/Shape.hpp"
-#include "game_object/Window.hpp"
 #include "game_object/aObject.hpp"
+#include"game_object/GameObject.hpp"
+#include "game_tools/Debugging.hpp"
+#include "geometry/Shape.hpp"
+#include "graphics/Window.hpp"
+
 
 class GameManager{
     private:
