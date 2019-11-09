@@ -16,6 +16,8 @@
 #include "graphics/Shader.hpp"
 #include "graphics/Window.hpp"
 
+#include "game_object/Camera.hpp"
+
 
 
 
@@ -23,7 +25,7 @@ class GameObject{
     public:
         //Constructors
         GameObject(Window* aWindow,InputManager* m_imput, Time* m_time);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape, float initial_pos[3],
+        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape,Camera* m_camera ,float initial_pos[3],
         std::string* vert_shader_path,std::string* frag_shader_path);
 
         //Public Updates
@@ -53,7 +55,7 @@ class GameObject{
 
         //Vertices of a triangle along with their indices and numberof points and indices
         GLfloat* vertex;
-        GLuint* indices;
+        GLuint* indices; 
         unsigned int vertex_count;
         unsigned int indices_count;
 
@@ -67,6 +69,9 @@ class GameObject{
         //path to the texture
 
     protected:
+        //The camera containing the view matrix
+        Camera* m_camera;
+
         //The model matrix
         glm::mat4 model; 
         //Shader Object
