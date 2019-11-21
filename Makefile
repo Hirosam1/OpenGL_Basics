@@ -3,6 +3,10 @@ INCLUDE = ./include
 SRC_DIR = src
 OBJ_DIR = objs
 
+file_name = MyOpenGLTest
+
+LIB_PATH = E:\OpenGL_Basics\lib
+
 GAME_MAN_SRC = $(wildcard $(SRC_DIR)/game_managing/*.cpp) 
 GAME_MAN_OBJS = $(patsubst $(SRC_DIR)/game_managing/%.cpp,$(OBJ_DIR)/%.o,$(GAME_MAN_SRC))
 
@@ -19,10 +23,20 @@ GRAPHI_SRC = $(wildcard $(SRC_DIR)/graphics/*.cpp)
 GRAPHI_OBJS = $(patsubst $(SRC_DIR)/graphics/%.cpp,$(OBJ_DIR)/%.o,$(GRAPHI_SRC))
 
 CXXFLAGS = -I$(INCLUDE)/
-LDLIBS = -lglfw3 -lrt -lm -lXrandr -lXrender -lXi -lGL -lpthread -pthread -lm -ldl -lXdamage -lXfixes -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm -lXext -lX11 -lpthread -lxcb -lXau -lXdmcp -ldrm
+LDLIBS_LINUX = -lglfw3 -lrt -lm -lXrandr -lXrender -lXi -lGL -lpthread -pthread -lm -ldl -lXdamage -lXfixes -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm -lXext -lX11 -lpthread -lxcb -lXau -lXdmcp -ldrm
 
+LDLIBS_WIN = -lglfw3  -lglfw3 -lglu32 -lgdi32
+
+<<<<<<< HEAD
 testing: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS)
 	g++ -o $@ $^ $(LDLIBS)
+=======
+testing: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS)
+	g++ -o $(file_name) $^ $(LDLIBS_LINUX)
+
+windows: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS)
+	g++ -o $(file_name) $^ $(LDLIBS_WIN)
+>>>>>>> e6a3965fc01dbfccf0f711e3d2066aede3030c20
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp 
 	g++ -o $@ -c $^ $(CXXFLAGS)

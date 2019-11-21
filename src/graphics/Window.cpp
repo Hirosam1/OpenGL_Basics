@@ -14,7 +14,6 @@ width(width), height(height), window_name(w_name) {
     glfwMakeContextCurrent(this->m_window);
 
 }
-
 GLFWwindow* Window::GetWindow(){
     return this->m_window;
 }

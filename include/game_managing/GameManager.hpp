@@ -13,6 +13,8 @@
 #include "geometry/Shape.hpp"
 #include "graphics/Window.hpp"
 
+#include "game_object/Camera.hpp"
+
 
 class GameManager{
     private:

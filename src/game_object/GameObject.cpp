@@ -38,7 +38,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path){
          this->shader->UseShader();
          
         //Pass position parameters to shader
-        this->shader->SetUniformMat4fv(this->MVP_string,projection*(*this->m_camera->GetView())*model);
+        this->shader->SetUniformMat4fv(this->MVP_string,projection*this->m_camera->GetView()*model);
         //Checks foe changes in the aspect ratio given a threshold
         if(this->width > (this->m_window->GetWidth() + 40) || this->height > (this->m_window->GetHeight() + 40) ||
                         this->width < (this->m_window->GetWidth() - 40) || this->height < (this->m_window->GetHeight() - 40)){

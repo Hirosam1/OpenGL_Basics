@@ -24,7 +24,8 @@
 class GameObject{
     public:
         //Constructors
-        GameObject(Window* aWindow,InputManager* m_imput, Time* m_time);
+        GameObject(Window* git,InputManager* m_imput, Time* m_time);
+        GameObject(Window* git,InputManager* m_imput, Time* m_time, Camera* m_camera);
         GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape,Camera* m_camera ,float initial_pos[3],
         std::string* vert_shader_path,std::string* frag_shader_path);
 
