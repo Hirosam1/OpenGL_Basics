@@ -31,7 +31,7 @@ linux: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(G
 	g++ -o $(file_name) $^ -L$(LIB_PATH)/ $(LDLIBS_LINUX)
 
 windows: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS)
-	g++ -o $(file_name) $^ -L$(LIB_PATH)/  $(LDLIBS_WIN)
+	g++ -o $(file_name) $^ -static-libgcc -static-libstdc++ -L$(LIB_PATH)/  $(LDLIBS_WIN)
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp 
 	g++ -o $@ -c $^ $(CXXFLAGS)
