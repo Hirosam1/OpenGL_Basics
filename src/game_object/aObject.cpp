@@ -8,20 +8,24 @@ Shape* m_shape,Camera* m_camera ,float initial_pos[3], std::string* vert_shader_
 }
 void aObject::Update(){
     
+    float a[3]{0,0,0};
+    
+    this->m_camera->LookAt(a);
+
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 10;
     }
-
     if(this->m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS)){
-        this->m_camera->camera_pos[0] += test_speed*m_time->delta_time;      
+         this->m_camera->camera_pos->x += this->test_speed * this->m_time->delta_time; 
+  
     }else if(this->m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS)){  
-        this->m_camera->camera_pos[0] -= test_speed*m_time->delta_time; 
+        this->m_camera->camera_pos->x -= this->test_speed * this->m_time->delta_time;
     }
     if(this->m_input->ProcessInput(GLFW_KEY_DOWN,GLFW_PRESS)){
-        this->m_camera->camera_pos[1] -= test_speed*m_time->delta_time;        
+        this->m_camera->camera_pos->y -= 3 * this->m_time->delta_time;
 
     }else if(this->m_input->ProcessInput(GLFW_KEY_UP,GLFW_PRESS)){
-       this->m_camera->camera_pos[1] += test_speed*m_time->delta_time;     
+        this->m_camera->camera_pos->y += 3 * this->m_time->delta_time;
     }
 
     else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
@@ -32,6 +36,8 @@ void aObject::Update(){
     else if(this->m_input->ProcessInput(GLFW_KEY_3,GLFW_PRESS)){
         Debugging::SetPoly2Points();
     }
+
+
 
     this->test_speed = 3;
 }

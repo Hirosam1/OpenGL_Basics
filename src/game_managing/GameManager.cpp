@@ -13,6 +13,8 @@ void GameManager::EngineInit(){
         exit(-1);
     }
 
+    glfwSetErrorCallback(this->ErrorCallback);
+    std::cout<<"gimme a break\n";
     this->main_window = new Window(this->width,this->height,this->game_name);
 
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
@@ -20,11 +22,9 @@ void GameManager::EngineInit(){
     exit(-1);
     }
     
-    this->main_window->GetWindow();
     //setting up callbacks
     std::cout<<"setting up callbacks...\n";
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this);
-    glfwSetErrorCallback(this->ErrorCallback);
     glfwSetFramebufferSizeCallback(this->main_window->GetWindow(),this->FrameBufferSizeCallback);
     this->main_input = new InputManager(this->main_window->GetWindow());
     this->main_time = new Time();

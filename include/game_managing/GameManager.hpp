@@ -5,6 +5,7 @@
 #include<string>
 #include<deque>
 
+
 #include"game_managing/InputManager.hpp"
 #include "game_managing/Time.hpp"
 #include "game_object/aObject.hpp"
@@ -18,6 +19,7 @@
 
 class GameManager{
     private:
+        GLFWwindow* m_window;
         //------------------------------------- Variables ---------------------------------------------------------------
         Window* main_window;
         //default width and height of game window
