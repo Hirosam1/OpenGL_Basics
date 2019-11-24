@@ -1,5 +1,5 @@
-#include "game_object/Texture.hpp"
-#include "game_object/Shader.hpp"
+#include "graphics/Texture.hpp"
+#include "graphics/Shader.hpp"
 
 Texture::Texture(Shader* m_shader, std::string* texture_path, std::string* uniform_name,unsigned int uniform_index):
 m_shader(m_shader){

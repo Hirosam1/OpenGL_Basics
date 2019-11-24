@@ -7,21 +7,26 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include"game_object/Shader.hpp"
-#include "game_tools/stb_image.h"
 #include "game_managing/InputManager.hpp"
-#include "game_tools/Debugging.hpp"
 #include "game_managing/Time.hpp"
-#include "game_object/Window.hpp"
 #include "game_object/VAO.hpp"
+#include "game_tools/Debugging.hpp"
+#include "game_tools/stb_image.h"
 #include "geometry/Shape.hpp"
+#include "graphics/Shader.hpp"
+#include "graphics/Window.hpp"
+
+#include "game_object/Camera.hpp"
+
+
 
 
 class GameObject{
     public:
         //Constructors
-        GameObject(Window* aWindow,InputManager* m_imput, Time* m_time);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape, float initial_pos[3],
+        GameObject(Window* git,InputManager* m_imput, Time* m_time);
+        GameObject(Window* git,InputManager* m_imput, Time* m_time, Camera* m_camera);
+        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape,Camera* m_camera ,float initial_pos[3],
         std::string* vert_shader_path,std::string* frag_shader_path);
 
         //Public Updates
@@ -51,14 +56,10 @@ class GameObject{
 
         //Vertices of a triangle along with their indices and numberof points and indices
         GLfloat* vertex;
-        GLuint* indices;
+        GLuint* indices; 
         unsigned int vertex_count;
         unsigned int indices_count;
 
-        //Vertex Buffer Object
-        unsigned int VBO;
-        //Element Buffer Objects
-        unsigned int EBO; 
         //VAO game object
         VAO* m_vao;
 
@@ -69,6 +70,9 @@ class GameObject{
         //path to the texture
 
     protected:
+        //The camera containing the view matrix
+        Camera* m_camera;
+
         //The model matrix
         glm::mat4 model; 
         //Shader Object

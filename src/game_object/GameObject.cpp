@@ -1,4 +1,5 @@
 #include "game_object/GameObject.hpp"
+
  GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time): 
     m_input(m_input),m_time(m_time),m_window(aWindow){
 
@@ -13,8 +14,9 @@
 
 
 
-GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Shape* m_shape, float initial_pos[3], std::string* vert_shader_path,std::string* frag_shader_path):
-m_input(m_input),m_time(m_time),vertex(m_shape->vertex),indices(m_shape->indices),vertex_count(m_shape->vertex_count),indices_count(m_shape->indices_count),m_window(aWindow),
+GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Shape* m_shape,Camera* m_camera ,float initial_pos[3], 
+std::string* vert_shader_path,std::string* frag_shader_path):
+m_input(m_input),m_time(m_time),vertex(m_shape->vertex),m_camera(m_camera),indices(m_shape->indices),vertex_count(m_shape->vertex_count),indices_count(m_shape->indices_count),m_window(aWindow),
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path){
     this->shader = nullptr; this->m_vao = nullptr;
     this->width = this->m_window->GetWidth();
@@ -31,11 +33,12 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path){
     //Updaets the vertex data
     this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr){
-        //Binds VAO
-        this->m_vao->UseVAO();
-        this->shader->UseShader();
+         //Binds VAO
+         this->m_vao->UseVAO();
+         this->shader->UseShader();
+         
         //Pass position parameters to shader
-        this->shader->SetUniformMat4fv(this->MVP_string,projection*view*model);
+        this->shader->SetUniformMat4fv(this->MVP_string,projection*this->m_camera->GetView()*model);
         //Checks foe changes in the aspect ratio given a threshold
         if(this->width > (this->m_window->GetWidth() + 40) || this->height > (this->m_window->GetHeight() + 40) ||
                         this->width < (this->m_window->GetWidth() - 40) || this->height < (this->m_window->GetHeight() - 40)){
@@ -85,10 +88,9 @@ void GameObject::SetTexture(std::string* tex_path){
  void GameObject::SetInitialMVP(){
     //This is the world space matrix
     this->model = glm::mat4(1.0f); model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
-    //How our comera is positioned in the world, it is inverted. If we want to move the camera backward, we move the whole scene forward
-    this->view = glm::mat4(1.0f); 
-    this->view = glm::rotate(model,glm::radians(40.0f),glm::vec3(1.0f,0.0f,0.0f)); 
-    view = glm::translate(view,glm::vec3(0.0f,-5.0f,-8.0f));
+    this->view = glm::mat4(1.0);
+    this->view = glm::rotate(view,glm::radians(35.0f),glm::vec3(1,0,0));
+    this->view = glm::translate(view,glm::vec3(0.0f,-4.0f,-7.0f));
     //The prjection matrix
     projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
  }
