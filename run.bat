@@ -1,0 +1,2 @@
+MyOpenGLTest.exe
+pause

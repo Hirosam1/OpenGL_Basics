@@ -5,11 +5,8 @@ OBJ_DIR = objs
 
 file_name = MyOpenGLTest
 
-<<<<<<< HEAD
-=======
 LIB_PATH = lib
 
->>>>>>> 18519c03c4536220d63302ead02c8c6f3a2b363d
 GAME_MAN_SRC = $(wildcard $(SRC_DIR)/game_managing/*.cpp) 
 GAME_MAN_OBJS = $(patsubst $(SRC_DIR)/game_managing/%.cpp,$(OBJ_DIR)/%.o,$(GAME_MAN_SRC))
 
@@ -33,13 +30,8 @@ LDLIBS_WIN = -Llib/ -lglfw3 -lglu32 -lgdi32
 linux: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS)
 	g++ -o $(file_name) $^ -L$(LIB_PATH)/ $(LDLIBS_LINUX)
 
-<<<<<<< HEAD
-windows: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS)
-	g++ -o $(file_name) $^ -static-libgcc -static-libstdc++ $(LDLIBS_WIN)
-=======
 windows: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS)
 	g++ -o $(file_name) $^ -static-libgcc -static-libstdc++ -L$(LIB_PATH)/  $(LDLIBS_WIN)
->>>>>>> 18519c03c4536220d63302ead02c8c6f3a2b363d
 
 $(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp 
 	g++ -o $@ -c $^ $(CXXFLAGS)
@@ -59,11 +51,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/game_tools/%.cpp
 $(OBJ_DIR)/%.o: $(SRC_DIR)/geometry/%.cpp
 	g++ -o $@ -c $< $(CXXFLAGS)
 
-<<<<<<< HEAD
 #-static-libgcc -static-libstdc++
-=======
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/graphics/%.cpp	
 	g++ -o $@ -c $< $(CXXFLAGS)
->>>>>>> 18519c03c4536220d63302ead02c8c6f3a2b363d
 clean:
 	rm -rf $(OBJ_DIR)/*.o
