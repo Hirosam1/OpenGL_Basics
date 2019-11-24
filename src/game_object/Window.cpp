@@ -6,7 +6,7 @@ width(width), height(height), window_name(w_name) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
 
     this->m_window = glfwCreateWindow(width,height,this->window_name.data(),NULL,NULL);
-        if(!this->m_window){
+    if(!this->m_window){
         std::cout<<"Error at creating windown!\n";
         glfwTerminate();
         exit(-1);
