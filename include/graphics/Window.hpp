@@ -12,6 +12,7 @@ class Window{
         unsigned int GetHeight();
         void SetWidthHeight(unsigned int width, unsigned int height);
         GLFWwindow* GetWindow();
+        void static FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
     private:
         unsigned int width;
         unsigned int height;

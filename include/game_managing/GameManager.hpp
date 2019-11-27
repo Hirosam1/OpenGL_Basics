@@ -9,6 +9,7 @@
 #include"game_managing/InputManager.hpp"
 #include "game_managing/Time.hpp"
 #include "game_object/aObject.hpp"
+#include "game_object/bObject.hpp"
 #include"game_object/GameObject.hpp"
 #include "game_tools/Debugging.hpp"
 #include "geometry/Shape.hpp"

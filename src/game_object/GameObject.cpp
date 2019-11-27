@@ -1,96 +1,86 @@
 #include "game_object/GameObject.hpp"
 
- GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time): 
-    m_input(m_input),m_time(m_time),m_window(aWindow){
+ GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Camera* m_camera,float initial_pos[3]): 
+    m_input(m_input),m_time(m_time),m_window(aWindow), m_camera(m_camera){
 
-    this->vertex_count = 0;  this->indices_count = 0; this->vertex = nullptr; this->indices = nullptr; this->shader = nullptr; this->m_vao = nullptr;
-
-    this->width = this->m_window->GetWidth();
-    this->height = this->m_window->GetHeight();
-    this->MVP_string = new std::string("MVP");
-    this->SetInitialMVP();
+   this->shader = nullptr;this->m_vao = nullptr;
+   this->width = this->m_window->GetWidth(); 
+   this->height = this->m_window->GetHeight();
+   this->MVP_string = new std::string("MVP");
+   model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
+   this->SetInitialMVP();
 
 }
 
 
 
-GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Shape* m_shape,Camera* m_camera ,float initial_pos[3], 
+GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Camera* m_camera,Shape* m_shape,float initial_pos[3], 
 std::string* vert_shader_path,std::string* frag_shader_path):
-m_input(m_input),m_time(m_time),vertex(m_shape->vertex),m_camera(m_camera),indices(m_shape->indices),vertex_count(m_shape->vertex_count),indices_count(m_shape->indices_count),m_window(aWindow),
-vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path){
-    this->shader = nullptr; this->m_vao = nullptr;
-    this->width = this->m_window->GetWidth();
-    this->height = this->m_window->GetHeight();
-    this->SetInitialMVP();
-    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-    this->MVP_string = new std::string("MVP");
+m_window(aWindow) ,m_input(m_input),m_time(m_time), m_camera(m_camera),
+vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
+   this->shader = nullptr; this->m_vao = nullptr;
+   this->width = this->m_window->GetWidth();
+   this->height = this->m_window->GetHeight();
+   this->SetInitialMVP();
+   
+   model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
+   this->MVP_string = new std::string("MVP");
     
 }
 
 //Updates the data and send it to GPU
  void GameObject::UpdateAndBuffer(){
-    
     //Updaets the vertex data
     this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr){
          //Binds VAO
          this->m_vao->UseVAO();
          this->shader->UseShader();
-         
         //Pass position parameters to shader
-        this->shader->SetUniformMat4fv(this->MVP_string,projection*this->m_camera->GetView()*model);
-        //Checks foe changes in the aspect ratio given a threshold
-        if(this->width > (this->m_window->GetWidth() + 40) || this->height > (this->m_window->GetHeight() + 40) ||
-                        this->width < (this->m_window->GetWidth() - 40) || this->height < (this->m_window->GetHeight() - 40)){
-            projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
-            this->width = this->m_window->GetWidth();
-            this->height = this->m_window->GetHeight();
-        }
-
+        this->shader->SetUniformMat4fv(this->MVP_string,this->m_camera->GetProjection() *this->m_camera->GetView()*model);
         //Draws the cube
-        glDrawElements(GL_TRIANGLES,this->indices_count,GL_UNSIGNED_INT,0);
+        glDrawElements(GL_TRIANGLES,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
     }
 
  }
 
- void GameObject::SetUpObject(){
+ void GameObject::SetUpVertex(){
+   if (this->m_shape != nullptr){
+      //Creates the VAO object
+      this->m_vao = new VAO();
+         //Sets how the atrtibutes should be read, ORDER MATTERS
+         this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
+         this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
+         this->m_vao->SetAttribPoint(2,GL_FLOAT,GL_ARRAY_BUFFER);
+      //Finishes the opbject
+      this->m_vao->SetUpObject();
+      //Buffer data into it
+      this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->vertex_count);
+      this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_FLOAT,this->m_shape->indices_count);
+   
+      this->CreateShaderObject(this->vertex_shader_path,this->fragment_shader_path);
+   }
+ }
 
-    //Creates the VAO object
-    this->m_vao = new VAO();
-        //Sets how the atrtibutes should be read, ORER MATTERS
-        this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
-        this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
-        this->m_vao->SetAttribPoint(2,GL_FLOAT,GL_ARRAY_BUFFER);
-    //Finishes the opbject
-    this->m_vao->SetUpObject();
-    //Buffer data into it
-    this->m_vao->BufferData<GLfloat>(this->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->vertex_count);
-    this->m_vao->BufferData<GLuint>(this->indices,GL_ELEMENT_ARRAY_BUFFER,GL_FLOAT,this->indices_count);
-
-    glBindVertexArray(0);    
-    this->CreateShaderObject(this->vertex_shader_path,this->fragment_shader_path);
+ void GameObject::SetUpVertex(VAO* aVAO){
+    this->m_vao = aVAO;
  }
 
  void GameObject::CreateShaderObject(std::string* vertex_shader, std::string* fragment_shader){
-    this->shader = new Shader();
-    this->shader->LoadShader(vertex_shader,GL_VERTEX_SHADER);
-    this->shader->LoadShader(fragment_shader,GL_FRAGMENT_SHADER);
-    this->shader->LinkShaders();
+   this->shader = new Shader();
+   this->shader->LoadShader(vertex_shader,GL_VERTEX_SHADER);
+   this->shader->LoadShader(fragment_shader,GL_FRAGMENT_SHADER);
+   this->shader->LinkShaders();
     
  }
 
 void GameObject::SetTexture(std::string* tex_path){
    if(this->shader != nullptr){
-   this->shader->SetTexture(tex_path);
+      this->shader->SetTexture(tex_path);
    }
 }
 
  void GameObject::SetInitialMVP(){
-    //This is the world space matrix
-    this->model = glm::mat4(1.0f); model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
-    this->view = glm::mat4(1.0);
-    this->view = glm::rotate(view,glm::radians(35.0f),glm::vec3(1,0,0));
-    this->view = glm::translate(view,glm::vec3(0.0f,-4.0f,-7.0f));
-    //The prjection matrix
-    projection = glm::mat4(1.0f); projection = glm::perspective(glm::radians(45.0f),(float)this->m_window->GetWidth()/this->m_window->GetHeight(),0.1f,100.0f);
+   //This is the world space matrix
+   this->model = glm::mat4(1.0f); //model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
  }

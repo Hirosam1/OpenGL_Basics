@@ -25,8 +25,8 @@ class GameObject{
     public:
         //Constructors
         GameObject(Window* git,InputManager* m_imput, Time* m_time);
-        GameObject(Window* git,InputManager* m_imput, Time* m_time, Camera* m_camera);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Shape* m_shape,Camera* m_camera ,float initial_pos[3],
+        GameObject(Window* git,InputManager* m_imput, Time* m_time, Camera* m_camera,float initial_pos[3]);
+        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Camera* m_camera,Shape* m_shape,float initial_pos[3],
         std::string* vert_shader_path,std::string* frag_shader_path);
 
         //Public Updates
@@ -37,7 +37,8 @@ class GameObject{
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
 
         //Sets up the object to be ready to update/render
-        void SetUpObject();
+        void SetUpVertex();
+        void SetUpVertex(VAO* aVAO);
 
         //Sets the texture to use
         void SetTexture(std::string* tex_path);
@@ -48,17 +49,13 @@ class GameObject{
         std::string* MVP_string;
 
         //View (camera) and projection (perspective) matrixes
-        glm::mat4 view;
         glm::mat4 projection;
-        //Window size for the projection
+        //Window size for the projection (no )
         unsigned int width;
         unsigned int height;
 
-        //Vertices of a triangle along with their indices and numberof points and indices
-        GLfloat* vertex;
-        GLuint* indices; 
-        unsigned int vertex_count;
-        unsigned int indices_count;
+        //================================================================================================
+        Shape* m_shape;
 
         //VAO game object
         VAO* m_vao;
@@ -66,6 +63,7 @@ class GameObject{
         //path to the shaders
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
+        //=================================================================================================
 
         //path to the texture
 
@@ -84,6 +82,5 @@ class GameObject{
         Window* m_window;
         //Children of GameObject class will inherit this method. This is where you update the data within GameObject
         virtual void Update()=0; //Pure virtual function, you need to create sub classes to implement it
-
-        
+  
 };

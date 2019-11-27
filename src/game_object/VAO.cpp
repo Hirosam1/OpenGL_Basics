@@ -63,6 +63,7 @@ template<typename T>
 void VAO::BufferData(T* data,GLenum array_or_element,GLenum type,unsigned int count, GLenum draw_type){
     glBindVertexArray(this->m_VAO); 
     glBufferData(array_or_element,sizeof(type)*count,data,draw_type);
+    glBindVertexArray(0); 
 }
 
 template void VAO::BufferData<GLfloat>(GLfloat* data,GLenum array_or_element,GLenum type,unsigned int count, GLenum draw_type);
