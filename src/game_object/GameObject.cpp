@@ -4,9 +4,7 @@
     m_input(m_input),m_time(m_time),m_window(aWindow), m_camera(m_camera){
 
    this->shader = nullptr;this->m_vao = nullptr;
-   this->width = this->m_window->GetWidth(); 
-   this->height = this->m_window->GetHeight();
-   this->MVP_string = new std::string("MVP");
+   //this->MVP_string = new std::string("MVP");
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->SetInitialMVP();
 
@@ -19,8 +17,6 @@ std::string* vert_shader_path,std::string* frag_shader_path):
 m_window(aWindow) ,m_input(m_input),m_time(m_time), m_camera(m_camera),
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
    this->shader = nullptr; this->m_vao = nullptr;
-   this->width = this->m_window->GetWidth();
-   this->height = this->m_window->GetHeight();
    this->SetInitialMVP();
    
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
@@ -33,6 +29,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     //Updaets the vertex data
     this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr){
+         
          //Binds VAO
          this->m_vao->UseVAO();
          this->shader->UseShader();

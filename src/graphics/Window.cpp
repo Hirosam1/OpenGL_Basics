@@ -14,7 +14,6 @@ width(width), height(height), window_name(w_name) {
     }
     glfwMakeContextCurrent(this->m_window);
     glfwSetFramebufferSizeCallback(this->m_window,this->FrameBufferSizeCallback);
-    glfwSetWindowUserPointer(this->m_window,this);
 }
 GLFWwindow* Window::GetWindow(){
     return this->m_window;
@@ -35,6 +34,6 @@ unsigned int Window::GetHeight(){
 
 void Window::FrameBufferSizeCallback(GLFWwindow* window, int width, int height){
     glViewport(0,0,width,height);
-    Window* here = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    here->SetWidthHeight(width,height);
+    BasicsBlock* here = static_cast<BasicsBlock*>(glfwGetWindowUserPointer(window));
+    here->m_window->SetWidthHeight(width,height);
 }

@@ -21,12 +21,13 @@ void GameManager::EngineInit(){
     std::cout<<"Error while initilazing GLAD\n";
     exit(-1);
     }
-    
-    //setting up callbacks
-    //glfwSetWindowUserPointer(this->main_window->GetWindow(),this);
-    //glfwSetFramebufferSizeCallback(this->main_window->GetWindow(),this->FrameBufferSizeCallback);
-    this->main_input = new InputManager(this->main_window->GetWindow());
+
+    this->main_input = new InputManager(this->main_window);
     this->main_time = new Time();
+
+    this->basic_block = new BasicsBlock(main_window,main_input,main_time);
+
+    glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
     std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
@@ -40,18 +41,16 @@ void GameManager::EngineInit(){
     Shape* cube  = new Cube();
     Shape* plane = new Plane();
     Shape* triag = new Triangle();
+
     std::cout<<"creating game objects...\n";
-    this->go = new aObject(this->main_window,this->main_input,this->main_time,cube,m_camera,new float[3]{0.5,-0.8,2});
+    this->go = new aObject(this->main_window,this->main_input,this->main_time, m_camera,cube,new float[3]{0.5,-0.8,2});
     this->go->SetUpVertex();
-    this->go2 = new aObject(this->main_window,this->main_input,this->main_time,plane,m_camera,new float[3]{-1,0.3,0},vert,frag);
+    this->go2 = new aObject(this->main_window,this->main_input,this->main_time,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
     this->go2->SetUpVertex();
     this->go2->SetTexture(tex);
-    GameObject* go3 = new aObject(this->main_window,this->main_input,this->main_time,triag,m_camera,new float[3]{0.1,0.2,-1});
+    GameObject* go3 = new aObject(this->main_window,this->main_input,this->main_time,m_camera,triag,new float[3]{0.1,0.2,-1});
     go3->SetUpVertex();
-
     GameObject* goglob = new bObject(this->main_window,this->main_input,this->main_time,m_camera,new float[3]{0.0f,0.0f,0.0f});
-
-
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
@@ -85,6 +84,7 @@ void GameManager::EngnieStart(){
         glClearColor(0.05f,0.05f,0.1f,1.0f);
         //glClearColor(0.58f,0.32f,0.69f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+       
         this->main_time->UpdateDelta();
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){

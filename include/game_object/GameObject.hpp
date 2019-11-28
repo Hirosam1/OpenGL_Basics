@@ -6,17 +6,16 @@
 #include<string>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "game_managing/InputManager.hpp"
-#include "game_managing/Time.hpp"
-#include "game_object/VAO.hpp"
-#include "game_tools/Debugging.hpp"
 #include "game_tools/stb_image.h"
-#include "geometry/Shape.hpp"
-#include "graphics/Shader.hpp"
-#include "graphics/Window.hpp"
 
 #include "game_object/Camera.hpp"
+#include "game_tools/Debugging.hpp"
+#include "game_managing/InputManager.hpp"
+#include "geometry/Shape.hpp"
+#include "graphics/Shader.hpp"
+#include "game_managing/Time.hpp"
+#include "game_object/VAO.hpp"
+#include "graphics/Window.hpp"
 
 
 
@@ -48,13 +47,7 @@ class GameObject{
         void SetInitialMVP();
         std::string* MVP_string;
 
-        //View (camera) and projection (perspective) matrixes
-        glm::mat4 projection;
-        //Window size for the projection (no )
-        unsigned int width;
-        unsigned int height;
-
-        //================================================================================================
+        //The shape of the model
         Shape* m_shape;
 
         //VAO game object
@@ -63,14 +56,11 @@ class GameObject{
         //path to the shaders
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
-        //=================================================================================================
-
-        //path to the texture
 
     protected:
+
         //The camera containing the view matrix
         Camera* m_camera;
-
         //The model matrix
         glm::mat4 model; 
         //Shader Object
