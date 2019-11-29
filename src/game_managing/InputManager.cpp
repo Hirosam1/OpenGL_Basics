@@ -22,11 +22,3 @@ void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos){
     here->m_input->mouse_Xpos = xpos;
     here->m_input->mouse_Ypos = ypos;
 }
-
-double InputManager::GetMouseX(){
-    return this->mouse_Xpos;
-}
-
-double InputManager::GetMouseY(){
-    return this->mouse_Ypos;
-}

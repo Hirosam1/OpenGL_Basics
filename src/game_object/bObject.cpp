@@ -11,15 +11,15 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
 
 void bObject::Update(){
     if(firstMouse && m_input->isMouseReady){
-        lastX = m_input->GetMouseX();
-        lastY = m_input->GetMouseY();
+        lastX = m_input->mouse_Xpos;
+        lastY = m_input->mouse_Ypos;
         firstMouse = false;
     }
-    float xoffset = m_input->GetMouseX() - lastX;
-    float yoffset = lastY - m_input->GetMouseY();
+    float xoffset = m_input->mouse_Xpos - lastX;
+    float yoffset = lastY - m_input->mouse_Ypos;
     if(!firstMouse && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
-        lastX = m_input->GetMouseX();
-        lastY = m_input->GetMouseY();
+        lastX = m_input->mouse_Xpos;
+        lastY = m_input->mouse_Ypos;
         xoffset *= sensitivity;
         yoffset *= sensitivity;m_input;
 
