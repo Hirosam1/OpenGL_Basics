@@ -3,7 +3,7 @@
 //Temporaly class that controlls the camera
 class bObject : public GameObject{
     public:
-     bObject(Window* aWindow,InputManager* m_input, Time* m_time, Camera* m_camera ,float initial_pos[3]);
+     bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]);
     void Update() override;
     private:
         glm::vec3 camera_front;

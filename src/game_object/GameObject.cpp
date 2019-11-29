@@ -1,7 +1,7 @@
 #include "game_object/GameObject.hpp"
 
- GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Camera* m_camera,float initial_pos[3]): 
-    m_input(m_input),m_time(m_time),m_window(aWindow), m_camera(m_camera){
+ GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
+    m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
 
    this->shader = nullptr;this->m_vao = nullptr;
    //this->MVP_string = new std::string("MVP");
@@ -12,9 +12,9 @@
 
 
 
-GameObject::GameObject(Window* aWindow,InputManager* m_input, Time* m_time, Camera* m_camera,Shape* m_shape,float initial_pos[3], 
+GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,Shape* m_shape,float initial_pos[3], 
 std::string* vert_shader_path,std::string* frag_shader_path):
-m_window(aWindow) ,m_input(m_input),m_time(m_time), m_camera(m_camera),
+m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
    this->shader = nullptr; this->m_vao = nullptr;
    this->SetInitialMVP();

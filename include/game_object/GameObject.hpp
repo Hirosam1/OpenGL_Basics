@@ -16,16 +16,16 @@
 #include "game_managing/Time.hpp"
 #include "game_object/VAO.hpp"
 #include "graphics/Window.hpp"
-
+#include "game_managing/BasicsBlock.hpp"
 
 
 
 class GameObject{
     public:
         //Constructors
-        GameObject(Window* git,InputManager* m_imput, Time* m_time);
-        GameObject(Window* git,InputManager* m_imput, Time* m_time, Camera* m_camera,float initial_pos[3]);
-        GameObject(Window* aWindow,InputManager* m_input, Time* m_time,Camera* m_camera,Shape* m_shape,float initial_pos[3],
+        GameObject(BasicsBlock* basic_block);
+        GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
+        GameObject(BasicsBlock* basic_block,Camera* m_camera,Shape* m_shape,float initial_pos[3],
         std::string* vert_shader_path,std::string* frag_shader_path);
 
         //Public Updates

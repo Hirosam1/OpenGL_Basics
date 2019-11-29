@@ -1,7 +1,7 @@
 #include "game_object/bObject.hpp"
 
-bObject::bObject(Window* aWindow,InputManager* m_input, Time* m_time, Camera* m_camera ,float initial_pos[3]):GameObject
-(aWindow,m_input,m_time,m_camera,initial_pos){
+bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
+(bc,m_camera,initial_pos){
     yaw = -90.0f;
     sensitivity= 0.2;
     camera_front = glm::vec3(0,0,-1);
@@ -17,11 +17,11 @@ void bObject::Update(){
     }
     float xoffset = m_input->GetMouseX() - lastX;
     float yoffset = lastY - m_input->GetMouseY();
-    lastX = m_input->GetMouseX();
-    lastY = m_input->GetMouseY();
-    if(!firstMouse && (abs(xoffset) > 0.01 ||  abs(yoffset) > 0.01)){
+    if(!firstMouse && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
+        lastX = m_input->GetMouseX();
+        lastY = m_input->GetMouseY();
         xoffset *= sensitivity;
-        yoffset *= sensitivity;
+        yoffset *= sensitivity;m_input;
 
         yaw += xoffset;
         pitch += yoffset;

@@ -43,14 +43,14 @@ void GameManager::EngineInit(){
     Shape* triag = new Triangle();
 
     std::cout<<"creating game objects...\n";
-    this->go = new aObject(this->main_window,this->main_input,this->main_time, m_camera,cube,new float[3]{0.5,-0.8,2});
+    this->go = new aObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2});
     this->go->SetUpVertex();
-    this->go2 = new aObject(this->main_window,this->main_input,this->main_time,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
+    this->go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
     this->go2->SetUpVertex();
     this->go2->SetTexture(tex);
-    GameObject* go3 = new aObject(this->main_window,this->main_input,this->main_time,m_camera,triag,new float[3]{0.1,0.2,-1});
+    GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{0.1,0.2,-1});
     go3->SetUpVertex();
-    GameObject* goglob = new bObject(this->main_window,this->main_input,this->main_time,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
