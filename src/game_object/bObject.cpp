@@ -36,6 +36,7 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
     lastX = m_window->GetWidth()/2;
     lastY = m_window->GetHeight()/2;
     m_deque_test = new std::deque<char*>();
+    fov = 45;
 }
 
 void bObject::Update(){
@@ -60,7 +61,13 @@ void bObject::Update(){
         camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
         camera_front = glm::normalize(camera_front);
+
     }
+    fov -= m_input->scroll_y * (sensitivity * 10);
+    fov = fov > 50 ? 50 : fov < 1 ? 1 : fov;
+    m_camera->MakeProjection(glm::radians(fov));
+    m_input->scroll_y = 0;
+    
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 15;
     }
@@ -93,6 +100,7 @@ void bObject::Update(){
          m_camera->camera_pos->x = 0;
          m_camera->camera_pos->y = 0;
          m_camera->camera_pos->z = 10;
+         fov = 45;
     }
     #ifdef __unix__
     

@@ -19,9 +19,11 @@ class Camera{
         Camera(Window* aWindow, float initial_pos[3]);
         const glm::mat4 GetView();
         const glm::mat4 GetProjection();
+        void MakeProjection(float fov, float aspect_ratio = -1.0f,float close = 0.1f, float far = 100.0f);
         void LookAt(float target[3]); 
         void LookAt(glm::vec3 target);
         void UpdateView();
+        
     private:
         Window* m_window;
         float width;

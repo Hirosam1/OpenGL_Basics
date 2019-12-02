@@ -4,6 +4,10 @@
 InputManager::InputManager(Window* window):window(window){
     glfwSetInputMode(window->GetWindow(),GLFW_CURSOR,GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window->GetWindow(),MouseCallback);
+    glfwSetScrollCallback(window->GetWindow(),ScrollCallback);
+    scroll_y = 0;
+    scroll_x = 0;
+    is_scroll_on = false;
 }
 
 bool InputManager::ProcessInput(int key, int action) const{
@@ -21,4 +25,11 @@ void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos){
     }
     here->m_input->mouse_Xpos = xpos;
     here->m_input->mouse_Ypos = ypos;
+}
+
+void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset){
+    BasicsBlock* here = static_cast<BasicsBlock*>(glfwGetWindowUserPointer(window));
+    here->m_input->scroll_x = xoffset;
+    here->m_input->scroll_y = yoffset;
+    
 }

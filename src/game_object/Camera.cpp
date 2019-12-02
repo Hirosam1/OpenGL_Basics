@@ -47,3 +47,10 @@ const glm::mat4 Camera::GetProjection(){
     }
     return this->m_projection->GetProjection();
 }
+
+void Camera::MakeProjection(float fov, float aspect_ratio,float close, float far){
+    if(aspect_ratio == -1){
+        aspect_ratio = (float)this->m_window->GetWidth()/this->m_window->GetHeight();
+    }
+    this->m_projection->MakePerspective(fov,aspect_ratio,close,far);
+}

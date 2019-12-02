@@ -17,6 +17,8 @@ class bObject : public GameObject{
         double yaw;
         int test_speed =3;
         float sensitivity;
+        float fov;
+
         bool firstMouse = true;
         long long CurrentPhysMem;
         

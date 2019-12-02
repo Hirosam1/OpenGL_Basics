@@ -55,5 +55,5 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/geometry/%.cpp
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/graphics/%.cpp	
 	g++ -o $@ -c $< $(CXXFLAGS)
-clean:
+clear:
 	rm -rf $(OBJ_DIR)/*.o
