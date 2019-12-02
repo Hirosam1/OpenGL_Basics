@@ -17,6 +17,7 @@ class bObject : public GameObject{
         float sensitivity;
         float fov;
 
+        bool didExit;
         bool firstMouse = true;
         long long CurrentPhysMem;
         

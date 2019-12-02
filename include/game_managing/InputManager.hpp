@@ -10,8 +10,10 @@ class InputManager{
     public:
         InputManager(Window* window);
         bool ProcessInput(int key, int action) const;
+        bool ProcessMouseInput(int key) const;
         static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+        static void CursorEnterCallback(GLFWwindow* window, int enter);
         void ResetValues();
         bool isMouseReady = false;
         double mouse_Xpos;
@@ -20,7 +22,7 @@ class InputManager{
         double GetScrollY();
         double scroll_x;
         double scroll_y;
-        bool is_scroll_on;
+        bool is_cursor_in;
     private:
         Window* window;
 };

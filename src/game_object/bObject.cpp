@@ -11,6 +11,7 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
     lastY = m_window->GetHeight()/2;
     m_deque_test = new std::deque<char*>();
     fov = 45;
+    didExit = false;
 }
 
 void bObject::Update(){
@@ -19,9 +20,20 @@ void bObject::Update(){
         lastY = m_input->mouse_Ypos;
         firstMouse = false;
     }
+
+    if(!m_input->is_cursor_in){
+        didExit = true;
+    }
+
+    if(didExit && m_input->is_cursor_in){
+        lastX = m_input->mouse_Xpos;
+        lastY = m_input->mouse_Ypos;
+        didExit = false;
+    }
+
     float xoffset = m_input->mouse_Xpos - lastX;
     float yoffset = lastY - m_input->mouse_Ypos;
-    if(!firstMouse && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
+    if(!firstMouse && !didExit && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
         xoffset *= sensitivity;
@@ -74,6 +86,7 @@ void bObject::Update(){
          m_camera->camera_pos->y = 0;
          m_camera->camera_pos->z = 10;
          fov = 45;
+         m_camera->MakeProjection(glm::radians(fov));
     }
     #ifdef __unix__
     
