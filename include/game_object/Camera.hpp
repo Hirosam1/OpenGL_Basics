@@ -25,11 +25,11 @@ class Camera{
         void UpdateView();
         
     private:
+        float projection_fov;
         Window* m_window;
         float width;
         float height;
         glm::mat4 m_view;
         Projection* m_projection;
-        //glm::mat4 projection;
 
 };
