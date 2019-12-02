@@ -1,8 +1,6 @@
 #include "game_object/GameObject.hpp"
 #include "deque"
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
+
 
 //Temporaly class that controlls the camera
 class bObject : public GameObject{

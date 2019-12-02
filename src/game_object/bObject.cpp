@@ -1,32 +1,6 @@
 #include "game_object/bObject.hpp"
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <iomanip>   
+#include <sys/time.h> 
 
-int parseLine(char* line){
-    // This assumes that a digit will be found and the line ends in " Kb".
-    int i = strlen(line);
-    const char* p = line;
-    while (*p <'0' || *p > '9') p++;
-    line[i-3] = '\0';
-    i = atoi(p);
-    return i;
-}
-
-int getValue(){ //Note: this value is in KB!
-    FILE* file = fopen("/proc/self/status", "r");
-    int result = -1;
-    char line[128];
-
-    while (fgets(line, 128, file) != NULL){
-        if (strncmp(line, "VmRSS:", 6) == 0){
-            result = parseLine(line);
-            break;
-        }
-    }
-    fclose(file);
-    return result;
-}
 
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
@@ -64,7 +38,7 @@ void bObject::Update(){
 
     }
     fov -= m_input->scroll_y * (sensitivity * 10);
-    fov = fov > 50 ? 50 : fov < 1 ? 1 : fov;
+    fov = fov > 70 ? 70 : fov < 1 ? 1 : fov;
     m_camera->MakeProjection(glm::radians(fov));
     
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
@@ -104,7 +78,7 @@ void bObject::Update(){
     #ifdef __unix__
     
     if(m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
-        std::cout<<"\r/ Memory Current Used--> "<<getValue() << "  |";
+        std::cout<<"\r\tMemory Current Used--> "<<Debugging::GetMemoryUsage() << "  |";
     }
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
     if(m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
