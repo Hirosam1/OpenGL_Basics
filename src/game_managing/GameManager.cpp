@@ -97,8 +97,9 @@ void GameManager::EngnieStart(){
     }
 
 
-    std::cout<<"Shutiing down glfw...\n"; 
+    std::cout<<"\nShutiing down glfw...\n"; 
     glfwTerminate();
+    
 }
 
 void GameManager::ErrorCallback(int error, const char* description){

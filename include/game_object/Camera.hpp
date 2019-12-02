@@ -4,10 +4,12 @@
 #include<GLFW/glfw3.h>
 #include<string.h>
 #include<string>
-#include "graphics/Window.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "graphics/Window.hpp"
+#include "game_object/Projection.hpp"
 
 class Camera{
     public:
@@ -25,6 +27,7 @@ class Camera{
         float width;
         float height;
         glm::mat4 m_view;
-        glm::mat4 projection;
+        Projection* m_projection;
+        //glm::mat4 projection;
 
 };

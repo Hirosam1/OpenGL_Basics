@@ -7,4 +7,5 @@ int main(int arc, char* argv[]){
     std::cout<<"==Initilizing Game engine\n";
     gameManager->EngineInit();
     gameManager->EngnieStart();
+    return 0;
 }

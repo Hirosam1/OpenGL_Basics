@@ -1,4 +1,32 @@
 #include "game_object/bObject.hpp"
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <iomanip>   
+
+int parseLine(char* line){
+    // This assumes that a digit will be found and the line ends in " Kb".
+    int i = strlen(line);
+    const char* p = line;
+    while (*p <'0' || *p > '9') p++;
+    line[i-3] = '\0';
+    i = atoi(p);
+    return i;
+}
+
+int getValue(){ //Note: this value is in KB!
+    FILE* file = fopen("/proc/self/status", "r");
+    int result = -1;
+    char line[128];
+
+    while (fgets(line, 128, file) != NULL){
+        if (strncmp(line, "VmRSS:", 6) == 0){
+            result = parseLine(line);
+            break;
+        }
+    }
+    fclose(file);
+    return result;
+}
 
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
@@ -7,6 +35,7 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
     camera_front = glm::vec3(0,0,-1);
     lastX = m_window->GetWidth()/2;
     lastY = m_window->GetHeight()/2;
+    m_deque_test = new std::deque<char*>();
 }
 
 void bObject::Update(){
@@ -65,6 +94,22 @@ void bObject::Update(){
          m_camera->camera_pos->y = 0;
          m_camera->camera_pos->z = 10;
     }
+    #ifdef __unix__
+    
+    if(m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
+        std::cout<<"\r/ Memory Current Used--> "<<getValue() << "  |";
+    }
+    //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
+    if(m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
+        m_deque_test->push_back((char*) malloc (1000000) );
+    }
+    if(m_input->ProcessInput(GLFW_KEY_0,GLFW_PRESS)){
+        for(int i = 0; i < m_deque_test->size(); i++){
+            delete m_deque_test->at(i);
+        }
+        m_deque_test->clear();
+    }
+    #endif
 
     m_camera->camera_front = &camera_front;
     m_camera->LookAt(*m_camera->camera_pos+ *m_camera->camera_front);
