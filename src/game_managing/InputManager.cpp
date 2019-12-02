@@ -31,5 +31,9 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
     BasicsBlock* here = static_cast<BasicsBlock*>(glfwGetWindowUserPointer(window));
     here->m_input->scroll_x = xoffset;
     here->m_input->scroll_y = yoffset;
-    
+}
+
+void InputManager::ResetValues(){
+    this->scroll_x = 0;
+    this->scroll_y = 0;
 }

@@ -66,7 +66,6 @@ void bObject::Update(){
     fov -= m_input->scroll_y * (sensitivity * 10);
     fov = fov > 50 ? 50 : fov < 1 ? 1 : fov;
     m_camera->MakeProjection(glm::radians(fov));
-    m_input->scroll_y = 0;
     
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 15;

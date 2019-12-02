@@ -92,8 +92,9 @@ void GameManager::EngnieStart(){
         }
 
         glfwSwapBuffers(this->main_window->GetWindow());
-
+        this->main_input->ResetValues();
         glfwPollEvents();
+
     }
 
 

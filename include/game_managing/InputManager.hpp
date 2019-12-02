@@ -12,6 +12,7 @@ class InputManager{
         bool ProcessInput(int key, int action) const;
         static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+        void ResetValues();
         bool isMouseReady = false;
         double mouse_Xpos;
         double mouse_Ypos;
