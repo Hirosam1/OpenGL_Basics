@@ -19,17 +19,17 @@
 #include "game_managing/BasicsBlock.hpp"
 
 
+class GameManager;
 
 class GameObject{
     public:
+        friend class GameManager;
         //Constructors
         GameObject(BasicsBlock* basic_block);
         GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
         GameObject(BasicsBlock* basic_block,Camera* m_camera,Shape* m_shape,float initial_pos[3],
-        std::string* vert_shader_path,std::string* frag_shader_path);
-
-        //Public Updates
-        void UpdateAndBuffer();
+        std::string* vert_shader_path = new std::string("shaders/vertex_shaders/MVP_vertex.vert"),
+        std::string* frag_shader_path = new std::string("shaders/fragment_shaders/basic_fragment.frag"));
 
         //Shaders Management
         //Creates the shader object, ready to use
@@ -37,14 +37,21 @@ class GameObject{
 
         //Sets up the object to be ready to update/render
         void SetUpVertex();
+        //Sets up the object to be ready to update/render
         void SetUpVertex(VAO* aVAO);
 
         //Sets the texture to use
         void SetTexture(std::string* tex_path);
 
     private:
+        /*Updates entearly the game object
+            -> Handles the binding and unbing of VAO, EBO and VBO
+            -> Copile and use shaders
+            -> Handles Textures */
+        void UpdateAndBuffer();
         //Sets the MVP to its initial position
         void SetInitialMVP();
+        //The string containg the name of the MVP uniform in the shader
         std::string* MVP_string;
 
         //The shape of the model
@@ -70,7 +77,10 @@ class GameObject{
         Time* m_time;
         //Window where the object will get inputs
         Window* m_window;
-        //Children of GameObject class will inherit this method. This is where you update the data within GameObject
+        /*Individual Update function that should be overridern by each game Object,
+        it will be updated each frame, there you can proccess inputs and alter game 
+        logic and objects, e.g., Cameras, Models, Projections
+        */
         virtual void Update()=0; //Pure virtual function, you need to create sub classes to implement it
   
 };
