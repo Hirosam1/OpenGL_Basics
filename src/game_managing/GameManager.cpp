@@ -36,21 +36,23 @@ void GameManager::EngineInit(){
     this->all_objs = new std::deque<GameObject*>();
 
 
-    Camera* m_camera = new Camera(this->main_window,new float[3]{1.0f,0.0f,10.0f});
+    Camera* m_camera = new Camera(this->main_window,new float[3]{0.0f,0.0f,10.0f});
 
     Shape* cube  = new Cube();
     Shape* plane = new Plane();
     Shape* triag = new Triangle();
 
     std::cout<<"creating game objects...\n";
-    this->go = new aObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2});
-    this->go->SetUpVertex();
-    this->go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
-    this->go2->SetUpVertex();
-    this->go2->SetTexture(tex);
-    GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{0.1,0.2,-1});
+    GameObject *go,*go2;
+    go = new aObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2});
+    go->SetUpVertex();
+    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
+    go2->SetUpVertex();
+    go2->SetTexture(tex);
+    GameObject* go3 = new MovingObject(this->basic_block ,m_camera,triag,new float[3]{0.1,0.2,-1});
     go3->SetUpVertex();
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
+
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
@@ -96,8 +98,7 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
 
     }
-
-
+    
     std::cout<<"\nShutiing down glfw...\n"; 
     glfwTerminate();
     

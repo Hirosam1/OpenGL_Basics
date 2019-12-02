@@ -5,7 +5,7 @@
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
     yaw = -90.0f;
-    sensitivity= 0.2;
+    sensitivity= 0.125;
     camera_front = glm::vec3(0,0,-1);
     lastX = m_window->GetWidth()/2;
     lastY = m_window->GetHeight()/2;
@@ -49,8 +49,8 @@ void bObject::Update(){
         camera_front = glm::normalize(camera_front);
 
     }
-    fov -= m_input->scroll_y * (sensitivity * 10);
-    fov = fov > 70 ? 70 : fov < 1 ? 1 : fov;
+    fov -= m_input->scroll_y * (sensitivity * 20);
+    fov = fov > 110 ? 110 : fov < 1 ? 1 : fov;
     m_camera->MakeProjection(glm::radians(fov));
     
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
@@ -91,12 +91,13 @@ void bObject::Update(){
     #ifdef __unix__
     
     if(m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
-        std::cout<<"\r\tMemory Current Used--> "<<Debugging::GetMemoryUsage() << "  |";
+        std::cout<<"\r\tMemory Current Beeing Used--> "<<Debugging::GetMemoryUsage() << "  |";
     }
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
     if(m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
         m_deque_test->push_back((char*) malloc (1000000) );
     }
+    //THIS CLEANS THE WASTED MEMORY
     if(m_input->ProcessInput(GLFW_KEY_0,GLFW_PRESS)){
         for(int i = 0; i < m_deque_test->size(); i++){
             delete m_deque_test->at(i);

@@ -10,6 +10,7 @@
 
 #include "game_object/aObject.hpp"
 #include "game_object/bObject.hpp"
+#include "game_object/movnigObject.hpp"
 
 #include "game_managing/BasicsBlock.hpp"
 #include"game_object/GameObject.hpp"
@@ -42,17 +43,11 @@ class GameManager{
 
         //The input manager
         InputManager* main_input;
-
-        //All the vertex to render
-        float* vertices;
     
         //name of the game
         std::string game_name;
 
-        //Game object to render (Will have multiple in the future)
-        GameObject* go2;
-        GameObject* go;
-
+        //All objects to be rendered/procceced
         std::deque<GameObject*>* all_objs;
 
         //Global time manager
