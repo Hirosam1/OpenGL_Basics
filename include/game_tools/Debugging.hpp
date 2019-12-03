@@ -6,8 +6,10 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
+#ifdef __unix__
 #include <sys/resource.h>
-#include <iomanip>  
+#include <iomanip>
+#endif
 class Debugging{
     public:
         static void SetPoly2Line();
