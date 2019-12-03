@@ -17,7 +17,7 @@ VAO::VAO(){
 }
 
 void VAO::SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type, GLenum target){
-    glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE,this->GetStride(),(void*)this->SumSizesToAtt(index));
+    glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE,this->GetStride(), (void *)(uintptr_t)this->SumSizesToAtt(index));
     glEnableVertexAttribArray(index);
 }
 
@@ -42,7 +42,9 @@ int VAO::SumSizesToAtt(unsigned int att_to_stop){
     int sum = 0;
     for(auto a = 0; a < this->indv_sizes->size() && a != att_to_stop; a++){
         sum += this->indv_sizes->at(a) * sizeof(this->indv_data_types->at(a));
+        
     }
+
     return sum;
 }
 

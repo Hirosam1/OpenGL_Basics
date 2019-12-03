@@ -48,7 +48,6 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
          //Sets how the atrtibutes should be read, ORDER MATTERS
          this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
          this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
-         this->m_vao->SetAttribPoint(2,GL_FLOAT,GL_ARRAY_BUFFER);
       //Finishes the opbject
       this->m_vao->SetUpObject();
       //Buffer data into it
@@ -60,7 +59,12 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
  }
 
  void GameObject::SetUpVertex(VAO* aVAO){
-    this->m_vao = aVAO;
+   this->m_vao = aVAO;
+   this->m_vao->UseVAO();
+   this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->vertex_count);
+   this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_FLOAT,this->m_shape->indices_count);
+
+   this->CreateShaderObject(this->vertex_shader_path,this->fragment_shader_path);
  }
 
  void GameObject::CreateShaderObject(std::string* vertex_shader, std::string* fragment_shader){

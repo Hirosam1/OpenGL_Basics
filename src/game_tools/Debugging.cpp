@@ -26,7 +26,7 @@ int getValueKB(){ //Note: this value is in KB!
 }
 
 int Debugging::GetMemoryUsage(){
-    getValueKB();
+    return getValueKB();
 }
 
 void Debugging::SetPoly2Line(){

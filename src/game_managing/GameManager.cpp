@@ -47,7 +47,12 @@ void GameManager::EngineInit(){
     go = new aObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2});
     go->SetUpVertex();
     go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
-    go2->SetUpVertex();
+    VAO* go2VAO = new VAO();
+        go2VAO->SetAttribPoint(3,GL_FLOAT, GL_ARRAY_BUFFER);
+        go2VAO->SetAttribPoint(3,GL_FLOAT, GL_ARRAY_BUFFER);
+        go2VAO->SetAttribPoint(2,GL_FLOAT, GL_ARRAY_BUFFER);
+    go2VAO->SetUpObject();
+    go2->SetUpVertex(go2VAO);
     go2->SetTexture(tex);
     GameObject* go3 = new MovingObject(this->basic_block ,m_camera,triag,new float[3]{0.1,0.2,-1});
     go3->SetUpVertex();
