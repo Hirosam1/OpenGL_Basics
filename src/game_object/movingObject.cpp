@@ -7,5 +7,8 @@ MovingObject::MovingObject(BasicsBlock* bb, Camera* camera, Shape* shape, float 
 void MovingObject::Update(){
     int direction = m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS) ? -1 : m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS) ? 1: 0;
     model = glm::translate(model,glm::vec3(direction*m_time->delta_time*test_speed,0,0));
+
+    int height =  m_input->ProcessInput(GLFW_KEY_UP,GLFW_PRESS) ? 1 : m_input->ProcessInput(GLFW_KEY_DOWN,GLFW_PRESS) ? -1: 0;
+    model = glm::translate(model,glm::vec3(0,height*m_time->delta_time*test_speed,0));
 }
 

@@ -28,7 +28,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
  void GameObject::UpdateAndBuffer(){
     //Updaets the vertex data
     this->Update();
-    if(this->m_vao != nullptr && this->shader != nullptr){
+    if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){
          
          //Binds VAO
          this->m_vao->UseVAO();

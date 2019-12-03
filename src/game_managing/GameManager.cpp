@@ -99,7 +99,7 @@ void GameManager::EngnieStart(){
 
     }
     
-    std::cout<<"\nShutiing down glfw...\n"; 
+    std::cout<<"\n==Shutiing down glfw\n"; 
     glfwTerminate();
     
 }
