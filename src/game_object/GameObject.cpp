@@ -45,10 +45,10 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
  void GameObject::SetUpVertex(){
    if (this->m_shape != nullptr){
       //Creates the VAO object
-      this->m_vao = new VAO();
+      this->m_vao = new VAO(GL_FLOAT);
          //Sets how the atrtibutes should be read, ORDER MATTERS
-         this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
-         this->m_vao->SetAttribPoint(3,GL_FLOAT,GL_ARRAY_BUFFER);
+         this->m_vao->SetAttribPoint(3);
+         this->m_vao->SetAttribPoint(3,12);
       //Finishes the opbject
       this->m_vao->SetUpObject();
       //Buffer data into it

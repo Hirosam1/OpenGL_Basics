@@ -1,13 +1,13 @@
 #include "game_object/VAO.hpp"
 
 
-VAO::VAO(){
+VAO::VAO(GLenum vertex_type):vertex_type(vertex_type){
     this->m_VAO = 0;
     this->m_EBO = 0;
     this->indv_sizes = new std::deque<unsigned int>();
-
-    this->indv_array_types = new std::deque<GLenum>();
-    this->indv_data_types = new std::deque<GLenum>();
+    this->elements_stride = new std::deque<int>();
+    //this->indv_array_types = new std::deque<GLenum>();
+    //this->indv_data_types = new std::deque<GLenum>();
     this->indv_ready = 0;
     glGenVertexArrays(1,&this->m_VAO);
     glGenBuffers(1,&this->m_VBO);
@@ -16,15 +16,17 @@ VAO::VAO(){
 
 }
 
-void VAO::SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type, GLenum target){
-    glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE,this->GetStride(), (void *)(uintptr_t)this->SumSizesToAtt(index));
+void VAO::SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type){
+    //stride = this->elements_stride->at(index) < 1 ?this->GetStride() : this->elements_stride->at(index) * sizeof(this->vertex_type);
+    glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE, this->GetStride(), (void *)(uintptr_t)this->SumSizesToAtt(index));
     glEnableVertexAttribArray(index);
 }
 
-void VAO::SetAttribPoint(unsigned int vertex_att_num, GLenum type, GLenum target){
+void VAO::SetAttribPoint(unsigned int vertex_att_num,int element_stride){
     this->indv_sizes->push_back(vertex_att_num);
-    this->indv_array_types->push_back(target);
-    this->indv_data_types->push_back(type);
+    this->elements_stride->push_back(element_stride);
+    //this->indv_array_types->push_back(target);
+    //this->indv_data_types->push_back(type);
 }
 
 void VAO::SetUpObject(){
@@ -33,7 +35,7 @@ void VAO::SetUpObject(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,this->m_EBO);
     
     for(auto a = 0; a < this->indv_sizes->size(); a++){
-        SetAttribPoint(a,this->indv_sizes->at(a),this->indv_data_types->at(a),this->indv_array_types->at(a));
+        SetAttribPoint(a,this->indv_sizes->at(a),this->vertex_type);
     }
 }
 
@@ -41,7 +43,7 @@ void VAO::SetUpObject(){
 int VAO::SumSizesToAtt(unsigned int att_to_stop){
     int sum = 0;
     for(auto a = 0; a < this->indv_sizes->size() && a != att_to_stop; a++){
-        sum += this->indv_sizes->at(a) * sizeof(this->indv_data_types->at(a));
+        sum += this->indv_sizes->at(a) * sizeof(this->vertex_type);
         
     }
 
@@ -52,7 +54,7 @@ int VAO::SumSizesToAtt(unsigned int att_to_stop){
 unsigned int VAO::GetStride(){
     int stride = 0;
     for(auto a = 0; a < this->indv_sizes->size(); a++){
-        stride += this->indv_sizes->at(a) * sizeof(this->indv_data_types->at(a));
+        stride += this->indv_sizes->at(a) * sizeof(this->vertex_type);
     }
     return stride;
 }

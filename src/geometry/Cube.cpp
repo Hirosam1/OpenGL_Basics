@@ -4,15 +4,15 @@
 Cube::Cube():Shape(64,36){
     vertex = new float[48]{
     // positions          // colors                         //Front
-    0.5f,  0.5f, 0.5f,   0.5, 0.55f, 0.20f,// top right    0
-    0.5f, -0.5f, 0.5f,   0.5, 0.55f, 0.20f, // bottom right 1
-    -0.5f,-0.5f, 0.5f,   0.5, 0.55f, 0.20f, // bottom left  2
-    -0.5f, 0.5f, 0.5f,   0.5, 0.55f, 0.20f, // top left     3
+    0.5f,  0.5f, 0.5f,   0.5, 0.65f, 0.30f, // top right    0
+    0.5f, -0.5f, 0.5f,   0.5, 0.65f, 0.30f, // bottom right 1
+    -0.5f,-0.5f, 0.5f,   0.5, 0.65f, 0.30f, // bottom left  2
+    -0.5f, 0.5f, 0.5f,   0.5, 0.55f, 0.30f, // top left     3
                                                             //Back
-    0.5f,  0.5f, -0.5f,  0.5, 0.55f, 0.20f, // top right    4                                      
-    0.5f, -0.5f, -0.5f,  0.5, 0.55f, 0.20f, // bottom right 5
-    -0.5f,-0.5f, -0.5f,  0.5, 0.55f, 0.20f, // bottom left  6
-    -0.5f, 0.5f, -0.5f,  0.5, 0.55f, 0.20f, // top left     7
+    0.5f,  0.5f, -0.5f,  0.5, 0.65f, 0.30f, // top right    4                                      
+    0.5f, -0.5f, -0.5f,  0.5, 0.65f, 0.30f, // bottom right 5
+    -0.5f,-0.5f, -0.5f,  0.5, 0.65f, 0.30f, // bottom left  6
+    -0.5f, 0.5f, -0.5f,  0.5, 0.65f, 0.30f, // top left     7
     };
 
     indices = new unsigned int[36]{
