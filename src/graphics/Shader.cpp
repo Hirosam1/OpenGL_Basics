@@ -88,10 +88,14 @@ void Shader::SetUniform1i(std::string* uniform_name,int i){
     glUniform1f(glGetUniformLocation(this->shader_program,uniform_name->data()),i);
 }
 
-void Shader::SetUniformMat4fv(std::string* uniform_name,glm::mat4 m_mat4){
+void Shader::SetUniformMat4f(std::string* uniform_name,glm::mat4 m_mat4){
     glUniformMatrix4fv(glGetUniformLocation(this->shader_program,uniform_name->data()),1,GL_FALSE,glm::value_ptr(m_mat4));
 }
 
-void Shader::SetFloat(std::string* uniform_name, float i ){
+void Shader::SetUniform1f(std::string* uniform_name, float i ){
     glUniform1f(glGetUniformLocation(this->shader_program,uniform_name->data()),i);
+}
+
+void Shader::SetUniformVec3f(std::string* uniform_name, glm::vec3 vec3 ){
+    glUniform3f(glGetUniformLocation(this->shader_program,uniform_name->data()),vec3.x,vec3.y,vec3.z);
 }

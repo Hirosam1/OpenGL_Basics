@@ -26,17 +26,18 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
 
 //Updates the data and send it to GPU
  void GameObject::UpdateAndBuffer(){
+    if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){this->shader->UseShader();}
     //Updaets the vertex data
     this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){
-         
-         //Binds VAO
-         this->m_vao->UseVAO();
-         this->shader->UseShader();
-        //Pass position parameters to shader
-        this->shader->SetUniformMat4fv(this->MVP_string,this->m_camera->GetProjection() *this->m_camera->GetView()*model);
-        //Draws the cube
-        glDrawElements(GL_TRIANGLES,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
+
+      //Binds VAO
+      this->m_vao->UseVAO();
+      
+      //Pass position parameters to shader
+      this->shader->SetUniformMat4f(this->MVP_string,this->m_camera->GetProjection() *this->m_camera->GetView()*model);
+      //Draws the cube
+      glDrawElements(GL_TRIANGLES,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
     }
 
  }

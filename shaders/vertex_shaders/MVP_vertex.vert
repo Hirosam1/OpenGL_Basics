@@ -5,7 +5,6 @@ layout (location = 2) in vec2 aTexCoord;
 
 uniform mat4 MVP;
 
-
 out vec3 ourColor;
 out vec2 TexCoord;
 

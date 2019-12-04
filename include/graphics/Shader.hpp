@@ -15,10 +15,16 @@ class Shader{
         Shader();
         unsigned int LoadShader(std::string* shader_path, GLenum shder_type);
         int LinkShaders();
+        //Uses shader before rendering
         void UseShader(bool use_texture = true);
+        //Sets the uniform of 1 int
         void SetUniform1i(std::string* uniform_name,int i);
-        void SetUniformMat4fv(std::string* uniform_name,glm::mat4 m_mat4);
-        void SetFloat(std::string* shader_name, float i);
+        //Sets the uniform of a mat 4
+        void SetUniformMat4f(std::string* uniform_name,glm::mat4 m_mat4);
+        //Sets the uniform of a float
+        void SetUniform1f(std::string* shader_name, float i);
+        void SetUniformVec3f(std::string* uniform_name,glm::vec3 vec3);
+        //Creates a texture object and uses the path name to apply it
         void SetTexture(std::string* texture_name);
     protected:
         unsigned int shader_comp;
