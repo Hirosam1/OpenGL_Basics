@@ -6,12 +6,14 @@ MovingObject::MovingObject(BasicsBlock* bb, Camera* camera, Shape* shape, float 
 }
 
 void MovingObject::Update(){
-    int direction = m_input->ProcessInput(GLFW_KEY_LEFT,GLFW_PRESS) ? -1 : m_input->ProcessInput(GLFW_KEY_RIGHT,GLFW_PRESS) ? 1: 0;
+    int direction = m_input->ProcessInput(GLFW_KEY_KP_4,GLFW_PRESS) ? -1 : m_input->ProcessInput(GLFW_KEY_KP_6,GLFW_PRESS) ? 1: 0;
     model = glm::translate(model,glm::vec3(direction*m_time->delta_time*test_speed,0,0));
 
-    int height =  m_input->ProcessInput(GLFW_KEY_UP,GLFW_PRESS) ? 1 : m_input->ProcessInput(GLFW_KEY_DOWN,GLFW_PRESS) ? -1: 0;
+    int height =  m_input->ProcessInput(GLFW_KEY_KP_8,GLFW_PRESS) ? 1 : m_input->ProcessInput(GLFW_KEY_KP_2,GLFW_PRESS) ? -1: 0;
     model = glm::translate(model,glm::vec3(0,height*m_time->delta_time*test_speed,0));
-    //lightPos.y += height * m_time->delta_time * 3;
+
+    int depth = m_input->ProcessInput(GLFW_KEY_KP_1,GLFW_PRESS) ? 1 : m_input->ProcessInput(GLFW_KEY_KP_7,GLFW_PRESS) ? -1: 0;
+    model = glm::translate(model,glm::vec3(0,0,depth*m_time->delta_time*test_speed));
 
     if(m_input->ProcessInput(GLFW_KEY_J,GLFW_PRESS)){
         light -= 1 * m_time->delta_time;
