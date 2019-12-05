@@ -2,7 +2,7 @@
 
  GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
     m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
-
+   this->color = glm::vec3(0);
    this->shader = nullptr;this->m_vao = nullptr;
    //this->MVP_string = new std::string("MVP");
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
@@ -18,9 +18,11 @@ m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_bloc
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
    this->shader = nullptr; this->m_vao = nullptr;
    this->SetInitialMVP();
-   
+   this->color = glm::vec3(0);
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-   this->MVP_string = new std::string("MVP");
+   this->MVP_string = new std::string("VP");
+   this->Color_string = new std::string("aColor");
+   this->model_shader_path = new std::string("Model");
     
 }
 
@@ -33,13 +35,19 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
 
       //Binds VAO
       this->m_vao->UseVAO();
-      
+      //Applies color to the object
+      this->shader->SetUniformVec3f(this->Color_string,this->color);
       //Pass position parameters to shader
-      this->shader->SetUniformMat4f(this->MVP_string,this->m_camera->GetProjection() *this->m_camera->GetView()*model);
-      //Draws the cube
-      glDrawElements(GL_TRIANGLES,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
+      this->shader->SetUniformMat4f( this->model_shader_path,model);
+      this->shader->SetUniformMat4f(this->MVP_string,this->m_camera->GetProjection() *this->m_camera->GetView());
+      if(this->m_shape->indices_count > 1){
+         glDrawElements(GL_TRIANGLE_STRIP,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
+      }else{
+         glDrawArrays(GL_TRIANGLES,0,36);
+      }
     }
 
+    glBindVertexArray(0);
  }
 
  void GameObject::SetUpVertex(){
@@ -48,12 +56,14 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       this->m_vao = new VAO(GL_FLOAT);
          //Sets how the atrtibutes should be read, ORDER MATTERS
          this->m_vao->SetAttribPoint(3);
-         this->m_vao->SetAttribPoint(3,12);
+         this->m_vao->SetAttribPoint(3);
       //Finishes the opbject
       this->m_vao->SetUpObject();
       //Buffer data into it
-      this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->vertex_count);
-      this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_FLOAT,this->m_shape->indices_count);
+      this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->att_count);
+      if(this->m_shape->indices_count > 1){
+         this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_UNSIGNED_INT,this->m_shape->indices_count);
+      }
    
       this->CreateShaderObject(this->vertex_shader_path,this->fragment_shader_path);
    }
@@ -62,9 +72,10 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
  void GameObject::SetUpVertex(VAO* aVAO){
    this->m_vao = aVAO;
    this->m_vao->UseVAO();
-   this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->vertex_count);
-   this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_FLOAT,this->m_shape->indices_count);
-
+   this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->att_count);
+   if(this->m_shape->indices_count > 1){
+      this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_UNSIGNED_INT,this->m_shape->indices_count);
+   }
    this->CreateShaderObject(this->vertex_shader_path,this->fragment_shader_path);
  }
 

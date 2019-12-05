@@ -30,6 +30,7 @@ void GameManager::EngineInit(){
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
     std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
+    std::string* vertTex = new std::string("shaders/vertex_shaders/MVP_texture_vertex.vert");
     std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
     std::string* fragLight = new std::string("shaders/fragment_shaders/light.frag");
     std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
@@ -47,8 +48,9 @@ void GameManager::EngineInit(){
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4;
     go = new MovingObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2},vert,fragLight);
+    go->color = glm::vec3(0.5, 0.65f, 0.30f);
     go->SetUpVertex();
-    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vert,frag);
+    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,frag);
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(3);
@@ -58,10 +60,14 @@ void GameManager::EngineInit(){
     go2->SetTexture(tex);
     GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{0.1,0.2,-1});
     go3->SetUpVertex();
+    go3->color = glm::vec3(1,0,0);
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
     go4 = new aObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vert,lamp);
-    go4->SetUpVertex();
+    VAO* go4VAO = new VAO(GL_FLOAT);
+    go4VAO->SetAttribPoint(3,6);
+    go4VAO->SetUpObject();
+    go4->SetUpVertex(go4VAO);
 
 
     all_objs->push_back(go);
@@ -101,7 +107,7 @@ void GameManager::EngnieStart(){
         }
 
         //Clear the screen
-        glClearColor(0.05f,0.05f,0.1f,1.0f);
+        glClearColor(0.07f,0.10f,0.05,1.0f);
         //glClearColor(0.58f,0.32f,0.69f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        

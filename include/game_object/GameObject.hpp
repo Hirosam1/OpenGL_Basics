@@ -31,6 +31,8 @@ class GameObject{
         std::string* vert_shader_path = new std::string("shaders/vertex_shaders/MVP_vertex.vert"),
         std::string* frag_shader_path = new std::string("shaders/fragment_shaders/basic_fragment.frag"));
 
+        glm::vec3 color;
+
         //Shaders Management
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
@@ -53,6 +55,7 @@ class GameObject{
         void SetInitialMVP();
         //The string containg the name of the MVP uniform in the shader
         std::string* MVP_string;
+        std::string* Color_string;
 
         //The shape of the model
         Shape* m_shape;
@@ -63,6 +66,7 @@ class GameObject{
         //path to the shaders
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
+        std::string* model_shader_path;
 
     protected:
 

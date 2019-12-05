@@ -42,7 +42,7 @@ void bObject::Update(){
         yaw += xoffset;
         pitch += yoffset;
 
-        pitch = pitch > 89.0f ? 89.0f : pitch < -89.0f ? -89.0f :  pitch; 
+        pitch = pitch > 89.4f ? 89.4f : pitch < -89.4f ? -89.4f :  pitch; 
         camera_front.y = sin(glm::radians(pitch));
         camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));

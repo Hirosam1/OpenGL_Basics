@@ -17,8 +17,8 @@ VAO::VAO(GLenum vertex_type):vertex_type(vertex_type){
 }
 
 void VAO::SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type){
-    //stride = this->elements_stride->at(index) < 1 ?this->GetStride() : this->elements_stride->at(index) * sizeof(this->vertex_type);
-    glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE, this->GetStride(), (void *)(uintptr_t)this->SumSizesToAtt(index));
+    stride = this->elements_stride->at(index) < 1 ?this->GetStride() : this->elements_stride->at(index) * sizeof(this->vertex_type);
+    glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE, stride, (void *)(uintptr_t)this->SumSizesToAtt(index));
     glEnableVertexAttribArray(index);
 }
 

@@ -1,6 +1,6 @@
 #include "geometry/Shape.hpp"
 
-Plane::Plane():Shape(32,6){
+Plane::Plane():Shape(32,4,6){
     vertex = new float[32]{
             // positions          // colors           // texture coords
      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right

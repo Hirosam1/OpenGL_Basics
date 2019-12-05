@@ -26,7 +26,7 @@ unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
         glGetShaderiv(shader_id,GL_INFO_LOG_LENGTH,&logLength);
         auto errorLog = new char[logLength];
         glGetShaderInfoLog(shader_id,logLength,&logLength,errorLog);
-        std::cout<<"Error at copiling the shader: " <<shader_path<<std::endl<<"INFO-> "<<errorLog<<std::endl;
+        std::cout<<"Error at copiling the shader: " <<*shader_path<<std::endl<<"INFO-> "<<errorLog<<std::endl;
         exit(-1);
     }
     if(shader_type == GL_VERTEX_SHADER){this->vertex_shader = shader_id;}

@@ -6,5 +6,6 @@ class MovingObject : public GameObject{
         void Update() override;
         float test_speed = 3;
         std::string* shaderUniform;
+        glm::vec3 lightPos;
         float light = 1;
 };

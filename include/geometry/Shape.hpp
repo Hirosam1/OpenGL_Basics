@@ -5,11 +5,13 @@
 
 class Shape{
     public:
-        float* vertex;
-        unsigned int* indices;
+        float* vertex = nullptr;
+        unsigned int* indices = nullptr;
+        unsigned int att_count;
         unsigned int vertex_count;
         unsigned int indices_count;
-        Shape(unsigned int vertex_count, unsigned int indices_count);
+        unsigned int triag_count;
+        Shape(unsigned int att_count,unsigned int vertex_count = 3 ,unsigned int indices_count = 1);
 };
 
 class Cube : public Shape{
