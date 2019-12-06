@@ -112,8 +112,8 @@ void GameManager::EngnieStart(){
         }
 
         //Clear the screen
-        glClearColor(0.07f,0.10f,0.05,1.0f);
-        //glClearColor(0.58f,0.32f,0.69f,1.0f);
+        glClearColor(0.07f,0.06f,0.05,1.0f);
+        //glClearColor(0.08f,0.32f,0.69f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
         this->main_time->UpdateDelta();
