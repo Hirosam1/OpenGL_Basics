@@ -7,6 +7,14 @@
    //this->MVP_string = new std::string("MVP");
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->SetInitialMVP();
+   this->m_light = nullptr;
+
+   this->Model_string = new std::string("Model");
+   this->View_string = new std::string("View");
+   this->Projection_string = new std::string("Projection");
+   this->Color_string = new std::string("aColor");
+   this->lightCol_string = new std::string("lightColor");
+   this->lightPos_string = new std::string("lightPos");
 
 }
 
@@ -20,14 +28,22 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
    this->SetInitialMVP();
    this->color = glm::vec3(0);
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-   this->MVP_string = new std::string("VP");
+   this->m_light = nullptr;
+   this->Model_string = new std::string("Model");
+   this->View_string = new std::string("View");
+   this->Projection_string = new std::string("Projection");
    this->Color_string = new std::string("aColor");
-   this->model_shader_path = new std::string("Model");
+   this->lightCol_string = new std::string("lightColor");
+   this->lightPos_string = new std::string("lightPos");
+
     
 }
 
 //Updates the data and send it to GPU
  void GameObject::UpdateAndBuffer(){
+    if(isLight){
+       this->m_light->light_pos = glm::vec3(model[3][0],model[3][1],model[3][2]);
+    }
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){this->shader->UseShader();}
     //Updaets the vertex data
     this->Update();
@@ -37,9 +53,14 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       this->m_vao->UseVAO();
       //Applies color to the object
       this->shader->SetUniformVec3f(this->Color_string,this->color);
-      //Pass position parameters to shader
-      this->shader->SetUniformMat4f( this->model_shader_path,model);
-      this->shader->SetUniformMat4f(this->MVP_string,this->m_camera->GetProjection() *this->m_camera->GetView());
+      //Pass uniforms
+      if(this->m_light != nullptr){
+         shader->SetUniformVec3f(this->lightCol_string,this->m_light->light_intensity * this->m_light->light_color);
+         shader->SetUniformVec3f(this->lightPos_string,this->m_light->light_pos);
+      }
+      this->shader->SetUniformMat4f(this->Model_string,this->model);
+      this->shader->SetUniformMat4f(this->View_string,this->m_camera->GetView());
+      this->shader->SetUniformMat4f(this->Projection_string,this->m_camera->GetProjection());
       if(this->m_shape->indices_count > 1){
          glDrawElements(GL_TRIANGLE_STRIP,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
       }else{
@@ -96,4 +117,14 @@ void GameObject::SetTexture(std::string* tex_path){
  void GameObject::SetInitialMVP(){
    //This is the world space matrix
    this->model = glm::mat4(1.0f); //model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
+ }
+
+void GameObject::MakeLight(){
+   if(this->m_light){
+      isLight = true;
+   }
+}
+
+ void GameObject::GiveLight(Light* light){
+    this->m_light = light;
  }

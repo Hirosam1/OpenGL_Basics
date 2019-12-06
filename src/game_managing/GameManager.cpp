@@ -47,9 +47,11 @@ void GameManager::EngineInit(){
 
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4;
+    Light* aLight = new Light();
     go = new MovingObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2},vert,fragLight);
     go->color = glm::vec3(0.5, 0.65f, 0.30f);
     go->SetUpVertex();
+    go->GiveLight(aLight);
     go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,frag);
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2VAO->SetAttribPoint(3);
@@ -58,9 +60,10 @@ void GameManager::EngineInit(){
     go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
     go2->SetTexture(tex);
-    GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{0.1,0.2,-1});
+    GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{-1,-2,-1},vert,fragLight);
     go3->SetUpVertex();
     go3->color = glm::vec3(1,0,0);
+    go3->GiveLight(aLight);
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
     go4 = new aObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vert,lamp);
@@ -68,6 +71,8 @@ void GameManager::EngineInit(){
     go4VAO->SetAttribPoint(3,6);
     go4VAO->SetUpObject();
     go4->SetUpVertex(go4VAO);
+    go4->GiveLight(aLight);
+    go4->MakeLight();
 
 
     all_objs->push_back(go);

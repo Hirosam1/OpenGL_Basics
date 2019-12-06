@@ -17,6 +17,7 @@
 #include "game_object/VAO.hpp"
 #include "graphics/Window.hpp"
 #include "game_managing/BasicsBlock.hpp"
+#include "game_object/Light.hpp"
 
 
 class GameManager;
@@ -33,7 +34,6 @@ class GameObject{
 
         glm::vec3 color;
 
-        //Shaders Management
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
 
@@ -45,6 +45,22 @@ class GameObject{
         //Sets the texture to use
         void SetTexture(std::string* tex_path);
 
+        //Sets the Object as a light Source
+        void MakeLight();
+        //Gives a light object to the GameObject, so it can be iluminated or become a light source with MakeLight()
+        void GiveLight(Light* light);
+
+        //The camera containing the view matrix
+        Camera* m_camera;
+        //The model matrix
+        glm::mat4 model; 
+        //Shader Object
+        Shader* shader;
+        //Time object
+        Time* m_time;
+        //Light object
+        Light* m_light;
+
     private:
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO
@@ -54,8 +70,12 @@ class GameObject{
         //Sets the MVP to its initial position
         void SetInitialMVP();
         //The string containg the name of the MVP uniform in the shader
-        std::string* MVP_string;
+        std::string* Model_string;
+        std::string* View_string;
+        std::string* Projection_string;
         std::string* Color_string;
+        std::string* lightCol_string;
+        std::string* lightPos_string;
 
         //The shape of the model
         Shape* m_shape;
@@ -66,21 +86,13 @@ class GameObject{
         //path to the shaders
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
-        std::string* model_shader_path;
-
+        //std::string* model_shader_path;
     protected:
-
-        //The camera containing the view matrix
-        Camera* m_camera;
-        //The model matrix
-        glm::mat4 model; 
-        //Shader Object
-        Shader* shader;
-        InputManager* m_input;
-        //Time object
-        Time* m_time;
+        bool isLight = false;
         //Window where the object will get inputs
         Window* m_window;
+        InputManager* m_input;
+
         /*Individual Update function that should be overridern by each game Object,
         it will be updated each frame, there you can proccess inputs and alter game 
         logic and objects, e.g., Cameras, Models, Projections

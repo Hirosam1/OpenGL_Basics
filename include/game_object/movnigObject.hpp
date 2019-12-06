@@ -5,7 +5,7 @@ class MovingObject : public GameObject{
         MovingObject(BasicsBlock* bb, Camera* camera, Shape* shape, float initial_pos[3],std::string* v, std::string* f);
         void Update() override;
         float test_speed = 3;
-        std::string* shaderUniform;
+        std::string* lightCol_string;
         glm::vec3 lightPos;
         float light = 1;
 };

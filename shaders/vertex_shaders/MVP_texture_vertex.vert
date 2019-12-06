@@ -3,8 +3,9 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
 layout (location = 2) in vec2 aTexCoord;
 
-uniform mat4 VP;
 uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Projection;
 
 out vec3 ourColor;
 out vec2 TexCoord;
@@ -13,7 +14,7 @@ out vec2 TexCoord;
 void main()
 {
     //the predifined gl_Position variable will be used as an output of this shader
-    gl_Position = VP * Model * vec4(aPos,1.0);
+    gl_Position = Projection * View * Model * vec4(aPos,1.0);
 
     ourColor = aColor;
     TexCoord = aTexCoord;

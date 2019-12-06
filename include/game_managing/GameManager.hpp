@@ -20,6 +20,7 @@
 #include "geometry/Shape.hpp"
 #include "game_managing/Time.hpp"
 #include "graphics/Window.hpp"
+#include "game_object/Light.hpp"
 
 
 class GameManager{

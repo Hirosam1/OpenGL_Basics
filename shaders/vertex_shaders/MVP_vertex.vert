@@ -1,24 +1,25 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 normal;
-//layout (location = 2) in vec2 aTexCoord;
 
 uniform mat4 Model;
-uniform mat4 VP;
-uniform vec3 aColor;
+uniform mat4 View;
+uniform mat4 Projection;
 
-out vec3 ourColor;
-out vec2 TexCoord;
+uniform vec3 lightPos;
+
+//uniform vec3 lightPos;
+
+out vec3 LightPos;
 out vec3 aNormal;
 out vec3 FragPos;
 
 //Usually you would transform the input into coordinates that fall within OpenGL's visible region
 void main()
 {
-    
 
-    ourColor = aColor;
-    aNormal = mat3(transpose(inverse(Model))) * normal; 
-    FragPos = vec3(Model  * vec4(aPos,1.0));
-    gl_Position =  VP * Model * vec4(aPos,1.0);
+    aNormal = mat3(transpose(inverse(View * Model))) * normal; 
+    FragPos = vec3(View * Model * vec4(aPos,1.0));
+    gl_Position =  Projection  * View * Model * vec4(aPos,1.0);
+    LightPos = vec3(View * vec4(lightPos,1.0));
 }
