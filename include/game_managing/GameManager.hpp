@@ -1,6 +1,3 @@
-#ifndef Game_man_H
-#define Game_man_H
-#endif
 #pragma once
 #include<iostream>
 #include<glad/glad.h>

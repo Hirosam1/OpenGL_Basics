@@ -6,28 +6,30 @@ MovingObject::MovingObject(BasicsBlock* bb, Camera* camera, Shape* shape, float 
 }
 
 void MovingObject::Update(){
-    int direction = m_input->ProcessInput(GLFW_KEY_KP_4,GLFW_PRESS) ? -1 : m_input->ProcessInput(GLFW_KEY_KP_6,GLFW_PRESS) ? 1: 0;
-    model = glm::translate(model,glm::vec3(direction*m_time->delta_time*test_speed,0,0));
-
-    int depth =  m_input->ProcessInput(GLFW_KEY_KP_8,GLFW_PRESS) ? 1 : m_input->ProcessInput(GLFW_KEY_KP_2,GLFW_PRESS) ? -1: 0;
-    model = glm::translate(model,glm::vec3(0,0,-depth*m_time->delta_time*test_speed));
-
-    int height = m_input->ProcessInput(GLFW_KEY_KP_7,GLFW_PRESS) ? 1 : m_input->ProcessInput(GLFW_KEY_KP_1,GLFW_PRESS) ? -1: 0;
-    model = glm::translate(model,glm::vec3(0,height*m_time->delta_time*test_speed,0));
-
-    if(m_input->ProcessInput(GLFW_KEY_J,GLFW_PRESS)){
-        light -= 1 * m_time->delta_time;
-    }else if(m_input->ProcessInput(GLFW_KEY_U,GLFW_PRESS)){
-        light += 1 * m_time->delta_time;
-    }
-    if(light < 0){
-        light = 0;
-    }else if(light > 1){
-        light = 1;
+    float movSpeed = 5;
+    if(m_input->ProcessInput(GLFW_KEY_KP_4,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(-movSpeed*m_time->delta_time,0,0));
+    }else if(m_input->ProcessInput(GLFW_KEY_KP_6,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(movSpeed*m_time->delta_time,0,0));
     }
 
-    //std::string aux = std::string("lightPos");
-    //shader->SetUniformVec3f(lightCol_string,light * glm::vec3(1,1,1));
-    //shader->SetUniformVec3f(&aux,lightPos);
+    if( m_input->ProcessInput(GLFW_KEY_KP_8,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(0,0,-movSpeed*m_time->delta_time));
+    }else if(m_input->ProcessInput(GLFW_KEY_KP_2,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(0,0, movSpeed*m_time->delta_time));
+    }
+
+    if( m_input->ProcessInput(GLFW_KEY_KP_7,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(0,movSpeed*m_time->delta_time,0));
+    }else if(m_input->ProcessInput(GLFW_KEY_KP_1,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(0,-movSpeed*m_time->delta_time,0)); 
+    }
+
+    if(m_input->ProcessInput(GLFW_KEY_KP_3,GLFW_PRESS)){
+        model = glm::rotate(model,glm::radians((float)((movSpeed+50)*m_time->delta_time)),glm::vec3(0.5f,0.0f,0.5f));
+    }else if(m_input->ProcessInput(GLFW_KEY_KP_9,GLFW_PRESS)){
+        model = glm::rotate(model,glm::radians((float)(-(movSpeed+50)*m_time->delta_time)),glm::vec3(0.5f,0.0f,0.5f));
+    }
+
 }
 

@@ -18,8 +18,6 @@
 
 }
 
-
-
 GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,Shape* m_shape,float initial_pos[3], 
 std::string* vert_shader_path,std::string* frag_shader_path):
 m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
@@ -116,7 +114,7 @@ void GameObject::SetTexture(std::string* tex_path){
 
  void GameObject::SetInitialMVP(){
    //This is the world space matrix
-   this->model = glm::mat4(1.0f); //model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
+   this->model = glm::mat4(1.0f);
  }
 
 void GameObject::MakeLight(){
