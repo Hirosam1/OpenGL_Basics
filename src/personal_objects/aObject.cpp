@@ -1,4 +1,4 @@
-#include "game_object/aObject.hpp"
+#include "personal_objects/aObject.hpp"
 
 //That is not supposed to be a game engine class
 aObject::aObject(BasicsBlock* bc, 

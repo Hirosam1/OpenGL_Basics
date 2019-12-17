@@ -8,10 +8,10 @@
 #include<string>
 #include<deque>
 
-#include "game_object/aObject.hpp"
-#include "game_object/bObject.hpp"
-#include "game_object/cObject.hpp"
-#include "game_object/movnigObject.hpp"
+#include "personal_objects/aObject.hpp"
+#include "personal_objects/bObject.hpp"
+#include "personal_objects/cObject.hpp"
+#include "personal_objects/movnigObject.hpp"
 
 #include "game_managing/BasicsBlock.hpp"
 #include"game_object/GameObject.hpp"
