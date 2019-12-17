@@ -31,7 +31,7 @@ void GameManager::EngineInit(){
 
     std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* vertTex = new std::string("shaders/vertex_shaders/MVP_texture_vertex.vert");
-    std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
+    std::string* frag = new std::string("shaders/fragment_shaders/texture_light.frag");
     std::string* fragLight = new std::string("shaders/fragment_shaders/light.frag");
     std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
     std::string* tex = new std::string("Arrow.png");
@@ -54,9 +54,11 @@ void GameManager::EngineInit(){
     go->GiveLight(aLight);
     go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,frag);
     VAO* go2VAO = new VAO(GL_FLOAT);
+        go2->GiveLight(aLight);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(2);
+        go2VAO->SetAttribPoint(3);
     go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
     go2->SetTexture(tex);

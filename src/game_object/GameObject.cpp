@@ -64,7 +64,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       if(this->m_shape->indices_count > 1){
          glDrawElements(GL_TRIANGLE_STRIP,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
       }else{
-         glDrawArrays(GL_TRIANGLES,0,36);
+         glDrawArrays(GL_TRIANGLES,0,this->m_shape->vertex_count);
       }
     }
 

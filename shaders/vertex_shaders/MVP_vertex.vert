@@ -20,6 +20,6 @@ void main()
 
     aNormal = mat3(transpose(inverse(View * Model))) * normal; 
     FragPos = vec3(View * Model * vec4(aPos,1.0));
-    gl_Position =  Projection  * View * Model * vec4(aPos,1.0);
+    gl_Position =  Projection  * vec4(FragPos,1.0);
     LightPos = vec3(View * vec4(lightPos,1.0));
 }
