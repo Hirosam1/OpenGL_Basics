@@ -10,6 +10,7 @@
 
 #include "game_object/aObject.hpp"
 #include "game_object/bObject.hpp"
+#include "game_object/cObject.hpp"
 #include "game_object/movnigObject.hpp"
 
 #include "game_managing/BasicsBlock.hpp"

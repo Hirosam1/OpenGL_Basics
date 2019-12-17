@@ -68,7 +68,7 @@ void GameManager::EngineInit(){
     go3->GiveLight(aLight);
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
-    go4 = new aObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vert,lamp);
+    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vert,lamp);
     VAO* go4VAO = new VAO(GL_FLOAT);
     go4VAO->SetAttribPoint(3,6);
     go4VAO->SetUpObject();
