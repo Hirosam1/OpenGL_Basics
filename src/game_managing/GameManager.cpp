@@ -56,12 +56,12 @@ void GameManager::EngineInit(){
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2->GiveLight(aLight);
         go2VAO->SetAttribPoint(3);
-        go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(2);
         go2VAO->SetAttribPoint(3);
     go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
     go2->SetTexture(tex);
+    go2->color = glm::vec3(0.9f,0.6f, 0.1f);
     GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{-1,-2,-1},vert,fragLight);
     go3->SetUpVertex();
     go3->color = glm::vec3(1,0,0);
@@ -115,7 +115,6 @@ void GameManager::EngnieStart(){
 
         //Clear the screen
         glClearColor(0.07f,0.06f,0.05,1.0f);
-        //glClearColor(0.08f,0.32f,0.69f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
         this->main_time->UpdateDelta();

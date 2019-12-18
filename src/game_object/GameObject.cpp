@@ -12,9 +12,16 @@
    this->Model_string = new std::string("Model");
    this->View_string = new std::string("View");
    this->Projection_string = new std::string("Projection");
-   this->Color_string = new std::string("aColor");
-   this->lightCol_string = new std::string("lightColor");
-   this->lightPos_string = new std::string("lightPos");
+   
+   this->Mat_ambient = new std::string("material.ambient");
+   this->Mat_diffuse = new std::string("material.diffuse");
+   this->Mat_specular = new std::string("material.specular");
+   this->Mat_shininess = new std::string("material.shininess");
+
+   this->Light_ambient = new std::string("light.ambient");
+   this->Light_diffuse = new std::string("light.difusse");
+   this->Light_specular = new std::string("light.specular");
+   this->Light_pos = new std::string("light.position");
 
 }
 
@@ -30,10 +37,16 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
    this->Model_string = new std::string("Model");
    this->View_string = new std::string("View");
    this->Projection_string = new std::string("Projection");
-   this->Color_string = new std::string("aColor");
-   this->lightCol_string = new std::string("lightColor");
-   this->lightPos_string = new std::string("lightPos");
 
+   this->Mat_ambient = new std::string("material.ambient");
+   this->Mat_diffuse = new std::string("material.diffuse");
+   this->Mat_specular = new std::string("material.specular");
+   this->Mat_shininess = new std::string("material.shininess");
+
+   this->Light_ambient = new std::string("light.ambient");
+   this->Light_diffuse = new std::string("light.diffuse");
+   this->Light_specular = new std::string("light.specular");
+   this->Light_pos = new std::string("light.position");
     
 }
 
@@ -50,11 +63,16 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       //Binds VAO
       this->m_vao->UseVAO();
       //Applies color to the object
-      this->shader->SetUniformVec3f(this->Color_string,this->color);
+      this->shader->SetUniformVec3f(this->Mat_ambient,this->color * 0.3f);
+      this->shader->SetUniformVec3f(this->Mat_diffuse,this->color);
+      this->shader->SetUniformVec3f(this->Mat_specular,glm::vec3(0.5f,0.5f,0.5f));
+      this->shader->SetUniform1f(this->Mat_shininess,32.0f);
       //Pass uniforms
       if(this->m_light != nullptr){
-         shader->SetUniformVec3f(this->lightCol_string,this->m_light->light_intensity * this->m_light->light_color);
-         shader->SetUniformVec3f(this->lightPos_string,this->m_light->light_pos);
+         shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_color * this->m_light->light_intensity);
+         shader->SetUniformVec3f(this->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);
+         shader->SetUniformVec3f(this->Light_specular,this->m_light->light_color * this->m_light->light_intensity);
+         shader->SetUniformVec3f(this->Light_pos,this->m_light->light_pos);
       }
       this->shader->SetUniformMat4f(this->Model_string,this->model);
       this->shader->SetUniformMat4f(this->View_string,this->m_camera->GetView());

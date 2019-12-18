@@ -73,9 +73,16 @@ class GameObject{
         std::string* Model_string;
         std::string* View_string;
         std::string* Projection_string;
-        std::string* Color_string;
-        std::string* lightCol_string;
-        std::string* lightPos_string;
+
+        std::string* Mat_ambient;
+        std::string* Mat_diffuse;
+        std::string* Mat_specular;
+        std::string* Mat_shininess;
+
+        std::string* Light_ambient;
+        std::string* Light_diffuse;
+        std::string* Light_specular;
+        std::string* Light_pos;
 
         //The shape of the model
         Shape* m_shape;
