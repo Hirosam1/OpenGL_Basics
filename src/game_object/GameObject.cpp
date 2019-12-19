@@ -9,19 +9,19 @@
    this->SetInitialMVP();
    this->m_light = nullptr;
 
-   this->Model_string = new std::string("Model");
-   this->View_string = new std::string("View");
-   this->Projection_string = new std::string("Projection");
-   
-   this->Mat_ambient = new std::string("material.ambient");
-   this->Mat_diffuse = new std::string("material.diffuse");
-   this->Mat_specular = new std::string("material.specular");
-   this->Mat_shininess = new std::string("material.shininess");
+   this->Model_string = basic_block->Model_string;
+   this->View_string = basic_block->View_string;
+   this->Projection_string = basic_block->Projection_string;
 
-   this->Light_ambient = new std::string("light.ambient");
-   this->Light_diffuse = new std::string("light.difusse");
-   this->Light_specular = new std::string("light.specular");
-   this->Light_pos = new std::string("light.position");
+   this->Mat_ambient = basic_block->Mat_ambient;
+   this->Mat_diffuse = basic_block->Mat_diffuse;
+   this->Mat_specular = basic_block->Mat_specular;
+   this->Mat_shininess = basic_block->Mat_shininess;
+
+   this->Light_ambient = basic_block->Light_ambient;
+   this->Light_diffuse = basic_block->Light_diffuse;
+   this->Light_specular = basic_block->Light_specular;
+   this->Light_pos = basic_block->Light_pos;
 
 }
 
@@ -34,19 +34,21 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
    this->color = glm::vec3(0);
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->m_light = nullptr;
-   this->Model_string = new std::string("Model");
-   this->View_string = new std::string("View");
-   this->Projection_string = new std::string("Projection");
+   this->m_material = nullptr;
+   
+   this->Model_string = basic_block->Model_string;
+   this->View_string = basic_block->View_string;
+   this->Projection_string = basic_block->Projection_string;
 
-   this->Mat_ambient = new std::string("material.ambient");
-   this->Mat_diffuse = new std::string("material.diffuse");
-   this->Mat_specular = new std::string("material.specular");
-   this->Mat_shininess = new std::string("material.shininess");
+   this->Mat_ambient = basic_block->Mat_ambient;
+   this->Mat_diffuse = basic_block->Mat_diffuse;
+   this->Mat_specular = basic_block->Mat_specular;
+   this->Mat_shininess = basic_block->Mat_shininess;
 
-   this->Light_ambient = new std::string("light.ambient");
-   this->Light_diffuse = new std::string("light.diffuse");
-   this->Light_specular = new std::string("light.specular");
-   this->Light_pos = new std::string("light.position");
+   this->Light_ambient = basic_block->Light_ambient;
+   this->Light_diffuse = basic_block->Light_diffuse;
+   this->Light_specular = basic_block->Light_specular;
+   this->Light_pos = basic_block->Light_pos;
     
 }
 
@@ -59,15 +61,16 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     //Updaets the vertex data
     this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){
-
+      //Pass uniforms
       //Binds VAO
       this->m_vao->UseVAO();
+      if(this->m_material != nullptr){
       //Applies color to the object
-      this->shader->SetUniformVec3f(this->Mat_ambient,this->color * 0.3f);
-      this->shader->SetUniformVec3f(this->Mat_diffuse,this->color);
+      this->shader->SetUniformVec3f(this->Mat_ambient,this->m_material->main_color * 0.3f);
+      this->shader->SetUniformVec3f(this->Mat_diffuse,this->m_material->main_color);
       this->shader->SetUniformVec3f(this->Mat_specular,glm::vec3(0.5f,0.5f,0.5f));
       this->shader->SetUniform1f(this->Mat_shininess,32.0f);
-      //Pass uniforms
+      }
       if(this->m_light != nullptr){
          shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_color * this->m_light->light_intensity);
          shader->SetUniformVec3f(this->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);

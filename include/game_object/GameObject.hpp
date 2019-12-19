@@ -18,6 +18,7 @@
 #include "graphics/Window.hpp"
 #include "game_managing/BasicsBlock.hpp"
 #include "game_object/Light.hpp"
+#include "graphics/Material.hpp"
 
 
 class GameManager;
@@ -32,19 +33,14 @@ class GameObject{
         std::string* vert_shader_path = new std::string("shaders/vertex_shaders/MVP_vertex.vert"),
         std::string* frag_shader_path = new std::string("shaders/fragment_shaders/basic_fragment.frag"));
 
-        glm::vec3 color;
-
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
-
         //Sets up the object to be ready to update/render
         void SetUpVertex();
         //Sets up the object to be ready to update/render
         void SetUpVertex(VAO* aVAO);
-
         //Sets the texture to use
         void SetTexture(std::string* tex_path);
-
         //Sets the Object as a light Source
         void MakeLight();
         //Gives a light object to the GameObject, so it can be iluminated or become a light source with MakeLight()
@@ -60,8 +56,13 @@ class GameObject{
         Time* m_time;
         //Light object
         Light* m_light;
+        //The material of the object
+        Material* m_material;
+
+    
 
     private:
+        glm::vec3 color;    
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO
             -> Copile and use shaders
@@ -69,7 +70,7 @@ class GameObject{
         void UpdateAndBuffer();
         //Sets the MVP to its initial position
         void SetInitialMVP();
-        //The string containg the name of the MVP uniform in the shader
+        //The strings
         std::string* Model_string;
         std::string* View_string;
         std::string* Projection_string;

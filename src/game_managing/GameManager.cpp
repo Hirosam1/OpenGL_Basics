@@ -49,7 +49,7 @@ void GameManager::EngineInit(){
     GameObject *go,*go2, *go4;
     Light* aLight = new Light();
     go = new MovingObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2},vert,fragLight);
-    go->color = glm::vec3(0.5, 0.65f, 0.30f);
+    go->m_material = new Material(glm::vec3(0.5, 0.65f, 0.30f));
     go->SetUpVertex();
     go->GiveLight(aLight);
     go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,frag);
@@ -61,10 +61,11 @@ void GameManager::EngineInit(){
     go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
     go2->SetTexture(tex);
-    go2->color = glm::vec3(0.9f,0.6f, 0.1f);
+    go2->m_material = new Material(glm::vec3(0.9f,0.6f, 0.1f));
     GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{-1,-2,-1},vert,fragLight);
     go3->SetUpVertex();
     go3->color = glm::vec3(1,0,0);
+    go3->m_material = new Material(glm::vec3(1,0,0));
     go3->GiveLight(aLight);
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
