@@ -2,7 +2,6 @@
 
  GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
     m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
-   this->color = glm::vec3(0);
    this->shader = nullptr;this->m_vao = nullptr;
    //this->MVP_string = new std::string("MVP");
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
@@ -31,7 +30,6 @@ m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_bloc
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
    this->shader = nullptr; this->m_vao = nullptr;
    this->SetInitialMVP();
-   this->color = glm::vec3(0);
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->m_light = nullptr;
    this->m_material = nullptr;
@@ -66,10 +64,10 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       this->m_vao->UseVAO();
       if(this->m_material != nullptr){
       //Applies color to the object
-      this->shader->SetUniformVec3f(this->Mat_ambient,this->m_material->main_color * 0.3f);
-      this->shader->SetUniformVec3f(this->Mat_diffuse,this->m_material->main_color);
-      this->shader->SetUniformVec3f(this->Mat_specular,glm::vec3(0.5f,0.5f,0.5f));
-      this->shader->SetUniform1f(this->Mat_shininess,32.0f);
+      this->shader->SetUniformVec3f(this->Mat_ambient,this->m_material->ambient_color);
+      this->shader->SetUniformVec3f(this->Mat_diffuse,this->m_material->diffuse_color);
+      this->shader->SetUniformVec3f(this->Mat_specular,this->m_material->specular_color);
+      this->shader->SetUniform1f(this->Mat_shininess,this->m_material->shininess);
       }
       if(this->m_light != nullptr){
          shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_color * this->m_light->light_intensity);

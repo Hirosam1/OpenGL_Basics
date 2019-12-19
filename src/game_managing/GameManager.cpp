@@ -61,10 +61,12 @@ void GameManager::EngineInit(){
     go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
     go2->SetTexture(tex);
-    go2->m_material = new Material(glm::vec3(0.9f,0.6f, 0.1f));
+
+    go2->m_material = new Material(glm::vec3(1.0f,1.0f, 0.2f));
+    go2->m_material->specular_color =  glm::vec3(0.5,0.5,0.5);
+    go2->m_material->shininess = 64.0f;
     GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{-1,-2,-1},vert,fragLight);
     go3->SetUpVertex();
-    go3->color = glm::vec3(1,0,0);
     go3->m_material = new Material(glm::vec3(1,0,0));
     go3->GiveLight(aLight);
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});

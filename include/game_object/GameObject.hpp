@@ -61,8 +61,7 @@ class GameObject{
 
     
 
-    private:
-        glm::vec3 color;    
+    private: 
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO
             -> Copile and use shaders
