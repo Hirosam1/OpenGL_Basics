@@ -22,23 +22,26 @@ struct Light{
 
 uniform Material material;
 uniform Light light;
+precision highp float;
 
 void main()
 {
     vec3 ambient = material.ambient * light.ambient;
-
     vec3 norm = normalize(aNormal);
     //Difuse
     vec3 lightDir = normalize(LightPos - FragPos);
-    float diff = max(dot(norm,lightDir),0);
-    vec3 diffuse = (diff * material.diffuse) * light.diffuse;
+    float diff = max(dot(norm,lightDir),0.0);
+    highp vec3 diffuse = (diff * material.diffuse) * light.diffuse;
 
+    vec3 specular = vec3(0);
     //Specular
-    vec3 viewDir = normalize(-FragPos);
-    vec3 reflectDir = reflect(-lightDir,norm);
-    float spec = pow(max(dot(viewDir,reflectDir),0), material.shininess);
-    vec3 specular = light.specular * (spec * material.specular);  
+    if(diff > 0){
+        vec3 viewDir = normalize(-FragPos);
+        vec3 reflectDir = reflect(-lightDir,norm);
+        float spec = pow(max(dot(viewDir,reflectDir),0.0), material.shininess);
+        specular = light.specular * (spec * material.specular);
+    }
 
-    vec3 result = ambient + diffuse + specular;
+    vec3 result = diffuse + (ambient + specular);
     FragColor = vec4(result, 1.0);
 }

@@ -94,7 +94,7 @@ void bObject::Update(){
         std::cout<<"\r\tMemory Current Beeing Used--> "<<Debugging::GetMemoryUsage() << "  |";
     }
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
-    if(m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
+    if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
         m_deque_test->push_back((char*) malloc (1000000) );
     }
     //THIS CLEANS THE WASTED MEMORY

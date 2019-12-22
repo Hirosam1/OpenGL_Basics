@@ -25,8 +25,6 @@ void VAO::SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum 
 void VAO::SetAttribPoint(unsigned int vertex_att_num,int element_stride){
     this->indv_sizes->push_back(vertex_att_num);
     this->elements_stride->push_back(element_stride);
-    //this->indv_array_types->push_back(target);
-    //this->indv_data_types->push_back(type);
 }
 
 void VAO::SetUpObject(){
@@ -71,4 +69,5 @@ void VAO::BufferData(T* data,GLenum array_or_element,GLenum type,unsigned int co
 }
 
 template void VAO::BufferData<GLfloat>(GLfloat* data,GLenum array_or_element,GLenum type,unsigned int count, GLenum draw_type);
+template void VAO::BufferData<GLdouble>(GLdouble* data,GLenum array_or_element,GLenum type,unsigned int count, GLenum draw_type);
 template void VAO::BufferData<GLuint>(GLuint* data,GLenum array_or_element,GLenum type,unsigned int count, GLenum draw_type);

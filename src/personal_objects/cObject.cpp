@@ -17,4 +17,10 @@ void cObject::Update(){
         model = glm::translate(model,glm::vec3(9*m_time->delta_time,0,0));
     }
 
+    if(m_input->ProcessInput(GLFW_KEY_PAGE_UP,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(0,9*m_time->delta_time,0));
+    }else  if(m_input->ProcessInput(GLFW_KEY_PAGE_DOWN,GLFW_PRESS)){
+        model = glm::translate(model,glm::vec3(0,-9*m_time->delta_time,0));
+    }
+
 }

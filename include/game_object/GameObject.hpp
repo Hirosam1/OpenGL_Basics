@@ -40,7 +40,7 @@ class GameObject{
         //Sets up the object to be ready to update/render
         void SetUpVertex(VAO* aVAO);
         //Sets the texture to use
-        void SetTexture(std::string* tex_path);
+        void SetTexture(std::string* tex_path, GLenum type = GL_RGB, std::string* uniform_name = nullptr);
         //Sets the Object as a light Source
         void MakeLight();
         //Gives a light object to the GameObject, so it can be iluminated or become a light source with MakeLight()
@@ -95,6 +95,7 @@ class GameObject{
         std::string* fragment_shader_path;
         //std::string* model_shader_path;
     protected:
+        BasicsBlock* bb;
         bool isLight = false;
         //Window where the object will get inputs
         Window* m_window;

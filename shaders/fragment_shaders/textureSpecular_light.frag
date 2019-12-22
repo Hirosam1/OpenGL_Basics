@@ -10,9 +10,9 @@ in vec3 LightPos;
 
 struct Material{
     sampler2D texture1;
+    sampler2D specular;
     vec3 ambient;
     vec3 diffuse;
-    vec3 specular;
     float shininess;
 };
 
@@ -32,7 +32,8 @@ uniform Light light;
 void main()
 {
     vec4 texColor = vec4(texture(material.texture1,TexCoord));
-    vec3 ambient = light.ambient * vec3(texColor) * material.ambient;
+    vec4 specColor = vec4(texture(material.specular,TexCoord));
+    
     vec3 norm = normalize(aNormal);
     //Difuse
     vec3 lightDir = normalize(LightPos - FragPos);
@@ -43,8 +44,9 @@ void main()
     vec3 viewDir = normalize(-FragPos);
     vec3 reflectDir = reflect(-lightDir,norm);
     float spec = pow(max(dot(viewDir,reflectDir),0), material.shininess);
-    vec3 specular = light.specular * (spec * material.specular);  
+    vec3 specular = light.specular * (spec * vec3(specColor));  
 
+    vec3 ambient = light.ambient * vec3(texColor) * material.ambient;
     vec3 result =(diffuse + ambient + specular);
     
     if (texColor.a < 0.5)

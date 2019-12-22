@@ -4,7 +4,7 @@
 
 class Material{
     public:
-    Material(glm::vec3 main_color);
+    Material(glm::vec3 main_color = glm::vec3(1.0, 1.0f, 1.0f));
     int use_main_color = 1;
     glm::vec3 main_color;
     glm::vec3 ambient_color;

@@ -15,4 +15,5 @@ m_window(window),m_input(input),m_time(time){
     this->Light_diffuse = new std::string("light.diffuse");
     this->Light_specular = new std::string("light.specular");
     this->Light_pos = new std::string("light.position");
+    this->Basic_tex = new std::string("material.texture1");
 }

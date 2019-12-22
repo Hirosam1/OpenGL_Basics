@@ -12,9 +12,9 @@ class Shader;
 class Texture{
     
     public:
-        Texture(Shader* m_shader, std::string* texture_path, std::string* uniform_name,unsigned int uniform_index);
-        void CreateTexture(std::string* texture_name,std::string* uniform_name,unsigned int uniform_index);
-        void UseTexture();
+        Texture(Shader* m_shader, std::string* texture_path, std::string* uniform_name,unsigned int uniform_index,GLenum type = GL_RGB);
+        void CreateTexture(std::string* texture_name,std::string* uniform_name,unsigned int uniform_index,GLenum type);
+        void UseTexture(unsigned int texture_num = 0);
         
     private:
         unsigned int m_texture;

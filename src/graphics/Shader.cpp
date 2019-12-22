@@ -7,6 +7,7 @@ Shader::Shader(){
     this->vertex_shader = 0;
     this->fragment_shader = 0;
     this->shader_program = 0;
+    this->m_textures = new std::list<Texture*>();
 }
 
 unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
@@ -48,7 +49,7 @@ int Shader::LinkShaders(){
 }
 
 unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned int fragment_shader){
-    unsigned int shader_program;
+    //unsigned int shader_program;
     int success;
 
     //Atacch and link the shaders
@@ -73,19 +74,24 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
     return shader_program;
 }
 
-void Shader::SetTexture(std::string* texture_name){
-    this->m_texture = new Texture(this,texture_name,new std::string("texture1"),0);
+void Shader::SetTexture(std::string* texture_name,std::string* uniform_name,GLenum type){
+    this->m_textures->push_back(new Texture(this,texture_name,uniform_name,this->m_textures->size(),type));
 }
 
 void Shader::UseShader(bool use_texture){
-    if(this->m_texture != nullptr && use_texture){
-        this->m_texture->UseTexture();
+    unsigned int tex_number = 0; 
+    if(this->m_textures->size() > 0 && use_texture){
+        for (Texture* const& it: *this->m_textures)
+        {
+            
+            it->UseTexture(tex_number++);
+        }
     }
     glUseProgram(this->shader_program);
 }
 
 void Shader::SetUniform1i(std::string* uniform_name,int i){
-    glUniform1f(glGetUniformLocation(this->shader_program,uniform_name->data()),i);
+    glUniform1i(glGetUniformLocation(this->shader_program,uniform_name->data()),i);
 }
 
 void Shader::SetUniformMat4f(std::string* uniform_name,glm::mat4 m_mat4){

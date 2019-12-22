@@ -26,4 +26,6 @@ class BasicsBlock{
         std::string* Light_diffuse;
         std::string* Light_specular;
         std::string* Light_pos;
+
+        std::string* Basic_tex;
 };
