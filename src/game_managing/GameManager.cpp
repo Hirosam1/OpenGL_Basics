@@ -53,8 +53,7 @@ void GameManager::SetUpObjects(){
     this->all_objs = new std::deque<GameObject*>();
 
 
-    Camera* m_camera = new Camera(this->main_window,new float[3]{-3.0f,2.0f,10.0f});
-    m_camera->LookAt(new float[3]{0,0,0});
+    Camera* m_camera = new Camera(this->main_window);
 
     Shape* cube  = new Cube();
     Shape* plane = new Plane();
