@@ -74,9 +74,9 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       this->shader->SetUniform1f(this->Mat_shininess,this->m_material->shininess);
       }
       if(this->m_light != nullptr){
-         shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_color * this->m_light->light_intensity);
+         shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_ambient);
          shader->SetUniformVec3f(this->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);
-         shader->SetUniformVec3f(this->Light_specular,glm::vec3(0.8));
+         shader->SetUniformVec3f(this->Light_specular,this->m_light->light_specular);
          shader->SetUniformVec3f(this->Light_pos,this->m_light->light_pos);
       }
       this->shader->SetUniformMat4f(this->Model_string,this->model);

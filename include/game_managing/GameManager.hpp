@@ -60,6 +60,9 @@ class GameManager{
         //Callback when Buffer size changes
         static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 
+        //Sets up the game Objects
+        void SetUpObjects();
+
     public:
         GameManager(std::string game_name,int width, int height);
         //Initiate the game engine, and become ready to start

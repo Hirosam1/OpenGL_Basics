@@ -28,6 +28,17 @@ void GameManager::EngineInit(){
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
+    SetUpObjects();
+
+    this->ready_to_start = true;
+    glEnable(GL_DITHER);
+    Debugging::SetPointsSize(10);    
+    glEnable(GL_DEPTH_TEST);
+
+}
+
+
+void GameManager::SetUpObjects(){
     std::string* vertDefault = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* vertTex = new std::string("shaders/vertex_shaders/MVP_texture_vertex.vert");
     std::string* fragTex = new std::string("shaders/fragment_shaders/texture_light.frag");
@@ -42,7 +53,8 @@ void GameManager::EngineInit(){
     this->all_objs = new std::deque<GameObject*>();
 
 
-    Camera* m_camera = new Camera(this->main_window,new float[3]{0.0f,0.0f,10.0f});
+    Camera* m_camera = new Camera(this->main_window,new float[3]{-3.0f,2.0f,10.0f});
+    m_camera->LookAt(new float[3]{0,0,0});
 
     Shape* cube  = new Cube();
     Shape* plane = new Plane();
@@ -105,8 +117,7 @@ void GameManager::EngineInit(){
         go5VAO->SetUpObject();
     go5->GiveLight(aLight);
     go5->SetUpVertex(go5VAO);
-    go5->m_material = new Material();
-    go5->m_material->shininess = 64.0;
+    go5->m_material = go->m_material;
     go5->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
     go5->AddTexture(boxTex);
     go5->AddTexture(boxSpec,new std::string("material.specular"));
@@ -121,20 +132,25 @@ void GameManager::EngineInit(){
 
     vertDefault->clear();
     vertTex->clear();
-    tex->clear();
     fragTex->clear();
+    fragSpec->clear();
+    fragDefault->clear();
     lamp->clear();
+    tex->clear();
+    tex2->clear();
+    spec->clear();
+    spec2->clear();
+
     delete vertDefault;
     delete vertTex;
     delete fragTex;
+    delete fragSpec;
+    delete fragDefault;
     delete lamp;
     delete tex;
-
-    this->ready_to_start = true;
-    glEnable(GL_DITHER);
-    Debugging::SetPointsSize(10);    
-    glEnable(GL_DEPTH_TEST);
-
+    delete tex2;
+    delete spec;
+    delete spec2;
 }
 
 void GameManager::EngnieStart(){

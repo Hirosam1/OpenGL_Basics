@@ -8,4 +8,6 @@ class Light{
         glm::vec3 light_pos;
         float light_intensity;
         glm::vec3 light_color;
+        glm::vec3 light_ambient;
+        glm::vec3 light_specular;
 };
