@@ -38,7 +38,6 @@ void GameManager::EngineInit(){
 
     this->all_objs = new std::deque<GameObject*>();
 
-
     Camera* m_camera = new Camera(this->main_window,new float[3]{0.0f,0.0f,10.0f});
 
     Shape* cube  = new Cube();
@@ -48,6 +47,7 @@ void GameManager::EngineInit(){
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4;
     Light* aLight = new Light();
+    aLight->light_intensity = 0.4;
     go = new MovingObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2},vert,fragLight);
     go->color = glm::vec3(0.5, 0.65f, 0.30f);
     go->SetUpVertex();
