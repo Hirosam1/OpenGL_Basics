@@ -38,7 +38,7 @@ void main()
     //Difuse
     vec3 lightDir = normalize(LightPos - FragPos);
     float diff = max(dot(norm,lightDir),0);
-    vec3 diffuse = (diff * material.diffuse) * vec3(texColor);
+    vec3 diffuse = (diff * material.diffuse) * vec3(texColor) * light.diffuse;
 
     //Specular
     vec3 viewDir = normalize(-FragPos);

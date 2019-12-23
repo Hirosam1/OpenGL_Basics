@@ -76,7 +76,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       if(this->m_light != nullptr){
          shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_color * this->m_light->light_intensity);
          shader->SetUniformVec3f(this->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);
-         shader->SetUniformVec3f(this->Light_specular,this->m_light->light_color * this->m_light->light_intensity);
+         shader->SetUniformVec3f(this->Light_specular,glm::vec3(0.8));
          shader->SetUniformVec3f(this->Light_pos,this->m_light->light_pos);
       }
       this->shader->SetUniformMat4f(this->Model_string,this->model);
@@ -90,6 +90,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     }
    glBindTexture(GL_TEXTURE_2D,0);
    glBindVertexArray(0);
+   glUseProgram(0);
  }
 
  void GameObject::SetUpVertex(){
@@ -129,10 +130,17 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     
  }
 
-void GameObject::SetTexture(std::string* tex_path, GLenum type, std::string* uniform_name){
+void GameObject::AddTexture(std::string* tex_path, GLenum type, std::string* uniform_name){
    if(this->shader != nullptr){
       uniform_name = uniform_name != nullptr ? uniform_name : bb->Basic_tex;
-      this->shader->SetTexture(tex_path,uniform_name,type);
+      this->shader->AddTexture(tex_path,uniform_name,type);
+   }
+}
+
+void GameObject::AddTexture(Texture* texture, std::string* uniform_name){
+   if(this->shader != nullptr){
+      uniform_name = uniform_name != nullptr ? uniform_name : bb->Basic_tex;
+      this->shader->AddTexture(texture, uniform_name);
    }
 }
 

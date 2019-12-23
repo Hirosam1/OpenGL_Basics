@@ -26,13 +26,13 @@ class Shader{
         void SetUniform1f(std::string* shader_name, float i);
         void SetUniformVec3f(std::string* uniform_name,glm::vec3 vec3);
         //Creates a texture object and uses the path name to apply it
-        void SetTexture(std::string* texture_name,std::string* uniform_name,GLenum type = GL_RGB);
+        void AddTexture(std::string* texture_path,std::string* uniform_name,GLenum type = GL_RGB);
+        void AddTexture(Texture* texture,std::string* uniform_name);
     protected:
         unsigned int shader_comp;
         unsigned int vertex_shader;
         unsigned int fragment_shader;
         unsigned int shader_program;
         unsigned int CreateShaderProgram(unsigned int vertex_shader, unsigned int fragment_shader);
-        Texture* m_texture;
         std::list<Texture*>* m_textures;
 };

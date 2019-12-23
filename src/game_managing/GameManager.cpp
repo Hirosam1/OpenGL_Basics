@@ -28,15 +28,16 @@ void GameManager::EngineInit(){
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
-    std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
+    std::string* vertDefault = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* vertTex = new std::string("shaders/vertex_shaders/MVP_texture_vertex.vert");
-    std::string* frag = new std::string("shaders/fragment_shaders/texture_light.frag");
+    std::string* fragTex = new std::string("shaders/fragment_shaders/texture_light.frag");
     std::string* fragSpec = new std::string("shaders/fragment_shaders/textureSpecular_light.frag");
-    std::string* fragLight = new std::string("shaders/fragment_shaders/light.frag");
+    std::string* fragDefault = new std::string("shaders/fragment_shaders/light.frag");
     std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
     std::string* tex = new std::string("textures/Arrow.png");
     std::string* tex2 = new std::string("textures/container2.png");
     std::string* spec = new std::string("textures/container2_specular.png");
+    std::string* spec2 = new std::string("textures/Arrow_specular.png");
 
     this->all_objs = new std::deque<GameObject*>();
 
@@ -49,9 +50,14 @@ void GameManager::EngineInit(){
     Shape* cubeTex = new CubeTex();
 
     std::cout<<"creating game objects...\n";
-    GameObject *go,*go2, *go4;
+    GameObject *go,*go2, *go4, * go5;
     Light* aLight = new Light();
+
+    Texture* boxTex = new Texture(tex2,GL_RGBA);
+    Texture* boxSpec = new Texture(spec, GL_RGBA);
     
+    aLight->light_color = glm::vec3(0.3,0.7,1.0);
+    aLight->light_intensity = 1;
     go = new MovingObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
     go->m_material = new Material();
     go->m_material->shininess = 64.0;
@@ -62,12 +68,12 @@ void GameManager::EngineInit(){
         goVAO->SetAttribPoint(2);
         goVAO->SetUpObject();
     go->SetUpVertex(goVAO);
-    go->SetTexture(tex2,GL_RGBA);
-    go->SetTexture(spec,GL_RGBA,new std::string("material.specular"));
+    go->AddTexture(boxTex);
+    go->AddTexture(boxSpec,new std::string("material.specular"));
     
 
     go->GiveLight(aLight);
-    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,frag);
+    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
     go2->GiveLight(aLight);
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2VAO->SetAttribPoint(3);
@@ -75,18 +81,15 @@ void GameManager::EngineInit(){
         go2VAO->SetAttribPoint(2);
         go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
-    go2->SetTexture(tex,GL_RGBA);
-
+    go2->AddTexture(tex,GL_RGBA);
     go2->m_material = new Material(glm::vec3(0.9f,0.9f, 0.2f));
     go2->m_material->specular_color =  glm::vec3(0.3,0.6,0.2);
     go2->m_material->shininess = 64.0f;
-    GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{-1,-2,-1},vert,fragLight);
-    go3->SetUpVertex();
-    go3->m_material = new Material(glm::vec3(1,0,0));
-    go3->GiveLight(aLight);
+
+    
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
-    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vert,lamp);
+    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vertDefault,lamp);
     VAO* go4VAO = new VAO(GL_FLOAT);
     go4VAO->SetAttribPoint(3,6);
     go4VAO->SetUpObject();
@@ -94,21 +97,36 @@ void GameManager::EngineInit(){
     go4->GiveLight(aLight);
     go4->MakeLight();
 
+    go5 = new MovingObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragTex);
+    VAO* go5VAO = new VAO(GL_FLOAT);
+        go5VAO->SetAttribPoint(3);
+        go5VAO->SetAttribPoint(3);
+        go5VAO->SetAttribPoint(2);
+        go5VAO->SetUpObject();
+    go5->GiveLight(aLight);
+    go5->SetUpVertex(go5VAO);
+    go5->m_material = new Material();
+    go5->m_material->shininess = 64.0;
+    go5->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
+    go5->AddTexture(boxTex);
+    go5->AddTexture(boxSpec,new std::string("material.specular"));
+
+
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
-    all_objs->push_back(go3);
     all_objs->push_back(goglob);
     all_objs->push_back(go4);
+    all_objs->push_back(go5);
 
-    vert->clear();
-    frag->clear();
+    vertDefault->clear();
+    vertTex->clear();
     tex->clear();
-    fragLight->clear();
+    fragTex->clear();
     lamp->clear();
-    delete vert;
-    delete frag;
-    delete fragLight;
+    delete vertDefault;
+    delete vertTex;
+    delete fragTex;
     delete lamp;
     delete tex;
 

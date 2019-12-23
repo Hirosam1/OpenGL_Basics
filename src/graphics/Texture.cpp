@@ -1,15 +1,24 @@
 #include "graphics/Texture.hpp"
 #include "graphics/Shader.hpp"
 
-Texture::Texture(Shader* m_shader, std::string* texture_path, std::string* uniform_name,unsigned int uniform_index, GLenum type):
-m_shader(m_shader){
-    CreateTexture(texture_path, uniform_name, uniform_index,type);
+Texture::Texture(unsigned int texture){
+    if (texture == 0){
+        //Creates and binds the Texture object
+        glGenTextures(1, &this->m_texture);
+        std::cout<<"Invalid texture setting\n";
+    }else{
+        this->m_texture = texture;
+    }
 }
 
-void Texture::CreateTexture(std::string* texture_path,std::string* uniform_name,unsigned int uniform_index,GLenum type){
-
+Texture::Texture(std::string* texture_path,GLenum type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
+    CreateTexture(texture_path,type);
+}
+
+void Texture::CreateTexture(std::string* texture_path,GLenum type){
+
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
 
     //Sets the parameters for warapping and filtering
@@ -32,9 +41,7 @@ void Texture::CreateTexture(std::string* texture_path,std::string* uniform_name,
         exit(-1);
     }
     stbi_image_free(data);
-    //glBindTexture(GL_TEXTURE_2D,0);
-    this->m_shader->UseShader(false);
-    this->m_shader->SetUniform1i(uniform_name,uniform_index);
+    glBindTexture(GL_TEXTURE_2D,0);
     
  }
  

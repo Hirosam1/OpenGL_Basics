@@ -2,7 +2,6 @@
 #include"graphics/Texture.hpp"
 
 Shader::Shader(){
-    this->m_texture = nullptr;
     this->shader_comp = 0;
     this->vertex_shader = 0;
     this->fragment_shader = 0;
@@ -74,8 +73,18 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
     return shader_program;
 }
 
-void Shader::SetTexture(std::string* texture_name,std::string* uniform_name,GLenum type){
-    this->m_textures->push_back(new Texture(this,texture_name,uniform_name,this->m_textures->size(),type));
+void Shader::AddTexture(std::string* texture_path,std::string* uniform_name,GLenum type){
+    this->UseShader(false);
+    this->SetUniform1i(uniform_name,this->m_textures->size());
+    this->m_textures->push_back(new Texture(texture_path,type));
+
+}
+
+void Shader::AddTexture(Texture* texture,std::string* uniform_name){
+    this->UseShader(false);
+    this->SetUniform1i(uniform_name,this->m_textures->size());
+    this->m_textures->push_back(texture);
+
 }
 
 void Shader::UseShader(bool use_texture){
