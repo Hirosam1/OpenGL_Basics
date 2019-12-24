@@ -27,6 +27,7 @@ void Camera::LookAt(float target[3]){
                                 glm::make_vec3(target),
                                 //up
                                 *this->camera_up);  
+    delete target;
 } 
 
 void Camera::LookAt(glm::vec3 target){

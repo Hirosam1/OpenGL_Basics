@@ -21,4 +21,5 @@ class bObject : public GameObject{
         bool firstMouse = true;
         long long CurrentPhysMem;
         
+        void CalculateCam();
 };

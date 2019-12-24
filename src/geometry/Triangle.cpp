@@ -1,7 +1,7 @@
 #include "geometry/Shape.hpp"
 
 
-Triangle::Triangle() : Shape(18){
+Triangle::Triangle() : Shape(18,3){
     vertex = new float[18]{
 
      0.0f,   1.0f, 0.0f,  0.0f,   0.0f, 1.0f,    //Top      

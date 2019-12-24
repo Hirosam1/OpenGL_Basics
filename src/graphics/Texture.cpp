@@ -1,15 +1,24 @@
 #include "graphics/Texture.hpp"
 #include "graphics/Shader.hpp"
 
-Texture::Texture(Shader* m_shader, std::string* texture_path, std::string* uniform_name,unsigned int uniform_index):
-m_shader(m_shader){
-    CreateTexture(texture_path, uniform_name, uniform_index);
+Texture::Texture(unsigned int texture){
+    if (texture == 0){
+        //Creates and binds the Texture object
+        glGenTextures(1, &this->m_texture);
+        std::cout<<"Invalid texture setting\n";
+    }else{
+        this->m_texture = texture;
+    }
 }
 
-void Texture::CreateTexture(std::string* texture_path,std::string* uniform_name,unsigned int uniform_index){
-
+Texture::Texture(std::string* texture_path,GLenum type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
+    CreateTexture(texture_path,type);
+}
+
+void Texture::CreateTexture(std::string* texture_path,GLenum type){
+
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
 
     //Sets the parameters for warapping and filtering
@@ -23,7 +32,7 @@ void Texture::CreateTexture(std::string* texture_path,std::string* uniform_name,
     unsigned char *data = stbi_load(texture_path->data(), &width, &height, &nrChannels, 0); 
     if(data){
     //Creats the texture image on the current bound texture object
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
+    glTexImage2D(GL_TEXTURE_2D,0,type,width,height,0,type,GL_UNSIGNED_BYTE,data);
     //Genetates mip maps automaticaly
     glGenerateMipmap(GL_TEXTURE_2D);
     //Free loaded image
@@ -33,12 +42,10 @@ void Texture::CreateTexture(std::string* texture_path,std::string* uniform_name,
     }
     stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D,0);
-    //Set the uninoform of texture of the shader to be 0
-    this->m_shader->UseShader(false);
-    this->m_shader->SetUniform1i(uniform_name,uniform_index);
     
  }
  
- void Texture::UseTexture(){
-     glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D,this->m_texture);
+ void Texture::UseTexture(unsigned int texture_num){
+
+     glActiveTexture(GL_TEXTURE0+texture_num); glBindTexture(GL_TEXTURE_2D,this->m_texture);
  }

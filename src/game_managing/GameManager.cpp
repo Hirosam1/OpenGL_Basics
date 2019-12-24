@@ -1,6 +1,5 @@
 #include "game_managing/GameManager.hpp"
 
-
 GameManager::GameManager(std::string game_name,int width, int height)
 :game_name(game_name),width(width),height(height),current_width(width),current_height(height),ready_to_start(false){
 }
@@ -29,44 +28,81 @@ void GameManager::EngineInit(){
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
-    std::string* vert = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
+    SetUpObjects();
+
+    this->ready_to_start = true;
+    glEnable(GL_DITHER);
+    Debugging::SetPointsSize(10);    
+    glEnable(GL_DEPTH_TEST);
+
+}
+
+
+void GameManager::SetUpObjects(){
+    std::string* vertDefault = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
     std::string* vertTex = new std::string("shaders/vertex_shaders/MVP_texture_vertex.vert");
-    std::string* frag = new std::string("shaders/fragment_shaders/texture_fragment.frag");
-    std::string* fragLight = new std::string("shaders/fragment_shaders/light.frag");
+    std::string* fragTex = new std::string("shaders/fragment_shaders/texture_light.frag");
+    std::string* fragSpec = new std::string("shaders/fragment_shaders/textureSpecular_light.frag");
+    std::string* fragDefault = new std::string("shaders/fragment_shaders/light.frag");
     std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
-    std::string* tex = new std::string("Arrow.png");
+    std::string* tex = new std::string("textures/Arrow.png");
+    std::string* tex2 = new std::string("textures/container2.png");
+    std::string* spec = new std::string("textures/container2_specular.png");
+    std::string* spec2 = new std::string("textures/Arrow_specular.png");
 
     this->all_objs = new std::deque<GameObject*>();
 
-    Camera* m_camera = new Camera(this->main_window,new float[3]{0.0f,0.0f,10.0f});
+
+
+    Camera* m_camera = new Camera(this->main_window);
+
 
     Shape* cube  = new Cube();
     Shape* plane = new Plane();
     Shape* triag = new Triangle();
+    Shape* cubeTex = new CubeTex();
 
     std::cout<<"creating game objects...\n";
-    GameObject *go,*go2, *go4;
+    GameObject *go,*go2, *go4, * go5;
     Light* aLight = new Light();
-    aLight->light_intensity = 0.4;
-    go = new MovingObject(this->basic_block , m_camera,cube,new float[3]{0.5,-0.8,2},vert,fragLight);
-    go->color = glm::vec3(0.5, 0.65f, 0.30f);
-    go->SetUpVertex();
+    aLight->light_ambient = aLight->light_color* 0.05f;
+
+    Texture* boxTex = new Texture(tex2,GL_RGBA);
+    Texture* boxSpec = new Texture(spec, GL_RGBA);
+    
+    aLight->light_color = glm::vec3(0.3,0.7,1.0);
+    aLight->light_intensity = 1;
+    go = new MovingObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
+    go->m_material = new Material();
+    go->m_material->shininess = 64.0;
+    go->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
+    VAO* goVAO = new VAO(GL_FLOAT);
+        goVAO->SetAttribPoint(3);
+        goVAO->SetAttribPoint(3);
+        goVAO->SetAttribPoint(2);
+        goVAO->SetUpObject();
+    go->SetUpVertex(goVAO);
+    go->AddTexture(boxTex);
+    go->AddTexture(boxSpec,new std::string("material.specular"));
     go->GiveLight(aLight);
-    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,frag);
+
+    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
+    go2->GiveLight(aLight);
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(2);
-    go2VAO->SetUpObject();
+        go2VAO->SetUpObject();
     go2->SetUpVertex(go2VAO);
-    go2->SetTexture(tex);
-    GameObject* go3 = new aObject(this->basic_block ,m_camera,triag,new float[3]{-1,-2,-1},vert,fragLight);
-    go3->SetUpVertex();
-    go3->color = glm::vec3(1,0,0);
-    go3->GiveLight(aLight);
+    go2->AddTexture(tex,GL_RGBA);
+    go2->m_material = new Material(glm::vec3(0.9f,0.9f, 0.2f));
+    go2->m_material->specular_color =  glm::vec3(0.3,0.6,0.2);
+    go2->m_material->shininess = 64.0f;
+
+    
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
 
-    go4 = new aObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vert,lamp);
+    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vertDefault,lamp);
     VAO* go4VAO = new VAO(GL_FLOAT);
     go4VAO->SetAttribPoint(3,6);
     go4VAO->SetUpObject();
@@ -74,29 +110,48 @@ void GameManager::EngineInit(){
     go4->GiveLight(aLight);
     go4->MakeLight();
 
+    go5 = new MovingObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragTex);
+    VAO* go5VAO = new VAO(GL_FLOAT);
+        go5VAO->SetAttribPoint(3);
+        go5VAO->SetAttribPoint(3);
+        go5VAO->SetAttribPoint(2);
+        go5VAO->SetUpObject();
+    go5->GiveLight(aLight);
+    go5->SetUpVertex(go5VAO);
+    go5->m_material = go->m_material;
+    go5->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
+    go5->AddTexture(boxTex);
+    go5->AddTexture(boxSpec,new std::string("material.specular"));
+
+
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
-    all_objs->push_back(go3);
     all_objs->push_back(goglob);
     all_objs->push_back(go4);
+    all_objs->push_back(go5);
 
-    vert->clear();
-    frag->clear();
-    tex->clear();
-    fragLight->clear();
+    vertDefault->clear();
+    vertTex->clear();
+    fragTex->clear();
+    fragSpec->clear();
+    fragDefault->clear();
     lamp->clear();
-    delete vert;
-    delete frag;
-    delete fragLight;
+    tex->clear();
+    tex2->clear();
+    spec->clear();
+    spec2->clear();
+
+    delete vertDefault;
+    delete vertTex;
+    delete fragTex;
+    delete fragSpec;
+    delete fragDefault;
     delete lamp;
     delete tex;
-
-    this->ready_to_start = true;
-
-    Debugging::SetPointsSize(10);    
-    glEnable(GL_DEPTH_TEST);
-
+    delete tex2;
+    delete spec;
+    delete spec2;
 }
 
 void GameManager::EngnieStart(){
@@ -112,8 +167,7 @@ void GameManager::EngnieStart(){
         }
 
         //Clear the screen
-        glClearColor(0.07f,0.06f,0.05,1.0f);
-        //glClearColor(0.08f,0.32f,0.69f,1.0f);
+        glClearColor(0.00f,0.00f,0.0,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
         this->main_time->UpdateDelta();

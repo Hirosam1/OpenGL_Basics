@@ -1,10 +1,12 @@
-#include "game_object/bObject.hpp"
+#include "personal_objects/bObject.hpp"
 #include <sys/time.h> 
 
 
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
-    yaw = -90.0f;
+    m_camera->camera_pos = new glm::vec3(-3.0f,2.0f,10.0f);
+    yaw = -75.0f;
+    pitch = -15.0f;
     sensitivity= 0.125;
     camera_front = glm::vec3(0,0,-1);
     lastX = m_window->GetWidth()/2;
@@ -14,8 +16,8 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
     didExit = false;
 }
 
-void bObject::Update(){
-    if(firstMouse && m_input->isMouseReady){
+void bObject::CalculateCam(){
+        if(firstMouse && m_input->isMouseReady){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
         firstMouse = false;
@@ -43,16 +45,31 @@ void bObject::Update(){
         pitch += yoffset;
 
         pitch = pitch > 89.4f ? 89.4f : pitch < -89.4f ? -89.4f :  pitch; 
-        camera_front.y = sin(glm::radians(pitch));
-        camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        camera_front = glm::normalize(camera_front);
 
     }
+    camera_front.y = sin(glm::radians(pitch));
+    camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    camera_front = glm::normalize(camera_front);
     fov -= m_input->scroll_y * (sensitivity * 20);
     fov = fov > 110 ? 110 : fov < 1 ? 1 : fov;
     m_camera->MakeProjection(glm::radians(fov));
-    
+}
+
+void bObject::Update(){
+    if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
+        yaw = -75;
+        pitch = -15;
+         camera_front = glm::vec3(0,0,-1);
+         m_camera->camera_pos->x = -3.0f;
+         m_camera->camera_pos->y = 2.0f;
+         m_camera->camera_pos->z = 10;
+         fov = 45;
+         m_camera->MakeProjection(glm::radians(fov));
+    }
+
+    CalculateCam();
+
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 15;
     }
@@ -78,23 +95,13 @@ void bObject::Update(){
         Debugging::SetPoly2Points();
     }
 
-    if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
-        yaw = -90;
-        pitch = 0;
-         camera_front = glm::vec3(0,0,-1);
-         m_camera->camera_pos->x = 0;
-         m_camera->camera_pos->y = 0;
-         m_camera->camera_pos->z = 10;
-         fov = 45;
-         m_camera->MakeProjection(glm::radians(fov));
-    }
     #ifdef __unix__
     
     if(m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
         std::cout<<"\r\tMemory Current Beeing Used--> "<<Debugging::GetMemoryUsage() << "  |";
     }
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
-    if(m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
+    if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
         m_deque_test->push_back((char*) malloc (1000000) );
     }
     //THIS CLEANS THE WASTED MEMORY

@@ -1,6 +1,3 @@
-#ifndef Game_man_H
-#define Game_man_H
-#endif
 #pragma once
 #include<iostream>
 #include<glad/glad.h>
@@ -8,9 +5,10 @@
 #include<string>
 #include<deque>
 
-#include "game_object/aObject.hpp"
-#include "game_object/bObject.hpp"
-#include "game_object/movnigObject.hpp"
+#include "personal_objects/aObject.hpp"
+#include "personal_objects/bObject.hpp"
+#include "personal_objects/cObject.hpp"
+#include "personal_objects/movnigObject.hpp"
 
 #include "game_managing/BasicsBlock.hpp"
 #include"game_object/GameObject.hpp"
@@ -61,6 +59,9 @@ class GameManager{
 
         //Callback when Buffer size changes
         static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
+
+        //Sets up the game Objects
+        void SetUpObjects();
 
     public:
         GameManager(std::string game_name,int width, int height);

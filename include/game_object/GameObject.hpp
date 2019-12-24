@@ -18,6 +18,8 @@
 #include "graphics/Window.hpp"
 #include "game_managing/BasicsBlock.hpp"
 #include "game_object/Light.hpp"
+#include "graphics/Material.hpp"
+#include "graphics/Texture.hpp"
 
 
 class GameManager;
@@ -32,19 +34,15 @@ class GameObject{
         std::string* vert_shader_path = new std::string("shaders/vertex_shaders/MVP_vertex.vert"),
         std::string* frag_shader_path = new std::string("shaders/fragment_shaders/basic_fragment.frag"));
 
-        glm::vec3 color;
-
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
-
         //Sets up the object to be ready to update/render
         void SetUpVertex();
         //Sets up the object to be ready to update/render
         void SetUpVertex(VAO* aVAO);
-
         //Sets the texture to use
-        void SetTexture(std::string* tex_path);
-
+        void AddTexture(std::string* tex_path, GLenum type = GL_RGB, std::string* uniform_name = nullptr);
+        void AddTexture(Texture* texture,std::string* uniform_name = nullptr);
         //Sets the Object as a light Source
         void MakeLight();
         //Gives a light object to the GameObject, so it can be iluminated or become a light source with MakeLight()
@@ -60,8 +58,12 @@ class GameObject{
         Time* m_time;
         //Light object
         Light* m_light;
+        //The material of the object
+        Material* m_material;
 
-    private:
+    
+
+    private: 
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO
             -> Copile and use shaders
@@ -69,13 +71,20 @@ class GameObject{
         void UpdateAndBuffer();
         //Sets the MVP to its initial position
         void SetInitialMVP();
-        //The string containg the name of the MVP uniform in the shader
+        //The strings
         std::string* Model_string;
         std::string* View_string;
         std::string* Projection_string;
-        std::string* Color_string;
-        std::string* lightCol_string;
-        std::string* lightPos_string;
+
+        std::string* Mat_ambient;
+        std::string* Mat_diffuse;
+        std::string* Mat_specular;
+        std::string* Mat_shininess;
+
+        std::string* Light_ambient;
+        std::string* Light_diffuse;
+        std::string* Light_specular;
+        std::string* Light_pos;
 
         //The shape of the model
         Shape* m_shape;
@@ -88,6 +97,7 @@ class GameObject{
         std::string* fragment_shader_path;
         //std::string* model_shader_path;
     protected:
+        BasicsBlock* bb;
         bool isLight = false;
         //Window where the object will get inputs
         Window* m_window;

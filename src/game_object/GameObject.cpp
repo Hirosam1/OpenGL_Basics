@@ -2,23 +2,29 @@
 
  GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
     m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
-   this->color = glm::vec3(0);
    this->shader = nullptr;this->m_vao = nullptr;
    //this->MVP_string = new std::string("MVP");
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->SetInitialMVP();
    this->m_light = nullptr;
 
-   this->Model_string = new std::string("Model");
-   this->View_string = new std::string("View");
-   this->Projection_string = new std::string("Projection");
-   this->Color_string = new std::string("aColor");
-   this->lightCol_string = new std::string("lightColor");
-   this->lightPos_string = new std::string("lightPos");
+   this->Model_string = basic_block->Model_string;
+   this->View_string = basic_block->View_string;
+   this->Projection_string = basic_block->Projection_string;
+
+   this->Mat_ambient = basic_block->Mat_ambient;
+   this->Mat_diffuse = basic_block->Mat_diffuse;
+   this->Mat_specular = basic_block->Mat_specular;
+   this->Mat_shininess = basic_block->Mat_shininess;
+
+   this->Light_ambient = basic_block->Light_ambient;
+   this->Light_diffuse = basic_block->Light_diffuse;
+   this->Light_specular = basic_block->Light_specular;
+   this->Light_pos = basic_block->Light_pos;
+
+   this->bb = basic_block;
 
 }
-
-
 
 GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,Shape* m_shape,float initial_pos[3], 
 std::string* vert_shader_path,std::string* frag_shader_path):
@@ -26,16 +32,25 @@ m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_bloc
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
    this->shader = nullptr; this->m_vao = nullptr;
    this->SetInitialMVP();
-   this->color = glm::vec3(0);
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->m_light = nullptr;
-   this->Model_string = new std::string("Model");
-   this->View_string = new std::string("View");
-   this->Projection_string = new std::string("Projection");
-   this->Color_string = new std::string("aColor");
-   this->lightCol_string = new std::string("lightColor");
-   this->lightPos_string = new std::string("lightPos");
+   this->m_material = nullptr;
+   
+   this->Model_string = basic_block->Model_string;
+   this->View_string = basic_block->View_string;
+   this->Projection_string = basic_block->Projection_string;
 
+   this->Mat_ambient = basic_block->Mat_ambient;
+   this->Mat_diffuse = basic_block->Mat_diffuse;
+   this->Mat_specular = basic_block->Mat_specular;
+   this->Mat_shininess = basic_block->Mat_shininess;
+
+   this->Light_ambient = basic_block->Light_ambient;
+   this->Light_diffuse = basic_block->Light_diffuse;
+   this->Light_specular = basic_block->Light_specular;
+   this->Light_pos = basic_block->Light_pos;
+
+   this->bb = basic_block;
     
 }
 
@@ -48,27 +63,34 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     //Updaets the vertex data
     this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){
-
+      //Pass uniforms
       //Binds VAO
       this->m_vao->UseVAO();
+      if(this->m_material != nullptr){
       //Applies color to the object
-      this->shader->SetUniformVec3f(this->Color_string,this->color);
-      //Pass uniforms
+      this->shader->SetUniformVec3f(this->Mat_ambient,this->m_material->ambient_color);
+      this->shader->SetUniformVec3f(this->Mat_diffuse,this->m_material->diffuse_color);
+      this->shader->SetUniformVec3f(this->Mat_specular,this->m_material->specular_color);
+      this->shader->SetUniform1f(this->Mat_shininess,this->m_material->shininess);
+      }
       if(this->m_light != nullptr){
-         shader->SetUniformVec3f(this->lightCol_string,this->m_light->light_intensity * this->m_light->light_color);
-         shader->SetUniformVec3f(this->lightPos_string,this->m_light->light_pos);
+         shader->SetUniformVec3f(this->Light_ambient,this->m_light->light_ambient);
+         shader->SetUniformVec3f(this->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);
+         shader->SetUniformVec3f(this->Light_specular,this->m_light->light_specular);
+         shader->SetUniformVec3f(this->Light_pos,this->m_light->light_pos);
       }
       this->shader->SetUniformMat4f(this->Model_string,this->model);
       this->shader->SetUniformMat4f(this->View_string,this->m_camera->GetView());
       this->shader->SetUniformMat4f(this->Projection_string,this->m_camera->GetProjection());
       if(this->m_shape->indices_count > 1){
-         glDrawElements(GL_TRIANGLE_STRIP,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
+         glDrawElements(GL_TRIANGLES,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
       }else{
-         glDrawArrays(GL_TRIANGLES,0,36);
+         glDrawArrays(GL_TRIANGLES,0,this->m_shape->vertex_count);
       }
     }
-
-    glBindVertexArray(0);
+   glBindTexture(GL_TEXTURE_2D,0);
+   glBindVertexArray(0);
+   glUseProgram(0);
  }
 
  void GameObject::SetUpVertex(){
@@ -81,7 +103,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       //Finishes the opbject
       this->m_vao->SetUpObject();
       //Buffer data into it
-      this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->att_count);
+      this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,this->m_vao->vertex_type,this->m_shape->att_count);
       if(this->m_shape->indices_count > 1){
          this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_UNSIGNED_INT,this->m_shape->indices_count);
       }
@@ -93,7 +115,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
  void GameObject::SetUpVertex(VAO* aVAO){
    this->m_vao = aVAO;
    this->m_vao->UseVAO();
-   this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,GL_FLOAT,this->m_shape->att_count);
+   this->m_vao->BufferData<GLfloat>(this->m_shape->vertex,GL_ARRAY_BUFFER,this->m_vao->vertex_type,this->m_shape->att_count);
    if(this->m_shape->indices_count > 1){
       this->m_vao->BufferData<GLuint>(this->m_shape->indices,GL_ELEMENT_ARRAY_BUFFER,GL_UNSIGNED_INT,this->m_shape->indices_count);
    }
@@ -108,15 +130,23 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     
  }
 
-void GameObject::SetTexture(std::string* tex_path){
+void GameObject::AddTexture(std::string* tex_path, GLenum type, std::string* uniform_name){
    if(this->shader != nullptr){
-      this->shader->SetTexture(tex_path);
+      uniform_name = uniform_name != nullptr ? uniform_name : bb->Basic_tex;
+      this->shader->AddTexture(tex_path,uniform_name,type);
+   }
+}
+
+void GameObject::AddTexture(Texture* texture, std::string* uniform_name){
+   if(this->shader != nullptr){
+      uniform_name = uniform_name != nullptr ? uniform_name : bb->Basic_tex;
+      this->shader->AddTexture(texture, uniform_name);
    }
 }
 
  void GameObject::SetInitialMVP(){
    //This is the world space matrix
-   this->model = glm::mat4(1.0f); //model = glm::rotate(model,glm::radians(-10.0f),glm::vec3(1.0f,0.0f,0.0));
+   this->model = glm::mat4(1.0f);
  }
 
 void GameObject::MakeLight(){

@@ -22,12 +22,14 @@ class VAO{
         void BufferData(T* data,GLenum array_or_element,GLenum type,unsigned int count, GLenum draw_type = GL_STATIC_DRAW);
         //Bind the VAO
         void UseVAO();
+
+        GLenum vertex_type;
     private:
         //Uses the data stored in this object to Set Att point to an indivdual att
         void SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type);
         //Get the sum of datasize before a point (att), this point is EXCLUSIVE
         int SumSizesToAtt(unsigned int att_to_stop);
-        GLenum vertex_type;
+
         unsigned int indv_ready;
         unsigned int m_VAO;
         unsigned int m_VBO;
