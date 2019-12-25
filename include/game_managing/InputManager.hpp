@@ -9,8 +9,8 @@
 class InputManager{
     public:
         InputManager(Window* window);
-        bool ProcessInput(int key, int action) const;
-        bool ProcessMouseInput(int key) const;
+        bool ProcessInput(int key, int action = GLFW_PRESS) const;
+        //bool ProcessMouseInput(int key) const;
         static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
         static void CursorEnterCallback(GLFWwindow* window, int enter);

@@ -127,9 +127,10 @@ void GameManager::SetUpObjects(){
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
-    all_objs->push_back(goglob);
     all_objs->push_back(go4);
     all_objs->push_back(go5);
+    //UI needs to be last?
+    all_objs->push_back(goglob);
 
     vertDefault->clear();
     vertTex->clear();

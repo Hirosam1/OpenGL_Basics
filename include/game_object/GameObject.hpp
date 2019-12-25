@@ -1,7 +1,7 @@
 #pragma once
 #include<iostream>
 #include<glad/glad.h>
-#include<GLFW/glfw3.h>
+//#include<GLFW/glfw3.h>
 #include<string.h>
 #include<string>
 #include <glm/glm.hpp>
@@ -60,8 +60,6 @@ class GameObject{
         Light* m_light;
         //The material of the object
         Material* m_material;
-
-    
 
     private: 
         /*Updates entearly the game object

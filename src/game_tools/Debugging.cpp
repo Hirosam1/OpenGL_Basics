@@ -26,7 +26,11 @@ int getValueKB(){ //Note: this value is in KB!
 }
 
 int Debugging::GetMemoryUsage(){
+    #ifdef __unix__
     return getValueKB();
+    #else 
+    return -1;
+    #endif
 }
 
 void Debugging::SetPoly2Line(){

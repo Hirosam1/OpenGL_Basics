@@ -16,13 +16,13 @@ bool InputManager::ProcessInput(int key, int action) const{
     }
     return false;
 }
-
+/*
 bool InputManager::ProcessMouseInput(int key) const{
     if(glfwGetMouseButton(this->window->GetWindow(),key)){
         return true;
     }
     return false;
-}
+}*/
 
 
 void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos){

@@ -14,10 +14,130 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
     m_deque_test = new std::deque<char*>();
     fov = 45;
     didExit = false;
+    /*===============GUI=====================*/
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(m_window->GetWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+}
+
+void bObject::Update(){
+    if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
+        yaw = -75;
+        pitch = -15;
+         camera_front = glm::vec3(0,0,-1);
+         m_camera->camera_pos->x = -3.0f;
+         m_camera->camera_pos->y = 2.0f;
+         m_camera->camera_pos->z = 10;
+         fov = 45;
+         m_camera->MakeProjection(glm::radians(fov));
+    }
+
+    #ifdef __unix__
+    //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
+    if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
+        m_deque_test->push_back((char*) malloc (1000000) );
+    }
+    //THIS CLEANS THE WASTED MEMORY
+    if(m_input->ProcessInput(GLFW_KEY_0,GLFW_PRESS)){
+        for(int i = 0; i < m_deque_test->size(); i++){
+            delete m_deque_test->at(i);
+        }
+        m_deque_test->clear();
+    }
+    #endif
+    
+    if(show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
+    if(show_cursor == GLFW_CURSOR_NORMAL) RenderGUI();
+
+    if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
+        this->test_speed = 15;
+    }
+    if(this->m_input->ProcessInput(GLFW_KEY_D,GLFW_PRESS)){
+        *m_camera->camera_pos += glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
+  
+    }else if(this->m_input->ProcessInput(GLFW_KEY_A,GLFW_PRESS)){  
+        *m_camera->camera_pos -= glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
+    }
+    if(this->m_input->ProcessInput(GLFW_KEY_S,GLFW_PRESS)){
+        *m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
+
+    }else if(this->m_input->ProcessInput(GLFW_KEY_W,GLFW_PRESS)){
+        *m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
+    }
+
+    else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
+        Debugging::SetPoly2Fill();
+    }else if(this->m_input->ProcessInput(GLFW_KEY_2,GLFW_PRESS)){
+        Debugging::SetPoly2Line();
+    }
+    else if(this->m_input->ProcessInput(GLFW_KEY_3,GLFW_PRESS)){
+        Debugging::SetPoly2Points();
+    }
+
+    m_camera->camera_front = &camera_front;
+    m_camera->LookAt(*m_camera->camera_pos+ *m_camera->camera_front);
+
+    this->test_speed = 5;
+
+    if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
+        show_cursor = show_cursor == GLFW_CURSOR_DISABLED? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED;
+        glfwSetInputMode(m_window->GetWindow(),GLFW_CURSOR,show_cursor);
+        f1KeyRealeased = false;
+        if(show_cursor == GLFW_CURSOR_DISABLED){
+            lastX = m_input->mouse_Xpos;
+            lastY = m_input->mouse_Ypos;
+        }
+        
+    }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE)){
+        f1KeyRealeased = true;
+    }
+}
+
+void bObject::RenderGUI(){
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+    {
+        // Our state
+        static float f = 0.0f;
+        static int counter = 0;
+
+        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        ImGui::Checkbox("Another Window", &show_another_window);
+
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Text("Aproximated Memory usage(%.d )",Debugging::GetMemoryUsage());
+        ImGui::End();
+    }
+    if (show_another_window)
+        {
+            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text("Hello from another window!");
+            if (ImGui::Button("Close Me"))
+                show_another_window = false;
+            ImGui::End();
+        }
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void bObject::CalculateCam(){
-        if(firstMouse && m_input->isMouseReady){
+    if(firstMouse && m_input->isMouseReady){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
         firstMouse = false;
@@ -45,8 +165,8 @@ void bObject::CalculateCam(){
         pitch += yoffset;
 
         pitch = pitch > 89.4f ? 89.4f : pitch < -89.4f ? -89.4f :  pitch; 
-
     }
+    
     camera_front.y = sin(glm::radians(pitch));
     camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -54,67 +174,6 @@ void bObject::CalculateCam(){
     fov -= m_input->scroll_y * (sensitivity * 20);
     fov = fov > 110 ? 110 : fov < 1 ? 1 : fov;
     m_camera->MakeProjection(glm::radians(fov));
-}
 
-void bObject::Update(){
-    if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
-        yaw = -75;
-        pitch = -15;
-         camera_front = glm::vec3(0,0,-1);
-         m_camera->camera_pos->x = -3.0f;
-         m_camera->camera_pos->y = 2.0f;
-         m_camera->camera_pos->z = 10;
-         fov = 45;
-         m_camera->MakeProjection(glm::radians(fov));
-    }
 
-    CalculateCam();
-
-    if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
-        this->test_speed = 15;
-    }
-    if(this->m_input->ProcessInput(GLFW_KEY_D,GLFW_PRESS)){
-        *m_camera->camera_pos += glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
-  
-    }else if(this->m_input->ProcessInput(GLFW_KEY_A,GLFW_PRESS)){  
-        *m_camera->camera_pos -= glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
-    }
-    if(this->m_input->ProcessInput(GLFW_KEY_S,GLFW_PRESS)){
-        *m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
-
-    }else if(this->m_input->ProcessInput(GLFW_KEY_W,GLFW_PRESS)){
-        *m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
-    }
-
-    else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
-        Debugging::SetPoly2Fill();
-    }else if(this->m_input->ProcessInput(GLFW_KEY_2,GLFW_PRESS)){
-        Debugging::SetPoly2Line();
-    }
-    else if(this->m_input->ProcessInput(GLFW_KEY_3,GLFW_PRESS)){
-        Debugging::SetPoly2Points();
-    }
-
-    #ifdef __unix__
-    
-    if(m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
-        std::cout<<"\r\tMemory Current Beeing Used--> "<<Debugging::GetMemoryUsage() << "  |";
-    }
-    //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
-    if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
-        m_deque_test->push_back((char*) malloc (1000000) );
-    }
-    //THIS CLEANS THE WASTED MEMORY
-    if(m_input->ProcessInput(GLFW_KEY_0,GLFW_PRESS)){
-        for(int i = 0; i < m_deque_test->size(); i++){
-            delete m_deque_test->at(i);
-        }
-        m_deque_test->clear();
-    }
-    #endif
-
-    m_camera->camera_front = &camera_front;
-    m_camera->LookAt(*m_camera->camera_pos+ *m_camera->camera_front);
-
-    this->test_speed = 5;
 }
