@@ -1363,6 +1363,9 @@ const char* ImStrSkipBlank(const char* str)
 #include "stb_sprintf.h"
 #endif
 
+//Had to move this line outside the macro if. ON WINDOWS
+#define vsnprintf _vsnprintf
+
 #if defined(_MSC_VER) && !defined(vsnprintf)
 #define vsnprintf _vsnprintf
 #endif

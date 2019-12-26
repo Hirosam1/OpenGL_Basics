@@ -107,6 +107,7 @@ Index of this file:
 #if defined(_MSC_VER) && !defined(snprintf)
 #define snprintf    _snprintf
 #endif
+
 #if defined(_MSC_VER) && !defined(vsnprintf)
 #define vsnprintf   _vsnprintf
 #endif
