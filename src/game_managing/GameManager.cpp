@@ -65,7 +65,7 @@ void GameManager::SetUpObjects(){
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4, * go5;
     Light* aLight = new Light();
-    aLight->light_ambient = aLight->light_color* 0.05f;
+    aLight->light_ambient = aLight->light_color* 0.2f;
 
     Texture* boxTex = new Texture(tex2,GL_RGBA);
     Texture* boxSpec = new Texture(spec, GL_RGBA);
