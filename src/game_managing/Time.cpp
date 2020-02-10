@@ -11,7 +11,7 @@ double Time::GetTime(){
 void Time::UpdateDelta(){
     this->delta_time = this->GetTime() - this->last_value;
     this->last_value = this->GetTime();
-    if(this->last_value >= 200){
+    if(this->last_value >= 1000){
         std::cout<<"\nReseting time\n";
         glfwSetTime(0.0);
         this->last_value = 0.0;

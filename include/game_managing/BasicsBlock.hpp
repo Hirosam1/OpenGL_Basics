@@ -1,17 +1,20 @@
 #pragma once
-#include "string"
-#include "iostream"
+#include <string>
+#include <iostream>
+#include <list>
 
 class Window;
 class InputManager;
 class Time;
+class GameObject;
 
 class BasicsBlock{
     public:
-        BasicsBlock(Window* window, InputManager* input, Time* time);
+        BasicsBlock(Window* window, InputManager* input, Time* time,std::list<GameObject*>* all_objs);
         Window* m_window;
         InputManager* m_input;
         Time* m_time;
+        std::list<GameObject*>* all_objs;
 
         std::string* Model_string;
         std::string* View_string;

@@ -1,6 +1,7 @@
 #include "personal_objects/bObject.hpp"
 #include <sys/time.h> 
-
+#include <type_traits>
+#include <typeinfo>
 
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
@@ -23,6 +24,10 @@ bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameOb
     ImGui_ImplOpenGL3_Init("#version 130");
 }
 
+void bObject::Ready(){
+    obj_iterator = bb->all_objs->begin();
+}
+
 void bObject::Update(){
     if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
         yaw = -75;
@@ -38,14 +43,20 @@ void bObject::Update(){
     #ifdef __unix__
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
     if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
-        m_deque_test->push_back((char*) malloc (1000000) );
+        if(obj_iterator != bb->all_objs->end()){
+            if ((*obj_iterator)->m_material != nullptr && (*obj_iterator) != this){
+                std::cout<< (*obj_iterator)->m_material->diffuse_color.z << std::endl;
+            }
+            ++obj_iterator;
+        }
+        //m_deque_test->push_back((char*) malloc (1000000) );
     }
     //THIS CLEANS THE WASTED MEMORY
     if(m_input->ProcessInput(GLFW_KEY_0,GLFW_PRESS)){
-        for(int i = 0; i < m_deque_test->size(); i++){
+       /* for(int i = 0; i < m_deque_test->size(); i++){
             delete m_deque_test->at(i);
         }
-        m_deque_test->clear();
+        m_deque_test->clear();*/
     }
     #endif
     

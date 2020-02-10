@@ -3,7 +3,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<string>
-#include<deque>
+#include<list>
 
 #include "personal_objects/aObject.hpp"
 #include "personal_objects/bObject.hpp"
@@ -23,8 +23,8 @@
 
 class GameManager{
     private:
-        GLFWwindow* m_window;
         //------------------------------------- Variables ---------------------------------------------------------------
+
         //The main window of the application
         Window* main_window;
         //default width and height of game window
@@ -46,8 +46,8 @@ class GameManager{
         //name of the game
         std::string game_name;
 
-        //All objects to be rendered/procceced
-        std::deque<GameObject*>* all_objs;
+        //All objects to be rendered/prossessed on the scene
+        std::list<GameObject*>* all_objs;
 
         //Global time manager
         Time* main_time;
@@ -62,7 +62,7 @@ class GameManager{
 
         //Sets up the game Objects
         void SetUpObjects();
-
+        
     public:
         GameManager(std::string game_name,int width, int height);
         //Initiate the game engine, and become ready to start

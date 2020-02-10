@@ -24,7 +24,9 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_window);
     this->main_time = new Time();
 
-    this->basic_block = new BasicsBlock(main_window,main_input,main_time);
+    this->all_objs = new std::list<GameObject*>();
+
+    this->basic_block = new BasicsBlock(main_window,main_input,main_time, this->all_objs);
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
@@ -50,10 +52,6 @@ void GameManager::SetUpObjects(){
     std::string* spec = new std::string("textures/container2_specular.png");
     std::string* spec2 = new std::string("textures/Arrow_specular.png");
 
-    this->all_objs = new std::deque<GameObject*>();
-
-
-
     Camera* m_camera = new Camera(this->main_window);
 
 
@@ -70,7 +68,7 @@ void GameManager::SetUpObjects(){
     Texture* boxTex = new Texture(tex2,GL_RGBA);
     Texture* boxSpec = new Texture(spec, GL_RGBA);
     
-    aLight->light_color = glm::vec3(0.3,0.7,1.0);
+    aLight->light_color = glm::vec3(0.6,0.6,0.6);
     aLight->light_intensity = 1;
     go = new MovingObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
     go->m_material = new Material();
@@ -123,8 +121,6 @@ void GameManager::SetUpObjects(){
     go5->AddTexture(boxTex);
     go5->AddTexture(boxSpec,new std::string("material.specular"));
 
-
-
     all_objs->push_back(go);
     all_objs->push_back(go2);
     all_objs->push_back(go4);
@@ -153,6 +149,9 @@ void GameManager::SetUpObjects(){
     delete tex2;
     delete spec;
     delete spec2;
+
+    this->basic_block->all_objs = this->all_objs;
+
 }
 
 void GameManager::EngnieStart(){
@@ -161,6 +160,10 @@ void GameManager::EngnieStart(){
         exit(-1);
     }
     std::cout<<"Ready to start!\n";
+    //Execute Ready for all objects
+    for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
+        (*it)->ReadyObject();
+    }
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
         
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
@@ -199,7 +202,5 @@ void GameManager::FrameBufferSizeCallback(GLFWwindow* windown, int width, int he
     here->main_window->SetWidthHeight(width,height);
     
 }
-
-
 
 

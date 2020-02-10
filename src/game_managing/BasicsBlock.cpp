@@ -1,6 +1,6 @@
 #include "game_managing/BasicsBlock.hpp"
-BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time):
-m_window(window),m_input(input),m_time(time){
+BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time,std::list<GameObject*>* all_objs):
+m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     
     this->Model_string = new std::string("Model");
     this->View_string = new std::string("View");

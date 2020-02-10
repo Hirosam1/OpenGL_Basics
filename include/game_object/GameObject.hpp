@@ -4,10 +4,12 @@
 //#include<GLFW/glfw3.h>
 #include<string.h>
 #include<string>
+#include<deque>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "game_tools/stb_image.h"
 
+#include "game_tools/stb_image.h"
 #include "game_object/Camera.hpp"
 #include "game_tools/Debugging.hpp"
 #include "game_managing/InputManager.hpp"
@@ -67,6 +69,8 @@ class GameObject{
             -> Copile and use shaders
             -> Handles Textures */
         void UpdateAndBuffer();
+
+        void ReadyObject();
         //Sets the MVP to its initial position
         void SetInitialMVP();
         //The strings
@@ -106,5 +110,6 @@ class GameObject{
         logic and objects, e.g., Cameras, Models, Projections
         */
         virtual void Update()=0; //Pure virtual function, you need to create sub classes to implement it
+        virtual void Ready();
   
 };

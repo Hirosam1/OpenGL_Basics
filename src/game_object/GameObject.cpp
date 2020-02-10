@@ -155,6 +155,14 @@ void GameObject::MakeLight(){
    }
 }
 
- void GameObject::GiveLight(Light* light){
+void GameObject::GiveLight(Light* light){
     this->m_light = light;
+ }
+
+
+void GameObject::ReadyObject(){
+   this->Ready();
+}
+
+ void GameObject::Ready(){
  }
