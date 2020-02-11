@@ -83,6 +83,7 @@ void GameManager::SetUpObjects(){
     go->AddTexture(boxTex);
     go->AddTexture(boxSpec,new std::string("material.specular"));
     go->GiveLight(aLight);
+    go->object_name = "Specular Cube";
 
     go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
     go2->GiveLight(aLight);
@@ -96,9 +97,10 @@ void GameManager::SetUpObjects(){
     go2->m_material = new Material(glm::vec3(0.9f,0.9f, 0.2f));
     go2->m_material->specular_color =  glm::vec3(0.3,0.6,0.2);
     go2->m_material->shininess = 64.0f;
-
+    go2->object_name = "Arrow texture";
     
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    goglob->object_name = "Editor gameObject";
 
     go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vertDefault,lamp);
     VAO* go4VAO = new VAO(GL_FLOAT);
@@ -107,6 +109,7 @@ void GameManager::SetUpObjects(){
     go4->SetUpVertex(go4VAO);
     go4->GiveLight(aLight);
     go4->MakeLight();
+    go4->object_name = "Light1";
 
     go5 = new MovingObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragTex);
     VAO* go5VAO = new VAO(GL_FLOAT);
@@ -120,6 +123,7 @@ void GameManager::SetUpObjects(){
     go5->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
     go5->AddTexture(boxTex);
     go5->AddTexture(boxSpec,new std::string("material.specular"));
+    go5->object_name = "Default Cube Texture";
 
     all_objs->push_back(go);
     all_objs->push_back(go2);

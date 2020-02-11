@@ -28,6 +28,7 @@ class GameManager;
 
 class GameObject{
     public:
+        std::string object_name = "Game Object";
         friend class GameManager;
         //Constructors
         GameObject(BasicsBlock* basic_block);

@@ -43,20 +43,14 @@ void bObject::Update(){
     #ifdef __unix__
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
     if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
-        if(obj_iterator != bb->all_objs->end()){
-            if ((*obj_iterator)->m_material != nullptr && (*obj_iterator) != this){
-                std::cout<< (*obj_iterator)->m_material->diffuse_color.z << std::endl;
-            }
-            ++obj_iterator;
-        }
-        //m_deque_test->push_back((char*) malloc (1000000) );
+        m_deque_test->push_back((char*) malloc (1000000) );
     }
     //THIS CLEANS THE WASTED MEMORY
     if(m_input->ProcessInput(GLFW_KEY_0,GLFW_PRESS)){
-       /* for(int i = 0; i < m_deque_test->size(); i++){
+        for(int i = 0; i < m_deque_test->size(); i++){
             delete m_deque_test->at(i);
         }
-        m_deque_test->clear();*/
+        m_deque_test->clear();
     }
     #endif
     
@@ -111,7 +105,51 @@ void bObject::RenderGUI(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+    {
+        static float vec_pos[3];
+        static float *vec_color;
+        ImGui::Begin("Game Object Manipulator");
+        ImGui::Text("Select Object Name: %s", (*obj_iterator)->object_name.c_str());
+        if(ImGui::Button("<<")){
+            if(obj_iterator != bb->all_objs->begin()){
+                obj_iterator--;
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button(">>")){
+            if(obj_iterator != --bb->all_objs->end()){
+                obj_iterator++;
+            }
+        }
+        vec_pos[0] = (*obj_iterator)->model[3][0];
+        vec_pos[1] = (*obj_iterator)->model[3][1];
+        vec_pos[2] = (*obj_iterator)->model[3][2];
+        ImGui::SliderFloat3("Object position", vec_pos,-5.0,5.0);
+        (*obj_iterator)->model[3][0] = vec_pos[0];
+        (*obj_iterator)->model[3][1] = vec_pos[1];
+        (*obj_iterator)->model[3][2] = vec_pos[2];
 
+        if ((*obj_iterator)->m_material != nullptr){
+            vec_color = glm::value_ptr((*obj_iterator)->m_material->diffuse_color);
+            ImGui::ColorEdit3("Material Color", vec_color);
+            (*obj_iterator)->m_material->ambient_color[0] = (*obj_iterator)->m_material->diffuse_color[0];
+            (*obj_iterator)->m_material->ambient_color[1] = (*obj_iterator)->m_material->diffuse_color[1];
+            (*obj_iterator)->m_material->ambient_color[2] = (*obj_iterator)->m_material->diffuse_color[2];
+           
+        }
+        ImGui::NewLine();
+        ImGui::Separator();
+        ImGui::NewLine();
+        if((*obj_iterator)->m_light != nullptr){
+            vec_color = glm::value_ptr((*obj_iterator)->m_light->light_color);
+            ImGui::ColorEdit3("Light Color", vec_color);
+            ImGui::SliderFloat("Light Intensity",&(*obj_iterator)->m_light->light_intensity,0.0f,1.0f);
+        }
+        
+        ImGui::End();
+    }
+
+    /*
     // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
     {
         // Our state
@@ -142,7 +180,7 @@ void bObject::RenderGUI(){
                 show_another_window = false;
             ImGui::End();
         }
-
+    */
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
