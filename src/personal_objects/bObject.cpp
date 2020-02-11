@@ -121,6 +121,7 @@ void bObject::RenderGUI(){
                 obj_iterator++;
             }
         }
+        
         vec_pos[0] = (*obj_iterator)->model[3][0];
         vec_pos[1] = (*obj_iterator)->model[3][1];
         vec_pos[2] = (*obj_iterator)->model[3][2];
@@ -137,9 +138,11 @@ void bObject::RenderGUI(){
             (*obj_iterator)->m_material->ambient_color[2] = (*obj_iterator)->m_material->diffuse_color[2];
            
         }
+
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
+        
         if((*obj_iterator)->m_light != nullptr){
             vec_color = glm::value_ptr((*obj_iterator)->m_light->light_color);
             ImGui::ColorEdit3("Light Color", vec_color);
@@ -149,38 +152,6 @@ void bObject::RenderGUI(){
         ImGui::End();
     }
 
-    /*
-    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-    {
-        // Our state
-        static float f = 0.0f;
-        static int counter = 0;
-
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Another Window", &show_another_window);
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        ImGui::Text("Aproximated Memory usage(%.d )",Debugging::GetMemoryUsage());
-        ImGui::End();
-    }
-    if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
-    */
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

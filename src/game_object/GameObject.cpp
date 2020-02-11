@@ -4,6 +4,7 @@
     m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
    this->shader = nullptr;this->m_vao = nullptr;
    //this->MVP_string = new std::string("MVP");
+   this->m_material = nullptr;
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->SetInitialMVP();
    this->m_light = nullptr;
