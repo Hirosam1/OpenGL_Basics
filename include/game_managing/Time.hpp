@@ -7,7 +7,7 @@
 class Time{
     public:
         Time();
-        double GetTime();
+        double GetTime(bool last_frame = false);
         void UpdateDelta();
         double delta_time;
     private:

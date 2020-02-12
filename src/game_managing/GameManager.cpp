@@ -155,6 +155,7 @@ void GameManager::SetUpObjects(){
     delete spec2;
 
     this->basic_block->all_objs = this->all_objs;
+    //glfwSwapInterval(0);
 
 }
 
@@ -178,6 +179,13 @@ void GameManager::EngnieStart(){
         glClearColor(0.00f,0.00f,0.0,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
+        float frame_rate_target = 1/(float)this->MAX_FRAMERATE;
+        double value = this->main_time->GetTime(true);
+        //Limit loop rate
+        
+        if (value < frame_rate_target){
+            std::this_thread::sleep_for(std::chrono::milliseconds( (int)((frame_rate_target - value) * 1000 )));
+        }
         this->main_time->UpdateDelta();
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
@@ -186,7 +194,8 @@ void GameManager::EngnieStart(){
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();
-        glfwPollEvents();
+        glfwPollEvents();        
+
 
     }
     

@@ -4,6 +4,8 @@
 #include<GLFW/glfw3.h>
 #include<string>
 #include<list>
+#include<thread>
+#include <chrono>
 
 #include "personal_objects/aObject.hpp"
 #include "personal_objects/bObject.hpp"
@@ -64,6 +66,7 @@ class GameManager{
         void SetUpObjects();
         
     public:
+        int MAX_FRAMERATE = 60;
         GameManager(std::string game_name,int width, int height);
         //Initiate the game engine, and become ready to start
         void EngineInit();

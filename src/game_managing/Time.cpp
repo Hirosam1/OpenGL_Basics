@@ -4,8 +4,12 @@ Time::Time():delta_time(0.0),last_value(0.0){
 
 }
 
-double Time::GetTime(){
-    return glfwGetTime();
+double Time::GetTime(bool last_frame){
+    if(last_frame){
+        return glfwGetTime() - this->last_value;
+    }else{
+        return glfwGetTime();
+    }
 }
 
 void Time::UpdateDelta(){
