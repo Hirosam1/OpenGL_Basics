@@ -88,6 +88,7 @@ void bObject::Update(){
     this->test_speed = 5;
 
     if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
+        
         show_cursor = show_cursor == GLFW_CURSOR_DISABLED? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED;
         glfwSetInputMode(m_window->GetWindow(),GLFW_CURSOR,show_cursor);
         f1KeyRealeased = false;
@@ -95,7 +96,7 @@ void bObject::Update(){
             lastX = m_input->mouse_Xpos;
             lastY = m_input->mouse_Ypos;
         }
-        
+    
     }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE)){
         f1KeyRealeased = true;
     }

@@ -62,7 +62,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
     }
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){this->shader->UseShader();}
     //Updaets the vertex data
-    this->Update();
+    //this->Update();
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){
       //Pass uniforms
       //Binds VAO

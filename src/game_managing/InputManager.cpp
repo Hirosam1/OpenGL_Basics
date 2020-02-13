@@ -3,6 +3,7 @@
 
 InputManager::InputManager(Window* window):window(window){
     glfwSetInputMode(window->GetWindow(),GLFW_CURSOR,GLFW_CURSOR_DISABLED);
+    glfwSetKeyCallback(window->GetWindow(),KeyboardCallBack);
     glfwSetCursorPosCallback(window->GetWindow(),MouseCallback);
     glfwSetScrollCallback(window->GetWindow(),ScrollCallback);
     glfwSetCursorEnterCallback(window->GetWindow(),CursorEnterCallback);
@@ -11,7 +12,8 @@ InputManager::InputManager(Window* window):window(window){
 }
 
 bool InputManager::ProcessInput(int key, int action) const{
-    if(glfwGetKey(this->window->GetWindow(),key) == action){
+   if(glfwGetKey(this->window->GetWindow(),key) == action){
+        //std::cout<< key <<"\n";
         return true;
     }
     return false;
@@ -24,6 +26,9 @@ bool InputManager::ProcessMouseInput(int key) const{
     return false;
 }*/
 
+void InputManager::KeyboardCallBack(GLFWwindow* window, int key, int scancode, int action, int mods){
+    BasicsBlock* here = static_cast<BasicsBlock*>(glfwGetWindowUserPointer(window));
+}
 
 void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos){
     BasicsBlock* here = static_cast<BasicsBlock*>(glfwGetWindowUserPointer(window));

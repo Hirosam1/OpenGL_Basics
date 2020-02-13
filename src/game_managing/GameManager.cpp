@@ -33,7 +33,6 @@ void GameManager::EngineInit(){
     this->supported_concurrency = std::thread::hardware_concurrency();
     this->threads = new std::thread[this->supported_concurrency];
 
-    this->input_thread = std::thread(CheckInput,main_window);
 
     SetUpObjects();
 
@@ -44,8 +43,6 @@ void GameManager::EngineInit(){
 
 }
 
-void GameManager::CheckInput(Window* window_to_check){
-}
 
 void GameManager::SetUpObjects(){
     std::string* vertDefault = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
@@ -163,9 +160,21 @@ void GameManager::SetUpObjects(){
 
     this->basic_block->all_objs = this->all_objs;
     glfwSwapInterval(1);
+    //glfwSetInputMode(main_window->GetWindow(),GLFW_CURSOR,GLFW_CURSOR_NORMAL);
 
-    this->MAX_FRAMERATE = 60;
+}
 
+void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsigned int supported_concurrency){
+    int i = 0;
+    int pos = 0;
+    
+    //Update all minus the last one
+    while(pos < all_objs->size()-1){
+        pos = id + supported_concurrency * i++;
+        if (pos < all_objs->size()-1){
+            all_objs->at(pos)->Update();
+        }
+    }
 }
 
 void GameManager::EngnieStart(){
@@ -179,7 +188,6 @@ void GameManager::EngnieStart(){
         (*it)->ReadyObject();
     }
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
-        
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
             glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
         }
@@ -188,15 +196,25 @@ void GameManager::EngnieStart(){
         glClearColor(0.00f,0.00f,0.0,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
-        float frame_rate_target = 1/(float)this->MAX_FRAMERATE;
-        double value = this->main_time->GetTime(true);
         this->main_time->UpdateDelta();
 
         glfwPollEvents();
+        //Update their info
+        for(int i = 0; i < this->supported_concurrency; i++){
+            this->threads[i] = std::thread(UpdateObjects,i,all_objs,supported_concurrency);
+        }
+        for(int i = 0; i < this->supported_concurrency; i++){
+            if( this->threads[i].joinable()){
+                this->threads[i].join();
+            }
+        }
+        
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
         }
+        //Last object, the GUI, needs to be Updated on main thread
+        all_objs->at(all_objs->size()-1)->Update();
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();
@@ -209,7 +227,12 @@ void GameManager::EngnieStart(){
 
 void GameManager::TerminateEngine(){
     std::cout<<"\n==Shutiing down glfw\n";
-    this->input_thread.join();
+    //Makes sure all threads ends
+    for(int i = 0; i < this->supported_concurrency; i++){
+        if( this->threads[i].joinable()){
+            this->threads[i].join();
+        }
+    }
     glfwTerminate();
 }
 

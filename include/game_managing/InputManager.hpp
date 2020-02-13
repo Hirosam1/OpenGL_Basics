@@ -14,6 +14,7 @@ class InputManager{
         static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
         static void CursorEnterCallback(GLFWwindow* window, int enter);
+        static void KeyboardCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
         void ResetValues();
         bool isMouseReady = false;
         double mouse_Xpos;

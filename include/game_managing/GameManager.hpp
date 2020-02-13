@@ -68,14 +68,13 @@ class GameManager{
         //Callback when Buffer size changes
         static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 
-        //Function that handles the input in a separate thread
-        static void CheckInput(Window* window_to_check);
-
         //Sets up the game Objects
         void SetUpObjects();
         
         //Terminate Engine
         void TerminateEngine();
+
+        static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsigned int supported_concurrency);
 
     public:
         int MAX_FRAMERATE = 60;
