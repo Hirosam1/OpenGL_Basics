@@ -24,11 +24,16 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_window);
     this->main_time = new Time();
 
-    this->all_objs = new std::list<GameObject*>();
+    this->all_objs = new std::vector<GameObject*>();
 
     this->basic_block = new BasicsBlock(main_window,main_input,main_time, this->all_objs);
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
+
+    this->supported_concurrency = std::thread::hardware_concurrency();
+    this->threads = new std::thread[this->supported_concurrency];
+
+    this->input_thread = std::thread(CheckInput,main_window);
 
     SetUpObjects();
 
@@ -39,6 +44,8 @@ void GameManager::EngineInit(){
 
 }
 
+void GameManager::CheckInput(Window* window_to_check){
+}
 
 void GameManager::SetUpObjects(){
     std::string* vertDefault = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
@@ -157,6 +164,8 @@ void GameManager::SetUpObjects(){
     this->basic_block->all_objs = this->all_objs;
     //glfwSwapInterval(0);
 
+    this->MAX_FRAMERATE = 70;
+
 }
 
 void GameManager::EngnieStart(){
@@ -182,11 +191,13 @@ void GameManager::EngnieStart(){
         float frame_rate_target = 1/(float)this->MAX_FRAMERATE;
         double value = this->main_time->GetTime(true);
         //Limit loop rate
-        
+        /*
         if (value < frame_rate_target){
             std::this_thread::sleep_for(std::chrono::milliseconds( (int)((frame_rate_target - value) * 1000 )));
-        }
+        }*/
         this->main_time->UpdateDelta();
+
+        glfwPollEvents();
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
@@ -194,15 +205,19 @@ void GameManager::EngnieStart(){
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();
-        glfwPollEvents();        
-
 
     }
     
-    std::cout<<"\n==Shutiing down glfw\n"; 
-    glfwTerminate();
+    this->TerminateEngine();
     
 }
+
+void GameManager::TerminateEngine(){
+    std::cout<<"\n==Shutiing down glfw\n";
+    this->input_thread.join();
+    glfwTerminate();
+}
+
 
 void GameManager::ErrorCallback(int error, const char* description){
     std::cout<<"Error: " << error << " ->" << description<<"\n";

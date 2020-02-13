@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include <list>
+#include <vector>
 
 class Window;
 class InputManager;
@@ -10,11 +10,11 @@ class GameObject;
 
 class BasicsBlock{
     public:
-        BasicsBlock(Window* window, InputManager* input, Time* time,std::list<GameObject*>* all_objs);
+        BasicsBlock(Window* window, InputManager* input, Time* time,std::vector<GameObject*>* all_objs);
         Window* m_window;
         InputManager* m_input;
         Time* m_time;
-        std::list<GameObject*>* all_objs;
+        std::vector<GameObject*>* all_objs;
 
         std::string* Model_string;
         std::string* View_string;

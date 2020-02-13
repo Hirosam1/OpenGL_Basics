@@ -3,7 +3,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<string>
-#include<list>
+#include<vector>
 #include<thread>
 #include <chrono>
 
@@ -35,6 +35,12 @@ class GameManager{
         //A block of data containing all indexes of all of the most important objects
         BasicsBlock* basic_block;
 
+        //Number of cores
+        unsigned int supported_concurrency;
+        //Threads in program
+        std::thread* threads = nullptr; 
+        //Thread specifically for input
+        std::thread input_thread;
         //the current width and height of game window
         int current_width;
         int current_height;
@@ -49,7 +55,7 @@ class GameManager{
         std::string game_name;
 
         //All objects to be rendered/prossessed on the scene
-        std::list<GameObject*>* all_objs;
+        std::vector<GameObject*>* all_objs;
 
         //Global time manager
         Time* main_time;
@@ -62,9 +68,15 @@ class GameManager{
         //Callback when Buffer size changes
         static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 
+        //Function that handles the input in a separate thread
+        static void CheckInput(Window* window_to_check);
+
         //Sets up the game Objects
         void SetUpObjects();
         
+        //Terminate Engine
+        void TerminateEngine();
+
     public:
         int MAX_FRAMERATE = 60;
         GameManager(std::string game_name,int width, int height);

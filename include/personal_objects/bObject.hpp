@@ -1,6 +1,6 @@
 #include "game_object/GameObject.hpp"
 #include "deque"
-#include <list>
+#include <vector>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -14,7 +14,7 @@ class bObject : public GameObject{
     void Update() override;
     void Ready() override;
     private:
-        std::list<GameObject*>::iterator obj_iterator;
+        std::vector<GameObject*>::iterator obj_iterator;
         std::deque<char*> *m_deque_test;
         glm::vec3 camera_front;
         float lastX, lastY;
