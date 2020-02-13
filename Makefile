@@ -30,7 +30,7 @@ IMGUI_OBJS = $(patsubst $(SRC_DIR)/imgui/%.cpp,$(OBJ_DIR)/%.o,$(IMGUI_SRC))
 
 CXXFLAGS = -I$(INCLUDE)/
 LDLIBS_LINUX = -lglfw3 -lrt -lm -lXrandr -lXrender -lXi -lGL -lpthread -pthread -lm -ldl -lXdamage -lXfixes -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm -lXext -lX11 -lpthread -lXdmcp -ldrm -lGL -lXinerama -lXcursor 
-LDLIBS_WIN = -Llib/ -lglfw3 -lglu32 -lgdi32
+LDLIBS_WIN = -lglfw3 -lglu32 -lgdi32 -lpthread
 
 linux: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS) $(PER_OBJS) $(IMGUI_OBJS)
 	g++ -o $(file_name) $^ $(LDLIBS_LINUX)
@@ -69,3 +69,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/imgui/%.cpp
 
 clear:
 	rm -rf $(OBJ_DIR)/*.o
+
+clear_windows:
+	DEL /F /Q /A $(OBJ_DIR)\*.o
