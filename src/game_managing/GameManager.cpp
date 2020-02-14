@@ -175,6 +175,9 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsig
             all_objs->at(pos)->Update();
         }
     }
+    v.clear();
+    v.shrink_to_fit();
+
 }
 
 void GameManager::EngnieStart(){
@@ -201,7 +204,8 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
         //Update their info
         for(int i = 0; i < this->supported_concurrency; i++){
-            this->threads[i] = std::thread(UpdateObjects,i,all_objs,supported_concurrency);
+        	std::vector<GameObject> v(*this->all_objs);
+            this->threads[i] = std::thread(UpdateObjects,i,&v,supported_concurrency);
         }
         for(int i = 0; i < this->supported_concurrency; i++){
             if( this->threads[i].joinable()){
