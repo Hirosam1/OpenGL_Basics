@@ -162,9 +162,9 @@ void GameManager::SetUpObjects(){
     delete spec2;
 
     this->basic_block->all_objs = this->all_objs;
-    //glfwSwapInterval(0);
+    glfwSwapInterval(1);
 
-    this->MAX_FRAMERATE = 70;
+    this->MAX_FRAMERATE = 60;
 
 }
 
@@ -190,11 +190,6 @@ void GameManager::EngnieStart(){
        
         float frame_rate_target = 1/(float)this->MAX_FRAMERATE;
         double value = this->main_time->GetTime(true);
-        //Limit loop rate
-        /*
-        if (value < frame_rate_target){
-            std::this_thread::sleep_for(std::chrono::milliseconds( (int)((frame_rate_target - value) * 1000 )));
-        }*/
         this->main_time->UpdateDelta();
 
         glfwPollEvents();
