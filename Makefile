@@ -33,7 +33,7 @@ LDLIBS_LINUX = -lglfw3 -lrt -lm -lXrandr -lXrender -lXi -lGL -lpthread -pthread 
 LDLIBS_WIN = -lglfw3 -lglu32 -lgdi32 -lpthread
 
 linux: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS) $(PER_OBJS) $(IMGUI_OBJS)
-	g++ -o $(file_name) $^ $(LDLIBS_LINUX)
+	g++ -o $(file_name) $^ $(LDLIBS_LINUX) -O
 
 windows: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS) $(PER_OBJS) $(IMGUI_OBJS)
 	g++ -o $(file_name) $^ -static-libgcc -static-libstdc++ -L$(LIB_PATH)/  $(LDLIBS_WIN)
