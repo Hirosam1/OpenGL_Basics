@@ -168,6 +168,7 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsig
     int i = 0;
     int pos = 0;
     
+    std::cout<<id<<" 1\n";
     //Update all minus the last one
     while(pos < all_objs->size()-1){
         pos = id + supported_concurrency * i++;
@@ -175,8 +176,10 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsig
             all_objs->at(pos)->Update();
         }
     }
-    v.clear();
-    v.shrink_to_fit();
+    
+    //all_objs->pop_back();
+    all_objs->clear();
+    all_objs->shrink_to_fit();
 
 }
 
@@ -204,15 +207,15 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
         //Update their info
         for(int i = 0; i < this->supported_concurrency; i++){
-        	std::vector<GameObject> v(*this->all_objs);
-            this->threads[i] = std::thread(UpdateObjects,i,&v,supported_concurrency);
+        	std::vector<GameObject*>* v = new std::vector<GameObject*>(*this->all_objs);
+            this->threads[i] = std::thread(UpdateObjects,i,v,supported_concurrency);
         }
+
         for(int i = 0; i < this->supported_concurrency; i++){
             if( this->threads[i].joinable()){
                 this->threads[i].join();
             }
         }
-        
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
