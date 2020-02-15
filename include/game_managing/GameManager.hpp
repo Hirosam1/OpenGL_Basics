@@ -6,6 +6,8 @@
 #include<vector>
 #include<thread>
 #include <chrono>
+#include<mutex>
+#include<condition_variable>
 
 #include "personal_objects/aObject.hpp"
 #include "personal_objects/bObject.hpp"
@@ -60,6 +62,12 @@ class GameManager{
         //Global time manager
         Time* main_time;
 
+        //Mutex to controll threads
+        std::mutex mtx;
+
+        //Conditional variable
+        std::condition_variable lock_threads;
+
         //------------------------------------- Methods ----------------------------------------------------------------
         
         //Error handler of GLFW
@@ -74,7 +82,9 @@ class GameManager{
         //Terminate Engine
         void TerminateEngine();
 
-        static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsigned int supported_concurrency);
+        static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,
+            unsigned int supported_concurrency,Window* window,
+            std::mutex *mtx, std::condition_variable *cv);
 
     public:
         int MAX_FRAMERATE = 60;

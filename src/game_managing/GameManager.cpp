@@ -41,6 +41,12 @@ void GameManager::EngineInit(){
     Debugging::SetPointsSize(10);    
     glEnable(GL_DEPTH_TEST);
 
+    //Update their info
+    for(int i = 0; i < this->supported_concurrency; i++){
+        	//std::vector<GameObject*>* v = new std::vector<GameObject*>(*this->all_objs);
+           this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, &mtx, &lock_threads);
+    }
+
 }
 
 
@@ -164,22 +170,28 @@ void GameManager::SetUpObjects(){
 
 }
 
-void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,unsigned int supported_concurrency){
-    int i = 0;
-    int pos = 0;
+void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
+        unsigned int supported_concurrency,Window* window,
+        std::mutex *mtx, std::condition_variable *cv){
     
-    std::cout<<id<<" 1\n";
-    //Update all minus the last one
-    while(pos < all_objs->size()-1){
-        pos = id + supported_concurrency * i++;
-        if (pos < all_objs->size()-1){
-            all_objs->at(pos)->Update();
+    while(!glfwWindowShouldClose(window->GetWindow())){
+        int i = 0;
+        int pos = 0;
+        std::unique_lock<std::mutex> lck(*mtx, std::defer_lock);
+        
+        cv->wait(lck);
+        //Update all minus the last one
+        while(pos < all_objs->size()-1){
+            pos = id + supported_concurrency * i++;
+            if (pos < all_objs->size()-1){
+                all_objs->at(pos)->Update();
+            }
         }
-    }
     
-    //all_objs->pop_back();
-    all_objs->clear();
-    all_objs->shrink_to_fit();
+    }
+    std::cout<<id<<"\n";
+    //all_objs->clear();
+    //all_objs->shrink_to_fit();
 
 }
 
@@ -205,17 +217,14 @@ void GameManager::EngnieStart(){
         this->main_time->UpdateDelta();
 
         glfwPollEvents();
-        //Update their info
-        for(int i = 0; i < this->supported_concurrency; i++){
-        	std::vector<GameObject*>* v = new std::vector<GameObject*>(*this->all_objs);
-            this->threads[i] = std::thread(UpdateObjects,i,v,supported_concurrency);
-        }
-
+        lock_threads.notify_all();
+        
+        /*
         for(int i = 0; i < this->supported_concurrency; i++){
             if( this->threads[i].joinable()){
                 this->threads[i].join();
             }
-        }
+        }*/
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
@@ -236,6 +245,7 @@ void GameManager::TerminateEngine(){
     std::cout<<"\n==Shutiing down glfw\n";
     //Makes sure all threads ends
     for(int i = 0; i < this->supported_concurrency; i++){
+        lock_threads.notify_all();
         if( this->threads[i].joinable()){
             this->threads[i].join();
         }
