@@ -30,7 +30,7 @@ void GameManager::EngineInit(){
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
-    this->supported_concurrency = std::thread::hardware_concurrency();
+    this->supported_concurrency = std::thread::hardware_concurrency()-1;
     this->threads = new std::thread[this->supported_concurrency];
 
 
@@ -40,11 +40,11 @@ void GameManager::EngineInit(){
     glEnable(GL_DITHER);
     Debugging::SetPointsSize(10);    
     glEnable(GL_DEPTH_TEST);
+    glfwSwapInterval(1);
 
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
-        	//std::vector<GameObject*>* v = new std::vector<GameObject*>(*this->all_objs);
-           this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, &mtx, &lock_threads);
+        this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, &mtx, &lock_threads);
     }
 
 }
@@ -73,12 +73,12 @@ void GameManager::SetUpObjects(){
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4, * go5;
     Light* aLight = new Light();
-    aLight->light_ambient = aLight->light_color* 0.2f;
+    aLight->light_ambient = aLight->light_color* 0.1f;
 
     Texture* boxTex = new Texture(tex2,GL_RGBA);
     Texture* boxSpec = new Texture(spec, GL_RGBA);
     
-    aLight->light_color = glm::vec3(0.6,0.6,0.6);
+    aLight->light_color = glm::vec3(1.0,1.0,1.0);
     aLight->light_intensity = 1;
     go = new MovingObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
     go->m_material = new Material();
@@ -93,7 +93,7 @@ void GameManager::SetUpObjects(){
     go->AddTexture(boxTex);
     go->AddTexture(boxSpec,new std::string("material.specular"));
     go->GiveLight(aLight);
-    go->object_name = "Specular Cube";
+    go->object_name = "Cube With Specular";
 
     go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
     go2->GiveLight(aLight);
@@ -107,7 +107,7 @@ void GameManager::SetUpObjects(){
     go2->m_material = new Material(glm::vec3(0.9f,0.9f, 0.2f));
     go2->m_material->specular_color =  glm::vec3(0.3,0.6,0.2);
     go2->m_material->shininess = 64.0f;
-    go2->object_name = "Arrow texture";
+    go2->object_name = "Arrow";
     
     GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
     goglob->object_name = "Editor gameObject";
@@ -129,11 +129,12 @@ void GameManager::SetUpObjects(){
         go5VAO->SetUpObject();
     go5->GiveLight(aLight);
     go5->SetUpVertex(go5VAO);
-    go5->m_material = go->m_material;
-    go5->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
+    go5->m_material = new Material();
+    go5->m_material->shininess = 128;
+    go5->m_material->specular_color = glm::vec3(0.5,0.5,0.5);
     go5->AddTexture(boxTex);
     go5->AddTexture(boxSpec,new std::string("material.specular"));
-    go5->object_name = "Default Cube Texture";
+    go5->object_name = "Cube without specular";
 
     all_objs->push_back(go);
     all_objs->push_back(go2);
@@ -164,22 +165,20 @@ void GameManager::SetUpObjects(){
     delete spec;
     delete spec2;
 
-    this->basic_block->all_objs = this->all_objs;
-    glfwSwapInterval(1);
-    //glfwSetInputMode(main_window->GetWindow(),GLFW_CURSOR,GLFW_CURSOR_NORMAL);
-
 }
 
 void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         unsigned int supported_concurrency,Window* window,
         std::mutex *mtx, std::condition_variable *cv){
     
+    std::unique_lock<std::mutex> lck(*mtx, std::defer_lock);
+
     while(!glfwWindowShouldClose(window->GetWindow())){
         int i = 0;
         int pos = 0;
-        std::unique_lock<std::mutex> lck(*mtx, std::defer_lock);
-        
+        lck.lock();
         cv->wait(lck);
+        lck.unlock();
         //Update all minus the last one
         while(pos < all_objs->size()-1){
             pos = id + supported_concurrency * i++;
@@ -189,9 +188,6 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         }
     
     }
-    std::cout<<id<<"\n";
-    //all_objs->clear();
-    //all_objs->shrink_to_fit();
 
 }
 
@@ -219,12 +215,6 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
         lock_threads.notify_all();
         
-        /*
-        for(int i = 0; i < this->supported_concurrency; i++){
-            if( this->threads[i].joinable()){
-                this->threads[i].join();
-            }
-        }*/
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
@@ -242,14 +232,16 @@ void GameManager::EngnieStart(){
 }
 
 void GameManager::TerminateEngine(){
-    std::cout<<"\n==Shutiing down glfw\n";
+    std::cout<<"\n==Shutiing down\n";
     //Makes sure all threads ends
+    lock_threads.notify_all();
+    std::cout<<"Joining Threads\n";
     for(int i = 0; i < this->supported_concurrency; i++){
-        lock_threads.notify_all();
         if( this->threads[i].joinable()){
             this->threads[i].join();
         }
     }
+    std::cout<<"Terminate glfw\n";
     glfwTerminate();
 }
 

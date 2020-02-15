@@ -67,6 +67,7 @@ class GameManager{
 
         //Conditional variable
         std::condition_variable lock_threads;
+        
 
         //------------------------------------- Methods ----------------------------------------------------------------
         
