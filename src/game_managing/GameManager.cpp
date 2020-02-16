@@ -170,7 +170,7 @@ void GameManager::SetUpObjects(){
 void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         unsigned int supported_concurrency,Window* window,
         std::mutex *mtx, std::condition_variable *cv){
-    
+    //Create its lock based on shared mutex, don't need to lock at this point that is why defer_lock
     std::unique_lock<std::mutex> lck(*mtx, std::defer_lock);
 
     while(!glfwWindowShouldClose(window->GetWindow())){
