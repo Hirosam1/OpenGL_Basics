@@ -173,7 +173,7 @@ void GameManager::SetUpObjects(){
 
 void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         unsigned int supported_concurrency,Window* window,
-        std::mutex *mtx, std::condition_variable *cv){
+        std::mutex *mtx, std::condition_variable *wait_main){
     //Create its lock based on shared mutex, don't need to lock at this point that is why defer_lock
     std::unique_lock<std::mutex> lck(*mtx, std::defer_lock);
 
@@ -181,7 +181,7 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         int i = 0;
         int pos = 0;
         lck.lock();
-        cv->wait(lck);
+        wait_main->wait(lck);
         lck.unlock();
         //Update all minus the last one
         while(pos < all_objs->size()-1){

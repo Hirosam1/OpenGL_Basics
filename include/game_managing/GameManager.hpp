@@ -85,7 +85,7 @@ class GameManager{
 
         static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,
             unsigned int supported_concurrency,Window* window,
-            std::mutex *mtx, std::condition_variable *cv);
+            std::mutex *mtx, std::condition_variable *wait_main);
 
     public:
         int MAX_FRAMERATE = 60;
