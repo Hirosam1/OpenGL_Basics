@@ -54,9 +54,9 @@ void bObject::Update(){
     }
     #endif
     
-    if(show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
+   //if(show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
     if(show_cursor == GLFW_CURSOR_NORMAL) RenderGUI();
-
+    /*
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 15;
     }
@@ -84,18 +84,14 @@ void bObject::Update(){
 
     m_camera->camera_front = &camera_front;
     m_camera->LookAt(*m_camera->camera_pos+ *m_camera->camera_front);
-
+    
     this->test_speed = 5;
-
+    */
     if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
         
         show_cursor = show_cursor == GLFW_CURSOR_DISABLED? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED;
         glfwSetInputMode(m_window->GetWindow(),GLFW_CURSOR,show_cursor);
         f1KeyRealeased = false;
-        if(show_cursor == GLFW_CURSOR_DISABLED){
-            lastX = m_input->mouse_Xpos;
-            lastY = m_input->mouse_Ypos;
-        }
     
     }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE)){
         f1KeyRealeased = true;

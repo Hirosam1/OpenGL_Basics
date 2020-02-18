@@ -12,7 +12,7 @@
 #include "personal_objects/aObject.hpp"
 #include "personal_objects/bObject.hpp"
 #include "personal_objects/cObject.hpp"
-#include "personal_objects/movnigObject.hpp"
+#include "personal_objects/NoBehaviorObject.hpp"
 
 #include "game_managing/BasicsBlock.hpp"
 #include"game_object/GameObject.hpp"

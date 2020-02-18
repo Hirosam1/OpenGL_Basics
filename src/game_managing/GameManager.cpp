@@ -80,7 +80,7 @@ void GameManager::SetUpObjects(){
     
     aLight->light_color = glm::vec3(1.0,1.0,1.0);
     aLight->light_intensity = 1;
-    go = new MovingObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
+    go = new NoBahaviorObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
     go->m_material = new Material();
     go->m_material->shininess = 64.0;
     go->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
@@ -95,7 +95,7 @@ void GameManager::SetUpObjects(){
     go->GiveLight(aLight);
     go->object_name = "Cube With Specular";
 
-    go2 = new aObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
+    go2 = new NoBahaviorObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
     go2->GiveLight(aLight);
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2VAO->SetAttribPoint(3);
@@ -109,8 +109,11 @@ void GameManager::SetUpObjects(){
     go2->m_material->shininess = 64.0f;
     go2->object_name = "Arrow";
     
-    GameObject* goglob = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
-    goglob->object_name = "Editor gameObject";
+    GameObject* GUIObject = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    GUIObject->object_name = "GUI gameObject";
+
+    GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    CameraMov->object_name = "Camera Movement Game Object";
 
     go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vertDefault,lamp);
     VAO* go4VAO = new VAO(GL_FLOAT);
@@ -121,7 +124,7 @@ void GameManager::SetUpObjects(){
     go4->MakeLight();
     go4->object_name = "Light1";
 
-    go5 = new MovingObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragTex);
+    go5 = new NoBahaviorObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragTex);
     VAO* go5VAO = new VAO(GL_FLOAT);
         go5VAO->SetAttribPoint(3);
         go5VAO->SetAttribPoint(3);
@@ -140,8 +143,9 @@ void GameManager::SetUpObjects(){
     all_objs->push_back(go2);
     all_objs->push_back(go4);
     all_objs->push_back(go5);
+    all_objs->push_back(CameraMov);
     //UI needs to be last?
-    all_objs->push_back(goglob);
+    all_objs->push_back(GUIObject);
 
     vertDefault->clear();
     vertTex->clear();
