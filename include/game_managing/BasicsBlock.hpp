@@ -16,19 +16,19 @@ class BasicsBlock{
         Time* m_time;
         std::vector<GameObject*>* all_objs;
 
-        std::string* Model_string;
-        std::string* View_string;
-        std::string* Projection_string;
+        std::string Model_string;
+        std::string View_string;
+        std::string Projection_string;
 
-        std::string* Mat_ambient;
-        std::string* Mat_diffuse;
-        std::string* Mat_specular;
-        std::string* Mat_shininess;
+        std::string Mat_ambient;
+        std::string Mat_diffuse;
+        std::string Mat_specular;
+        std::string Mat_shininess;
 
-        std::string* Light_ambient;
-        std::string* Light_diffuse;
-        std::string* Light_specular;
-        std::string* Light_pos;
+        std::string Light_ambient;
+        std::string Light_diffuse;
+        std::string Light_specular;
+        std::string Light_pos;
 
-        std::string* Basic_tex;
+        std::string Basic_tex;
 };

@@ -2,18 +2,18 @@
 BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time,std::vector<GameObject*>* all_objs):
 m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     
-    this->Model_string = new std::string("Model");
-    this->View_string = new std::string("View");
-    this->Projection_string = new std::string("Projection");
+    this->Model_string = std::string("Model");
+    this->View_string = std::string("View");
+    this->Projection_string = std::string("Projection");
 
-    this->Mat_ambient = new std::string("material.ambient");
-    this->Mat_diffuse = new std::string("material.diffuse");
-    this->Mat_specular = new std::string("material.specular");
-    this->Mat_shininess = new std::string("material.shininess");
+    this->Mat_ambient = std::string("material.ambient");
+    this->Mat_diffuse = std::string("material.diffuse");
+    this->Mat_specular = std::string("material.specular");
+    this->Mat_shininess = std::string("material.shininess");
 
-    this->Light_ambient = new std::string("light.ambient");
-    this->Light_diffuse = new std::string("light.diffuse");
-    this->Light_specular = new std::string("light.specular");
-    this->Light_pos = new std::string("light.position");
-    this->Basic_tex = new std::string("material.texture1");
+    this->Light_ambient =  std::string("light.ambient");
+    this->Light_diffuse =  std::string("light.diffuse");
+    this->Light_specular = std::string("light.specular");
+    this->Light_pos = std::string("light.position");
+    this->Basic_tex = std::string("material.texture1");
 }
