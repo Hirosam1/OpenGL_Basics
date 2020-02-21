@@ -93,7 +93,7 @@ void GameManager::SetUpObjects(){
     go->AddTexture(boxTex);
     go->AddTexture(boxSpec,new std::string("material.specular"));
     go->GiveLight(aLight);
-    go->object_name = "Cube With Specular";
+    go->object_name = "Cube With Specular 1";
 
     go2 = new NoBahaviorObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
     go2->GiveLight(aLight);
@@ -124,7 +124,7 @@ void GameManager::SetUpObjects(){
     go4->MakeLight();
     go4->object_name = "Light1";
 
-    go5 = new NoBahaviorObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragTex);
+    go5 = new NoBahaviorObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragSpec);
     VAO* go5VAO = new VAO(GL_FLOAT);
         go5VAO->SetAttribPoint(3);
         go5VAO->SetAttribPoint(3);
@@ -133,16 +133,16 @@ void GameManager::SetUpObjects(){
     go5->GiveLight(aLight);
     go5->SetUpVertex(go5VAO);
     go5->m_material = new Material();
-    go5->m_material->shininess = 128;
+    go5->m_material->shininess = 64;
     go5->m_material->specular_color = glm::vec3(0.5,0.5,0.5);
     go5->AddTexture(boxTex);
     go5->AddTexture(boxSpec,new std::string("material.specular"));
-    go5->object_name = "Cube without specular";
+    go5->object_name = "Cube with specular 2";
 
     all_objs->push_back(go);
+    all_objs->push_back(go5);
     all_objs->push_back(go2);
     all_objs->push_back(go4);
-    all_objs->push_back(go5);
     all_objs->push_back(CameraMov);
     //UI needs to be last?
     all_objs->push_back(GUIObject);

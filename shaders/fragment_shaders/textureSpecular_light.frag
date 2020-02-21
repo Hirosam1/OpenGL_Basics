@@ -44,7 +44,7 @@ void main()
     float distance = length(LightPos - FragPos);
     float attenuation = 1.0/(light.constant + (light.linear * distance) + (light.quadratic * (distance * distance)));
     //Difuse
-    //vec3  lightDir = normalize(-light.direction);
+    //vec3  lightDir = normalize(-LightDir);
     vec3 lightDir = normalize(LightPos - FragPos);
     float diff = max(dot(norm,lightDir),0);
     vec3 diffuse = (diff * material.diffuse) * vec3(texColor) * light.diffuse;
