@@ -16,6 +16,7 @@ class BasicsBlock{
         Time* m_time;
         std::vector<GameObject*>* all_objs;
 
+        //I probably should put those strings on a file?
         std::string Model_string;
         std::string View_string;
         std::string Projection_string;
@@ -28,7 +29,14 @@ class BasicsBlock{
         std::string Light_ambient;
         std::string Light_diffuse;
         std::string Light_specular;
+
         std::string Light_pos;
 
+        std::string Ligh_direction;
+
         std::string Basic_tex;
+
+        std::string Light_constant;
+        std::string Light_linear;
+        std::string Light_quadratic;
 };

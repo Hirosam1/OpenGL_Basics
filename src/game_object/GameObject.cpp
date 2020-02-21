@@ -49,12 +49,17 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       if(this->m_light != nullptr){
          shader->SetUniformVec3f(&this->bb->Light_ambient,this->m_light->light_ambient);
          shader->SetUniformVec3f(&this->bb->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);
-         shader->SetUniformVec3f(&this->bb->Light_specular,this->m_light->light_specular);
-         shader->SetUniformVec3f(&this->bb->Light_pos,this->m_light->light_pos);
+         shader->SetUniformVec3f(&this->bb->Light_specular,this->m_light->light_specular * this->m_light->light_intensity);
+         shader->SetUniformVec3f(&this->bb->Light_pos, this->m_light->light_pos);
+         //shader->SetUniformVec3f(&this->bb->Ligh_direction,  glm::vec3( glm::transpose(glm::inverse(this->m_camera->GetView())) * glm::vec4(this->m_light->light_pos,1)));
+         shader->SetUniform1f(&this->bb->Light_constant,1.0);
+         shader->SetUniform1f(&this->bb->Light_linear,0.5);
+         shader->SetUniform1f(&this->bb->Light_quadratic,0.6);
       }
       this->shader->SetUniformMat4f(&this->bb->Model_string,this->model);
       this->shader->SetUniformMat4f(&this->bb->View_string,this->m_camera->GetView());
       this->shader->SetUniformMat4f(&this->bb->Projection_string,this->m_camera->GetProjection());
+
       if(this->m_shape->indices_count > 1){
          glDrawElements(GL_TRIANGLES,this->m_shape->indices_count,GL_UNSIGNED_INT,0);
       }else{

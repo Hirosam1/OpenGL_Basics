@@ -115,7 +115,7 @@ void GameManager::SetUpObjects(){
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
-    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{-1.5,1.2,1.2},vertDefault,lamp);
+    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{0.5,0.1,3},vertDefault,lamp);
     VAO* go4VAO = new VAO(GL_FLOAT);
     go4VAO->SetAttribPoint(3,6);
     go4VAO->SetUpObject();
