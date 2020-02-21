@@ -41,4 +41,5 @@ class BasicsBlock{
         std::string Light_quadratic;
 
         std::string Light_CutOff;
+        std::string Light_OutCutoff;
 };

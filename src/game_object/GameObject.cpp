@@ -56,10 +56,11 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
          shader->SetUniformVec3f(&this->bb->Light_pos,*this->m_camera->camera_pos);
          shader->SetUniformVec3f(&this->bb->Light_direction,*this->m_camera->camera_front);
          shader->SetUniform1f(&this->bb->Light_constant,1.0);
-         shader->SetUniform1f(&this->bb->Light_linear,0.3);
-         shader->SetUniform1f(&this->bb->Light_quadratic,0.1);
+         shader->SetUniform1f(&this->bb->Light_linear,0.1);
+         shader->SetUniform1f(&this->bb->Light_quadratic,0.02);
          //We already calculate the cosine here since we will compare it to the dot product of the fragment angle
          shader->SetUniform1f(&this->bb->Light_CutOff, glm::cos(glm::radians(12.5)));
+         shader->SetUniform1f(&this->bb->Light_OutCutoff, glm::cos(glm::radians(18.0)));
       }
       this->shader->SetUniformMat4f(&this->bb->Model_string,this->model);
       this->shader->SetUniformMat4f(&this->bb->View_string,this->m_camera->GetView());

@@ -14,7 +14,8 @@ struct Light{
     float linear;
     float quadratic;
 
-    float cutOff
+    float cutOff;
+    float outerCutOff;
 };
 
 
@@ -42,5 +43,4 @@ void main()
     gl_Position = Projection * vec4(FragPos,1.0);
     TexCoord = aTexCoord;
     LightDir = vec3(View * vec4(light.direction,0));
-    //LightDir = vec3(transpose(inverse(View)) * vec4(light.direction,1));
 }

@@ -24,4 +24,5 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     this->Light_quadratic = std::string("light.quadratic");
 
     this->Light_CutOff = std::string("light.cutOff");
+    this->Light_OutCutoff = std::string("light.outerCutOff");
 }
