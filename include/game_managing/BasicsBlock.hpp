@@ -32,11 +32,13 @@ class BasicsBlock{
 
         std::string Light_pos;
 
-        std::string Ligh_direction;
+        std::string Light_direction;
 
         std::string Basic_tex;
 
         std::string Light_constant;
         std::string Light_linear;
         std::string Light_quadratic;
+
+        std::string Light_CutOff;
 };

@@ -17,9 +17,11 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     this->Light_pos = std::string("light.position");
     this->Basic_tex = std::string("material.texture1");
 
-    this->Ligh_direction = std::string("light.direction");
+    this->Light_direction = std::string("light.direction");
 
     this->Light_constant = std::string("light.constant");
     this->Light_linear = std::string("light.linear");
     this->Light_quadratic = std::string("light.quadratic");
+
+    this->Light_CutOff = std::string("light.cutOff");
 }
