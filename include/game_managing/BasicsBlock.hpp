@@ -26,6 +26,11 @@ class BasicsBlock{
         std::string Mat_specular;
         std::string Mat_shininess;
 
+
+        std::string DirLight_prefix;
+        std::string PointLight_prefix;
+        std::string SpotLight_prefix;
+
         std::string Light_ambient;
         std::string Light_diffuse;
         std::string Light_specular;

@@ -47,17 +47,38 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       this->shader->SetUniform1f(&this->bb->Mat_shininess,this->m_material->shininess);
       }
       if(this->m_light != nullptr){
+         std::string uniform_name = bb->PointLight_prefix + bb->Light_ambient;
+         shader->SetUniformVec3f(&uniform_name,this->m_light->light_ambient);
+
+         uniform_name = bb->PointLight_prefix + bb->Light_diffuse;
+         shader->SetUniformVec3f(&uniform_name,this->m_light->light_color * this->m_light->light_intensity);
+
+         uniform_name = bb->PointLight_prefix + bb->Light_specular;
+         shader->SetUniformVec3f(&uniform_name,this->m_light->light_specular * this->m_light->light_intensity);
+
+         uniform_name = bb->PointLight_prefix + bb->Light_pos;
+         shader->SetUniformVec3f(&uniform_name,glm::vec3(glm::vec4(this->m_light->light_pos,1) * this->m_camera->GetView()));
+
+         uniform_name = bb->PointLight_prefix + bb->Light_CutOff;
+         shader->SetUniform1f(&uniform_name,glm::cos(glm::radians(12.5)));
+
+         uniform_name = bb->PointLight_prefix + bb->Light_constant;
+         shader->SetUniform1f(&uniform_name,1);
+
+         uniform_name = bb->PointLight_prefix + bb->Light_linear;
+         shader->SetUniform1f(&uniform_name,0.6);
+
+         uniform_name = bb->PointLight_prefix + bb->Light_quadratic;
+         shader->SetUniform1f(&uniform_name,0.3);
+
+         /*
          shader->SetUniformVec3f(&this->bb->Light_ambient,this->m_light->light_ambient);
          shader->SetUniformVec3f(&this->bb->Light_diffuse,this->m_light->light_color * this->m_light->light_intensity);
          //Specularity is intensity depedent
-         shader->SetUniformVec3f(&this->bb->Light_specular,this->m_light->light_specular * this->m_light->light_intensity);
-         //shader->SetUniformVec3f(&this->bb->Light_pos, this->m_light->light_pos);
-         //shader->SetUniformVec3f(&this->bb->Ligh_direction, this->m_light->light_pos);
-         shader->SetUniformVec3f(&this->bb->Light_pos,*this->m_camera->camera_pos);
-         shader->SetUniformVec3f(&this->bb->Light_direction,*this->m_camera->camera_front);
-         shader->SetUniform1f(&this->bb->Light_constant,1.0);
-         shader->SetUniform1f(&this->bb->Light_linear,0.1);
-         shader->SetUniform1f(&this->bb->Light_quadratic,0.02);
+         shader->SetUniformVec3f(&this->bb->Light_specular,this->m_light->light_specular * this->m_light->light_intensity);*/
+         
+
+
          //We already calculate the cosine here since we will compare it to the dot product of the fragment angle
          shader->SetUniform1f(&this->bb->Light_CutOff, glm::cos(glm::radians(12.5)));
          shader->SetUniform1f(&this->bb->Light_OutCutoff, glm::cos(glm::radians(18.0)));
