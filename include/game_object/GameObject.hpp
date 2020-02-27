@@ -85,6 +85,9 @@ class GameObject{
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
         //std::string* model_shader_path;
+
+        void SetUpLightUniforms(int index,std::string light_type);
+
     protected:
         BasicsBlock* bb;
         bool isLight = false;
