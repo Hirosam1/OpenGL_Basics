@@ -25,6 +25,7 @@ void GameManager::EngineInit(){
     this->main_time = new Time();
 
     this->all_objs = new std::vector<GameObject*>();
+    this->all_lights = std::vector<Light*>();
 
     this->basic_block = new BasicsBlock(main_window,main_input,main_time, this->all_objs);
 
@@ -72,14 +73,19 @@ void GameManager::SetUpObjects(){
 
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4, * go5;
-    Light* aLight = new Light();
-    aLight->light_ambient = aLight->light_color* 0.1f;
+
+    GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{-1.0,2.0,-3.0},vertDefault,lamp);
+    VAO* light_vao = new VAO(GL_FLOAT);
+        light_vao->SetAttribPoint(3,6);
+        light_vao->SetUpObject();
+    m_light->SetUpVertex(light_vao);
+    m_light->model = glm::scale(m_light->model,glm::vec3(0.2,0.2,0.2));
+    m_light->object_name = "Point Light";
+
 
     Texture* boxTex = new Texture(tex2,GL_RGBA);
     Texture* boxSpec = new Texture(spec, GL_RGBA);
     
-    aLight->light_color = glm::vec3(1.0,1.0,1.0);
-    aLight->light_intensity = 1;
     go = new NoBahaviorObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
     go->m_material = new Material();
     go->m_material->shininess = 64.0;
@@ -92,11 +98,9 @@ void GameManager::SetUpObjects(){
     go->SetUpVertex(goVAO);
     go->AddTexture(boxTex);
     go->AddTexture(boxSpec,new std::string("material.specular"));
-    go->GiveLight(aLight);
     go->object_name = "Cube With Specular 1";
 
     go2 = new NoBahaviorObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
-    go2->GiveLight(aLight);
     VAO* go2VAO = new VAO(GL_FLOAT);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(3);
@@ -115,22 +119,12 @@ void GameManager::SetUpObjects(){
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
-    go4 = new cObject(this->basic_block , m_camera,cube,new float[3]{0.5,0.1,3},vertDefault,lamp);
-    VAO* go4VAO = new VAO(GL_FLOAT);
-    go4VAO->SetAttribPoint(3,6);
-    go4VAO->SetUpObject();
-    go4->SetUpVertex(go4VAO);
-    go4->GiveLight(aLight);
-    go4->MakeLight();
-    go4->object_name = "Light1";
-
     go5 = new NoBahaviorObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragSpec);
     VAO* go5VAO = new VAO(GL_FLOAT);
         go5VAO->SetAttribPoint(3);
         go5VAO->SetAttribPoint(3);
         go5VAO->SetAttribPoint(2);
         go5VAO->SetUpObject();
-    go5->GiveLight(aLight);
     go5->SetUpVertex(go5VAO);
     go5->m_material = new Material();
     go5->m_material->shininess = 64;
@@ -142,10 +136,12 @@ void GameManager::SetUpObjects(){
     all_objs->push_back(go);
     all_objs->push_back(go5);
     all_objs->push_back(go2);
-    all_objs->push_back(go4);
     all_objs->push_back(CameraMov);
+    all_objs->push_back(m_light);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
+
+    all_lights.push_back(dynamic_cast<Light*>(m_light));
 
     vertDefault->clear();
     vertTex->clear();
@@ -209,7 +205,6 @@ void GameManager::EngnieStart(){
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
             glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
         }
-
         //Clear the screen
         glClearColor(0.00f,0.00f,0.0,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -218,10 +213,14 @@ void GameManager::EngnieStart(){
 
         glfwPollEvents();
         lock_threads.notify_all();
-        
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
+            if(dynamic_cast<Light*>(*it) == NULL){
+                for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
+                    (*lit)->LightBuffering((*it));
+                }
+            }
         }
         //Last object, the GUI, needs to be Updated on main thread
         all_objs->at(all_objs->size()-1)->Update();

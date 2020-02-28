@@ -58,6 +58,7 @@ class GameManager{
 
         //All objects to be rendered/prossessed on the scene
         std::vector<GameObject*>* all_objs;
+        std::vector<Light*> all_lights;
 
         //Global time manager
         Time* main_time;

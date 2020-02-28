@@ -139,14 +139,6 @@ void bObject::RenderGUI(){
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
-        
-        if((*obj_iterator)->m_light != nullptr){
-            vec_color = glm::value_ptr((*obj_iterator)->m_light->light_color);
-            ImGui::ColorEdit3("Light Color", vec_color);
-            ImGui::SliderFloat("Light Intensity",&(*obj_iterator)->m_light->light_intensity,0.0f,1.0f);
-            ImGui::NewLine();
-        }
-        
         ImGui::Text("FPS: %f", 1/m_time->delta_time);
 
         ImGui::End();

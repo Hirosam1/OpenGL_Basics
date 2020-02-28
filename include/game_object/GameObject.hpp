@@ -19,12 +19,12 @@
 #include "game_object/VAO.hpp"
 #include "graphics/Window.hpp"
 #include "game_managing/BasicsBlock.hpp"
-#include "game_object/Light.hpp"
 #include "graphics/Material.hpp"
 #include "graphics/Texture.hpp"
 
 
 class GameManager;
+class Light;
 
 class GameObject{
     public:
@@ -46,8 +46,6 @@ class GameObject{
         //Sets the texture to use
         void AddTexture(std::string* tex_path, GLenum type = GL_RGB, std::string* uniform_name = nullptr);
         void AddTexture(Texture* texture,std::string* uniform_name = nullptr);
-        //Sets the Object as a light Source
-        void MakeLight();
         //Gives a light object to the GameObject, so it can be iluminated or become a light source with MakeLight()
         void GiveLight(Light* light);
 
@@ -60,9 +58,11 @@ class GameObject{
         //Time object
         Time* m_time;
         //Light object
-        Light* m_light;
+        //Light* m_light;
         //The material of the object
         Material* m_material;
+
+        bool change = false;
 
     private: 
         /*Updates entearly the game object
@@ -90,7 +90,7 @@ class GameObject{
 
     protected:
         BasicsBlock* bb;
-        bool isLight = false;
+        //bool isLight = false;
         //Window where the object will get inputs
         Window* m_window;
         InputManager* m_input;

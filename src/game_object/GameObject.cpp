@@ -1,13 +1,12 @@
 #include "game_object/GameObject.hpp"
 
- GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
+GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
     m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
    this->shader = nullptr;this->m_vao = nullptr;
    //this->MVP_string = new std::string("MVP");
    this->m_material = nullptr;
-   model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->SetInitialMVP();
-   this->m_light = nullptr;
+   this->model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
 
    this->bb = basic_block;
 
@@ -17,21 +16,17 @@ GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,Shape* m_shape
 std::string* vert_shader_path,std::string* frag_shader_path):
 m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
+   this->model = glm::mat4(0);
    this->shader = nullptr; this->m_vao = nullptr;
    this->SetInitialMVP();
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-   this->m_light = nullptr;
    this->m_material = nullptr;
-
    this->bb = basic_block;
     
 }
 
 //Updates the data and send it to GPU
  void GameObject::UpdateAndBuffer(){
-    if(isLight){
-       this->m_light->light_pos = glm::vec3(model[3][0],model[3][1],model[3][2]);
-    }
     if(this->m_vao != nullptr && this->shader != nullptr && this->m_camera != nullptr){this->shader->UseShader();}
     //Updaets the vertex data
     //this->Update();
@@ -46,14 +41,7 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       this->shader->SetUniformVec3f(&this->bb->Mat_specular,this->m_material->specular_color);
       this->shader->SetUniform1f(&this->bb->Mat_shininess,this->m_material->shininess);
       }
-      if(this->m_light != nullptr){
-        
-         this->SetUpLightUniforms(1,"Point_Light");
-
-         //We already calculate the cosine here since we will compare it to the dot product of the fragment angle
-         /*shader->SetUniform1f(&this->bb->Light_CutOff, glm::cos(glm::radians(12.5)));
-         shader->SetUniform1f(&this->bb->Light_OutCutoff, glm::cos(glm::radians(18.0)));*/
-      }
+      
       this->shader->SetUniformMat4f(&this->bb->Model_string,this->model);
       this->shader->SetUniformMat4f(&this->bb->View_string,this->m_camera->GetView());
       this->shader->SetUniformMat4f(&this->bb->Projection_string,this->m_camera->GetProjection());
@@ -71,36 +59,6 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
 
 
 void GameObject::SetUpLightUniforms(int index, std::string light_type){
-   std::string uniform_name;
-   if (light_type == "Point_Light"){
-      uniform_name = bb->PointLight_prefix + bb->Light_ambient;
-      shader->SetUniformVec3f(&uniform_name,this->m_light->light_ambient);
-
-      uniform_name = bb->PointLight_prefix + bb->Light_diffuse;
-      shader->SetUniformVec3f(&uniform_name,this->m_light->light_color * this->m_light->light_intensity);
-
-      uniform_name = bb->PointLight_prefix + bb->Light_specular;
-      shader->SetUniformVec3f(&uniform_name,this->m_light->light_specular * this->m_light->light_intensity);
-
-      uniform_name = bb->PointLight_prefix + bb->Light_pos;
-      shader->SetUniformVec3f(&uniform_name,glm::vec3(this->m_camera->GetView() * glm::vec4(this->m_light->light_pos,1)));
-
-      uniform_name = bb->PointLight_prefix + bb->Light_CutOff;
-      shader->SetUniform1f(&uniform_name,glm::cos(glm::radians(12.5)));
-
-      uniform_name = bb->PointLight_prefix + bb->Light_constant;
-      shader->SetUniform1f(&uniform_name,1);
-
-      uniform_name = bb->PointLight_prefix + bb->Light_linear;
-      shader->SetUniform1f(&uniform_name,0.3);
-
-      uniform_name = bb->PointLight_prefix + bb->Light_quadratic;
-      shader->SetUniform1f(&uniform_name,0.15);
-   }else if (light_type == "Dir_Light"){
-
-   }
-   
-
 }
 
 
@@ -160,14 +118,8 @@ void GameObject::AddTexture(Texture* texture, std::string* uniform_name){
    this->model = glm::mat4(1.0f);
  }
 
-void GameObject::MakeLight(){
-   if(this->m_light){
-      isLight = true;
-   }
-}
 
 void GameObject::GiveLight(Light* light){
-    this->m_light = light;
  }
 
 
