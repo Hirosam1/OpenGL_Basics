@@ -1,5 +1,6 @@
 #pragma once
 #include "game_object/GameObject.hpp"
+#include "game_object/Light.hpp"
 #include "deque"
 #include <vector>
 

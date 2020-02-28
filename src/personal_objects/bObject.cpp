@@ -56,37 +56,6 @@ void bObject::Update(){
     
    //if(show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
     if(show_cursor == GLFW_CURSOR_NORMAL) RenderGUI();
-    /*
-    if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
-        this->test_speed = 15;
-    }
-    if(this->m_input->ProcessInput(GLFW_KEY_D,GLFW_PRESS)){
-        *m_camera->camera_pos += glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
-  
-    }else if(this->m_input->ProcessInput(GLFW_KEY_A,GLFW_PRESS)){  
-        *m_camera->camera_pos -= glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
-    }
-    if(this->m_input->ProcessInput(GLFW_KEY_S,GLFW_PRESS)){
-        *m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
-
-    }else if(this->m_input->ProcessInput(GLFW_KEY_W,GLFW_PRESS)){
-        *m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
-    }
-
-    else if(this->m_input->ProcessInput(GLFW_KEY_1,GLFW_PRESS)){
-        Debugging::SetPoly2Fill();
-    }else if(this->m_input->ProcessInput(GLFW_KEY_2,GLFW_PRESS)){
-        Debugging::SetPoly2Line();
-    }
-    else if(this->m_input->ProcessInput(GLFW_KEY_3,GLFW_PRESS)){
-        Debugging::SetPoly2Points();
-    }
-
-    m_camera->camera_front = &camera_front;
-    m_camera->LookAt(*m_camera->camera_pos+ *m_camera->camera_front);
-    
-    this->test_speed = 5;
-    */
     if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
         
         show_cursor = show_cursor == GLFW_CURSOR_DISABLED? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED;
@@ -139,6 +108,16 @@ void bObject::RenderGUI(){
         ImGui::NewLine();
         ImGui::Separator();
         ImGui::NewLine();
+
+        Light* light;
+        light = dynamic_cast<Light*>(*obj_iterator);
+        if(light != NULL){
+            vec_color = glm::value_ptr(light->light_color);
+            ImGui::ColorEdit3("Light Color", vec_color);
+            ImGui::SliderFloat("Light Intensity", &light->light_intensity,0.0f,1.0f);
+            ImGui::NewLine();
+        }
+
         ImGui::Text("FPS: %f", 1/m_time->delta_time);
 
         ImGui::End();
