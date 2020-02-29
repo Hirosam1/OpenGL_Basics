@@ -118,11 +118,6 @@ void GameObject::AddTexture(Texture* texture, std::string* uniform_name){
    this->model = glm::mat4(1.0f);
  }
 
-
-void GameObject::GiveLight(Light* light){
- }
-
-
 void GameObject::ReadyObject(){
    this->Ready();
 }

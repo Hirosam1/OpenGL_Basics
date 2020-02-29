@@ -16,7 +16,6 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
 
     this->DirLight_prefix = std::string("dirLight");
     this->PointLight_prefix = std::string("pointLight");
-    this->SpotLight_prefix = std::string("spotLight");
     this->PointLights_prefix = std::string("pointLights[%d]");
 
     this->Light_ambient =  std::string(".ambient");

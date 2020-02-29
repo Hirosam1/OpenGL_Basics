@@ -11,21 +11,25 @@ class Light : public GameObject{
         float light_intensity;
         glm::vec3 light_ambient;
         glm::vec3 light_specular;
+        //Handles buffering of shader of given GameObject
         virtual void LightBuffering(GameObject* go) = 0;
+        //Buffer of the lamp game object, this will render the light game object, so it can appear on the scene
         void LampColorBuffering();
         void Update() override;
 };
 
 class PointLight : public Light{
     public:
-        PointLight(BasicsBlock* bb, Camera* m_camera,Shape* shape,float initial_pos[3], std::string* vert, std::string* frag, int index,float liniar = 0.12, float quadratic = 0.03, float constant = 1.0);
+        PointLight(BasicsBlock* bb, Camera* m_camera,Shape* shape,float initial_pos[3], std::string* vert, std::string* frag, int index,float liniar = 0.45, float quadratic = 0.23, float constant = 1.0);
         float constant;
         float linear;
         float quadratic;
+        //Index of the n point lights
         int index;
-        std::string LightPrefix;
+        
     private:
         void LightBuffering(GameObject *go) override;
+        std::string LightPrefix;
 };
 
 class DirLight : public Light{

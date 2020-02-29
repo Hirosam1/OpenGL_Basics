@@ -46,8 +46,6 @@ class GameObject{
         //Sets the texture to use
         void AddTexture(std::string* tex_path, GLenum type = GL_RGB, std::string* uniform_name = nullptr);
         void AddTexture(Texture* texture,std::string* uniform_name = nullptr);
-        //Gives a light object to the GameObject, so it can be iluminated or become a light source with MakeLight()
-        void GiveLight(Light* light);
 
         //The camera containing the view matrix
         Camera* m_camera;
