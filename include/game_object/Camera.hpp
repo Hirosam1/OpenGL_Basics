@@ -13,9 +13,9 @@
 
 class Camera{
     public:
-        glm::vec3 *camera_pos;
-        glm::vec3 *camera_front;
-        glm::vec3 *camera_up;
+        glm::vec3 camera_pos;
+        glm::vec3 camera_front;
+        glm::vec3 camera_up;
         Camera(Window* aWindow, float initial_pos[3] = new float[3]{0,0,0});
         const glm::mat4 GetView();
         const glm::mat4 GetProjection();

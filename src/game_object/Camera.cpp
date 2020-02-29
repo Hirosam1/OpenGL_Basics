@@ -2,9 +2,9 @@
 
 Camera::Camera(Window* aWindow, float initial_pos[3]):m_window(aWindow){ 
     
-    this->camera_pos = new glm::vec3(glm::make_vec3(initial_pos));
-    camera_front = new glm::vec3(0.0f, 0.0f, -1.0f);
-    camera_up    = new glm::vec3(0.0f, 1.0f,  0.0f);
+    this->camera_pos = glm::vec3(glm::make_vec3(initial_pos));
+    camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+    camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
     this->projection_fov = glm::radians(45.0f);
     this->m_projection = new Projection(this->projection_fov,(float)this->m_window->GetWidth()/this->m_window->GetHeight());
     UpdateView();
@@ -22,21 +22,21 @@ void Camera::UpdateView(){
 
 void Camera::LookAt(float target[3]){
                                 //position
-    this->m_view = glm::lookAt( *this->camera_pos,
+    this->m_view = glm::lookAt( this->camera_pos,
                                 //target
                                 glm::make_vec3(target),
                                 //up
-                                *this->camera_up);  
+                                this->camera_up);  
     delete target;
 } 
 
 void Camera::LookAt(glm::vec3 target){
                                 //position
-    this->m_view = glm::lookAt( *this->camera_pos,
+    this->m_view = glm::lookAt( this->camera_pos,
                                 //target
                                 target,
                                 //up
-                                *this->camera_up);  
+                                this->camera_up);  
 } 
 
 const glm::mat4 Camera::GetProjection(){

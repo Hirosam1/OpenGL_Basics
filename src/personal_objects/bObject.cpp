@@ -5,7 +5,7 @@
 
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
-    m_camera->camera_pos = new glm::vec3(-3.0f,2.0f,10.0f);
+    m_camera->camera_pos = glm::vec3(-3.0f,2.0f,10.0f);
     yaw = -75.0f;
     pitch = -15.0f;
     sensitivity= 0.125;
@@ -33,9 +33,9 @@ void bObject::Update(){
         yaw = -75;
         pitch = -15;
          camera_front = glm::vec3(0,0,-1);
-         m_camera->camera_pos->x = -3.0f;
-         m_camera->camera_pos->y = 2.0f;
-         m_camera->camera_pos->z = 10;
+         m_camera->camera_pos.x = -3.0f;
+         m_camera->camera_pos.y = 2.0f;
+         m_camera->camera_pos.z = 10;
          fov = 45;
          m_camera->MakeProjection(glm::radians(fov));
     }

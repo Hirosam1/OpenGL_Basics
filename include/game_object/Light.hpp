@@ -2,15 +2,20 @@
 #include <glm/glm.hpp>
 #include "game_object/GameObject.hpp"
 
+class GameManager;
+
 class Light : public GameObject{
     public:
+        friend GameManager;
         Light(BasicsBlock* bb, Camera* m_camera,Shape* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_color[3],float light_intensity = 1.0);
         Light(BasicsBlock* bb, Camera* m_camera,Shape* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_intensity = 1.0);
+        Light(BasicsBlock* bb, Camera* m_camera, float initial_pos[3],float light_intensity = 1.0);
         glm::vec3 light_color;
         float* light_pos;
         float light_intensity;
         glm::vec3 light_ambient;
         glm::vec3 light_specular;
+    protected:
         //Handles buffering of shader of given GameObject
         virtual void LightBuffering(GameObject* go) = 0;
         //Buffer of the lamp game object, this will render the light game object, so it can appear on the scene
@@ -39,4 +44,14 @@ class DirLight : public Light{
         float* direction;
     private:
         void LightBuffering(GameObject *go) override;
+};
+
+class SpotLight : public Light{
+    public:
+        SpotLight(BasicsBlock* bb, Camera* m_camera, Shape* shape, float initial_pos[3], std::string* vert, std::string* frag, float direction[3]);
+        SpotLight(BasicsBlock* bb, Camera* m_camera, Shape* shape, float initial_pos[3], std::string* vert, std::string* frag);
+        SpotLight(BasicsBlock* bb, Camera* m_camera, float initial_pos[3], float direction[3]);
+        float* direction;
+    private:
+        void LightBuffering(GameObject* go) override;
 };

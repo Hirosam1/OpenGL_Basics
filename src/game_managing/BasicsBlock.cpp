@@ -15,8 +15,8 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     this->Basic_tex = std::string("material.texture1");
 
     this->DirLight_prefix = std::string("dirLight");
-    this->PointLight_prefix = std::string("pointLight");
     this->PointLights_prefix = std::string("pointLights[%d]");
+    this->SpotLight_prefix = std::string("spotLight");
 
     this->Light_ambient =  std::string(".ambient");
     this->Light_diffuse =  std::string(".diffuse");

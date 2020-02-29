@@ -24,7 +24,6 @@
 
 
 class GameManager;
-class Light;
 
 class GameObject{
     public:
@@ -55,8 +54,6 @@ class GameObject{
         Shader* shader;
         //Time object
         Time* m_time;
-        //Light object
-        //Light* m_light;
         //The material of the object
         Material* m_material;
 
@@ -82,13 +79,9 @@ class GameObject{
         //path to the shaders
         std::string* vertex_shader_path;
         std::string* fragment_shader_path;
-        //std::string* model_shader_path;
-
-        void SetUpLightUniforms(int index,std::string light_type);
 
     protected:
         BasicsBlock* bb;
-        //bool isLight = false;
         //Window where the object will get inputs
         Window* m_window;
         InputManager* m_input;

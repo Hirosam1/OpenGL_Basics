@@ -4,7 +4,7 @@
 aObject::aObject(BasicsBlock* bc, 
 Camera* m_camera,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
-    m_camera->camera_pos = new glm::vec3(-3.0f,2.0f,10.0f);
+    m_camera->camera_pos = glm::vec3(-3.0f,2.0f,10.0f);
     yaw = -75.0f;
     pitch = -15.0f;
     sensitivity= 0.125;
@@ -28,9 +28,9 @@ void aObject::Update(){
         yaw = -75;
         pitch = -15;
          camera_front = glm::vec3(0,0,-1);
-         m_camera->camera_pos->x = -3.0f;
-         m_camera->camera_pos->y = 2.0f;
-         m_camera->camera_pos->z = 10;
+         m_camera->camera_pos.x = -3.0f;
+         m_camera->camera_pos.y = 2.0f;
+         m_camera->camera_pos.z = 10;
          fov = 45;
          m_camera->MakeProjection(glm::radians(fov));
     }
@@ -41,20 +41,20 @@ void aObject::Update(){
         this->test_speed = 15;
     }
     if(this->m_input->ProcessInput(GLFW_KEY_D,GLFW_PRESS)){
-        *m_camera->camera_pos += glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
+        m_camera->camera_pos += glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
   
     }else if(this->m_input->ProcessInput(GLFW_KEY_A,GLFW_PRESS)){  
-        *m_camera->camera_pos -= glm::normalize(glm::cross(*m_camera->camera_front, *m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
+        m_camera->camera_pos -= glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
     }
     if(this->m_input->ProcessInput(GLFW_KEY_S,GLFW_PRESS)){
-        *m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
+        m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * m_camera->camera_front;
 
     }else if(this->m_input->ProcessInput(GLFW_KEY_W,GLFW_PRESS)){
-        *m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * *m_camera->camera_front;
+        m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * m_camera->camera_front;
     }
 
-    m_camera->camera_front = &camera_front;
-    m_camera->LookAt(*m_camera->camera_pos+ *m_camera->camera_front);
+    m_camera->camera_front = camera_front;
+    m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
 
         this->test_speed = 5;
 

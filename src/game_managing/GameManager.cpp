@@ -93,14 +93,18 @@ void GameManager::SetUpObjects(){
     dynamic_cast<Light*>(light2)->light_color = glm::vec3(1,1,0.6);
     light2->object_name = "Point Light 2";
 
-    GameObject* m_dirLight = new DirLight(this->basic_block,m_camera,cube,new float[3]{0.3,-1,1.2},vertDefault,lamp);
+    GameObject* m_dirLight = new DirLight(this->basic_block,m_camera,cube,new float[3]{-0.3,-1,1.2},vertDefault,lamp);
     VAO* DirLight_vao = new VAO();
         DirLight_vao->SetAttribPoint(3,6);
         DirLight_vao->SetUpObject();
     m_dirLight->SetUpVertex(DirLight_vao);
     m_dirLight->model = glm::scale(m_dirLight->model,glm::vec3(0.4,0.4,0.4));
-    dynamic_cast<Light*>(m_dirLight)->light_intensity = 0.4;
+    dynamic_cast<Light*>(m_dirLight)->light_intensity = 0.2;
     m_dirLight->object_name = "Directional light";
+
+
+    GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
+    spotLight->object_name = "Spot Light";
 
     Texture* boxTex = new Texture(tex2,GL_RGBA);
     Texture* boxSpec = new Texture(spec, GL_RGBA);
@@ -159,12 +163,14 @@ void GameManager::SetUpObjects(){
     all_objs->push_back(m_light);
     all_objs->push_back(light2);
     all_objs->push_back(m_dirLight);
+    all_objs->push_back(spotLight);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
 
     all_lights.push_back(dynamic_cast<Light*>(m_light));
     all_lights.push_back(dynamic_cast<Light*>(m_dirLight));
     all_lights.push_back(dynamic_cast<Light*>(light2));
+    all_lights.push_back(dynamic_cast<Light*>(spotLight));
 
     vertDefault->clear();
     vertTex->clear();

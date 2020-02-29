@@ -118,8 +118,10 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos){
     return (ambient + diffuse + specular);
 }
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
-uniform PointLight pointLight;
 uniform DirLight dirLight;
+uniform SpotLight spotLight;
+
+uniform int hasSpotLight;
 
 void main()
 {
@@ -127,7 +129,10 @@ void main()
 
     vec3 norm = normalize(aNormal);
     vec3 result = CalcDirLight(dirLight, norm);
-    
+
+    if (hasSpotLight > 0 ){
+        result += CalcSpotLight(spotLight, norm, FragPos);
+    }
     for(int i = 0; i < n_point_lights && i < MAX_POINT_LIGHTS; i++){
         result += CalcPointLight(pointLights[i], norm, FragPos);
     }

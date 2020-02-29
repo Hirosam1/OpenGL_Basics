@@ -29,7 +29,6 @@ class BasicsBlock{
 
 
         std::string DirLight_prefix;
-        std::string PointLight_prefix;
         std::string PointLights_prefix;
         std::string SpotLight_prefix;
 

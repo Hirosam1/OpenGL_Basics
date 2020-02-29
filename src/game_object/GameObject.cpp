@@ -1,28 +1,25 @@
 #include "game_object/GameObject.hpp"
 
-GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
-    m_input(basic_block->m_input),m_time(basic_block->m_time),m_window(basic_block->m_window), m_camera(m_camera){
-   this->shader = nullptr;this->m_vao = nullptr;
-   //this->MVP_string = new std::string("MVP");
-   this->m_material = nullptr;
-   this->SetInitialMVP();
-   this->model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-
-   this->bb = basic_block;
-
-}
-
 GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,Shape* m_shape,float initial_pos[3], 
 std::string* vert_shader_path,std::string* frag_shader_path):
 m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
 vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_shape(m_shape){
-   this->model = glm::mat4(0);
    this->shader = nullptr; this->m_vao = nullptr;
    this->SetInitialMVP();
    model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->m_material = nullptr;
    this->bb = basic_block;
     
+}
+
+GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
+                        m_window(basic_block->m_window) ,m_input(basic_block->m_input),
+                        m_time(basic_block->m_time), m_camera(m_camera),bb(basic_block){
+
+   this->shader = nullptr; this->m_vao = nullptr; this->m_material = nullptr;
+   this->SetInitialMVP();
+   model = glm::translate(model,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
+
 }
 
 //Updates the data and send it to GPU
@@ -51,15 +48,12 @@ vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path),m_s
       }else{
          glDrawArrays(GL_TRIANGLES,0,this->m_shape->vertex_count);
       }
-    }
-   glBindTexture(GL_TEXTURE_2D,0);
-   glBindVertexArray(0);
-   glUseProgram(0);
+      glBindTexture(GL_TEXTURE_2D,0);
+      glBindVertexArray(0);
+      glUseProgram(0);
+
+   }
  }
-
-
-void GameObject::SetUpLightUniforms(int index, std::string light_type){
-}
 
 
 void GameObject::SetUpVertex(){
