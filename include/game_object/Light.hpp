@@ -4,10 +4,11 @@
 
 class Light : public GameObject{
     public:
-        Light(BasicsBlock* bb, Camera* m_camera,Shape* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_intensity = 0.5f, glm::vec3 light_color = glm::vec3(1,1,1));
+        Light(BasicsBlock* bb, Camera* m_camera,Shape* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_color[3],float light_intensity = 1.0);
+        Light(BasicsBlock* bb, Camera* m_camera,Shape* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_intensity = 1.0);
+        glm::vec3 light_color;
         float* light_pos;
         float light_intensity;
-        glm::vec3 light_color;
         glm::vec3 light_ambient;
         glm::vec3 light_specular;
         virtual void LightBuffering(GameObject* go) = 0;
@@ -20,5 +21,15 @@ class PointLight : public Light{
         float constant;
         float linear;
         float quadratic;
+    private:
+        void LightBuffering(GameObject *go) override;
+};
+
+class DirLight : public Light{
+    public:
+        DirLight(BasicsBlock* bb, Camera* m_camera,Shape* shape,float initial_pos[3], std::string* vert, std::string* frag, float direction[3]);
+        DirLight(BasicsBlock* bb, Camera* m_camera,Shape* shape,float initial_pos[3], std::string* vert, std::string* frag);
+        glm::vec3 direction;
+    private:
         void LightBuffering(GameObject *go) override;
 };
