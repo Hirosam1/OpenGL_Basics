@@ -74,14 +74,29 @@ void GameManager::SetUpObjects(){
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4, * go5;
 
-    GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{-1.0,2.0,-3.0},vertDefault,lamp);
-    VAO* light_vao = new VAO(GL_FLOAT);
+    GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{-1.0,2.0,-3.0},vertDefault,lamp,this->basic_block->n_point_lights++);
+    VAO* light_vao = new VAO();
         light_vao->SetAttribPoint(3,6);
         light_vao->SetUpObject();
     m_light->SetUpVertex(light_vao);
     m_light->model = glm::scale(m_light->model,glm::vec3(0.2,0.2,0.2));
-    m_light->object_name = "Point Light";
+    m_light->object_name = "Point Light 1";
 
+    GameObject* light2 = new PointLight(this->basic_block,m_camera,cube,new float[3]{0.0,1.0,1.0},vertDefault,lamp,this->basic_block->n_point_lights++);
+    VAO* light2_vao = new VAO();
+        light2_vao->SetAttribPoint(3,6);
+        light2_vao->SetUpObject();
+    light2->SetUpVertex(light2_vao);
+    light2->model = glm::scale(light2->model,glm::vec3(0.2,0.2,0.2));
+    light2->object_name = "Point Light 2";
+
+    GameObject* m_dirLight = new DirLight(this->basic_block,m_camera,cube,new float[3]{0.3,-1,1.2},vertDefault,lamp);
+    VAO* DirLight_vao = new VAO();
+        DirLight_vao->SetAttribPoint(3,6);
+        DirLight_vao->SetUpObject();
+    m_dirLight->SetUpVertex(DirLight_vao);
+    m_dirLight->model = glm::scale(m_dirLight->model,glm::vec3(0.4,0.4,0.4));
+    m_dirLight->object_name = "Directional light";
 
     Texture* boxTex = new Texture(tex2,GL_RGBA);
     Texture* boxSpec = new Texture(spec, GL_RGBA);
@@ -90,7 +105,7 @@ void GameManager::SetUpObjects(){
     go->m_material = new Material();
     go->m_material->shininess = 64.0;
     go->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
-    VAO* goVAO = new VAO(GL_FLOAT);
+    VAO* goVAO = new VAO();
         goVAO->SetAttribPoint(3);
         goVAO->SetAttribPoint(3);
         goVAO->SetAttribPoint(2);
@@ -101,7 +116,7 @@ void GameManager::SetUpObjects(){
     go->object_name = "Cube With Specular 1";
 
     go2 = new NoBahaviorObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
-    VAO* go2VAO = new VAO(GL_FLOAT);
+    VAO* go2VAO = new VAO();
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(3);
         go2VAO->SetAttribPoint(2);
@@ -120,7 +135,7 @@ void GameManager::SetUpObjects(){
     CameraMov->object_name = "Camera Movement Game Object";
 
     go5 = new NoBahaviorObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragSpec);
-    VAO* go5VAO = new VAO(GL_FLOAT);
+    VAO* go5VAO = new VAO();
         go5VAO->SetAttribPoint(3);
         go5VAO->SetAttribPoint(3);
         go5VAO->SetAttribPoint(2);
@@ -138,10 +153,14 @@ void GameManager::SetUpObjects(){
     all_objs->push_back(go2);
     all_objs->push_back(CameraMov);
     all_objs->push_back(m_light);
+    all_objs->push_back(light2);
+    all_objs->push_back(m_dirLight);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
 
     all_lights.push_back(dynamic_cast<Light*>(m_light));
+    all_lights.push_back(dynamic_cast<Light*>(m_dirLight));
+    all_lights.push_back(dynamic_cast<Light*>(light2));
 
     vertDefault->clear();
     vertTex->clear();
@@ -216,10 +235,13 @@ void GameManager::EngnieStart(){
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
-            if(dynamic_cast<Light*>(*it) == NULL){
+            Light* is_light = dynamic_cast<Light*>(*it);
+            if(is_light == NULL){
                 for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
                     (*lit)->LightBuffering((*it));
                 }
+            }else{
+                is_light->LampColorBuffering();
             }
         }
         //Last object, the GUI, needs to be Updated on main thread

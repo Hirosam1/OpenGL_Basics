@@ -21,5 +21,10 @@ Light::Light(BasicsBlock* bb, Camera* m_camera,Shape* shape, float initial_pos[3
 
 }
 
+void Light::LampColorBuffering(){
+    this->shader->UseShader();
+    this->shader->SetUniformVec3f(&bb->LampColor,this->light_color);
+}
+
 void Light::Update(){
 }

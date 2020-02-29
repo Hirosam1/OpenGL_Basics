@@ -15,6 +15,7 @@ class BasicsBlock{
         InputManager* m_input;
         Time* m_time;
         std::vector<GameObject*>* all_objs;
+        int n_point_lights = 0;
 
         //I probably should put those strings on a file?
         std::string Model_string;
@@ -29,6 +30,7 @@ class BasicsBlock{
 
         std::string DirLight_prefix;
         std::string PointLight_prefix;
+        std::string PointLights_prefix;
         std::string SpotLight_prefix;
 
         std::string Light_ambient;
@@ -47,4 +49,9 @@ class BasicsBlock{
 
         std::string Light_CutOff;
         std::string Light_OutCutoff;
+
+        std::string LampColor;
+        
+        std::string n_point_lights_string;
+
 };

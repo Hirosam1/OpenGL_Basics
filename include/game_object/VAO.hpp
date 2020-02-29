@@ -9,7 +9,7 @@
 
 class VAO{
     public:
-        VAO(GLenum vertex_type);
+        VAO(GLenum vertex_type = GL_FLOAT);
         //Sets the parameters for the overloading function, the order that those are called is the number of the Vertex 
         /*Will set one type of data that will be sent to the GPU, each call from this will register in the layout at the order of call 0, 1 2
         vertex_att_num -> the number of attributes on each stride

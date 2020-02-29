@@ -17,6 +17,7 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     this->DirLight_prefix = std::string("dirLight");
     this->PointLight_prefix = std::string("pointLight");
     this->SpotLight_prefix = std::string("spotLight");
+    this->PointLights_prefix = std::string("pointLights[%d]");
 
     this->Light_ambient =  std::string(".ambient");
     this->Light_diffuse =  std::string(".diffuse");
@@ -31,4 +32,8 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
 
     this->Light_CutOff = std::string(".cutOff");
     this->Light_OutCutoff = std::string(".outerCutOff");
+
+    this->LampColor = std::string("LampColor");
+
+    this->n_point_lights_string = std::string("n_point_lights");
 }

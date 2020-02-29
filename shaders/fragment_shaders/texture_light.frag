@@ -1,7 +1,8 @@
 #version 330 core
 //We declare an output, we only need one
 out vec4 FragColor;
-#define NR_POINT_LIGHTS 4
+#define MAX_POINT_LIGHTS 4
+uniform int n_point_lights;
 
 in vec2 TexCoord;
 
@@ -53,11 +54,6 @@ struct SpotLight{
 };
 
 uniform Material material;
-
-
-uniform PointLight pointLights[NR_POINT_LIGHTS];
-uniform PointLight pointLight;
-uniform DirLight dirlight;
 
 vec3 CalcDirLight(DirLight light,vec3 normal){
     vec3 viewDir = normalize(-FragPos);
@@ -121,20 +117,20 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos){
 
     return (ambient + diffuse + specular);
 }
+uniform PointLight pointLights[MAX_POINT_LIGHTS];
+uniform PointLight pointLight;
+uniform DirLight dirLight;
 
 void main()
 {
     vec4 texColor = vec4(texture(material.texture1,TexCoord));
-    vec4 specColor = vec4(texture(material.specular,TexCoord));
 
     vec3 norm = normalize(aNormal);
-    vec3 result = CalcDirLight(dirlight, norm);
-    result = CalcPointLight(pointLight,norm,FragPos);
-
-    /*
-    for(int i = 0; i < NR_POINT_LIGHTS; i++){
+    vec3 result = CalcDirLight(dirLight, norm);
+    
+    for(int i = 0; i < n_point_lights && i < MAX_POINT_LIGHTS; i++){
         result += CalcPointLight(pointLights[i], norm, FragPos);
-    }*/
+    }
 
     
     if (texColor.a < 0.5)
