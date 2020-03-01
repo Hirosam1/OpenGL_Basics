@@ -74,7 +74,7 @@ void GameManager::SetUpObjects(){
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4, * go5;
 
-    GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{-1.0,2.0,-2.0},vertDefault,lamp,this->basic_block->n_point_lights++);
+    GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{0.3,0.5,-0.5},vertDefault,lamp,this->basic_block->n_point_lights++);
     VAO* light_vao = new VAO();
         light_vao->SetAttribPoint(3,6);
         light_vao->SetUpObject();
