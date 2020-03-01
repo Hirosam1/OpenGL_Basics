@@ -1,7 +1,7 @@
 #include "game_object/VAO.hpp"
 
 
-VAO::VAO(GLenum vertex_type):vertex_type(vertex_type){
+VAO::VAO(GLenum vertex_type):vertex_type(vertex_type = GL_FLOAT){
     this->m_VAO = 0;
     this->m_EBO = 0;
     this->indv_sizes = new std::deque<unsigned int>();
