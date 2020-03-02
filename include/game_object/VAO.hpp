@@ -24,6 +24,11 @@ class VAO{
         void UseVAO();
 
         GLenum vertex_type;
+
+        unsigned int m_VAO;
+        unsigned int m_VBO;
+        unsigned int m_EBO;
+
     private:
         //Uses the data stored in this object to Set Att point to an indivdual att
         void SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type);
@@ -31,9 +36,7 @@ class VAO{
         int SumSizesToAtt(unsigned int att_to_stop);
 
         unsigned int indv_ready;
-        unsigned int m_VAO;
-        unsigned int m_VBO;
-        unsigned int m_EBO;
+
         unsigned int stride;
         std::deque<unsigned int>* indv_sizes;
         //std::deque<unsigned int>* indv_types_sizes;

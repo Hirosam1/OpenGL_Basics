@@ -16,11 +16,13 @@
 #include "geometry/Shape.hpp"
 #include "graphics/Shader.hpp"
 #include "game_managing/Time.hpp"
-#include "game_object/VAO.hpp"
+//#include "game_object/VAO.hpp"
 #include "graphics/Window.hpp"
 #include "game_managing/BasicsBlock.hpp"
 #include "graphics/Material.hpp"
 #include "graphics/Texture.hpp"
+
+#include "game_object/Mesh.hpp"
 
 
 class GameManager;

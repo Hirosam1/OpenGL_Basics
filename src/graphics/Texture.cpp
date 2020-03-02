@@ -11,10 +11,10 @@ Texture::Texture(unsigned int texture){
     }
 }
 
-Texture::Texture(std::string* texture_path,GLenum type){
+Texture::Texture(std::string* texture_path,GLenum img_type, std::string tex_type):tex_type(tex_type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
-    CreateTexture(texture_path,type);
+    CreateTexture(texture_path,img_type);
 }
 
 void Texture::CreateTexture(std::string* texture_path,GLenum type){
@@ -45,7 +45,8 @@ void Texture::CreateTexture(std::string* texture_path,GLenum type){
     
  }
  
- void Texture::UseTexture(unsigned int texture_num){
-
-     glActiveTexture(GL_TEXTURE0+texture_num); glBindTexture(GL_TEXTURE_2D,this->m_texture);
+ void Texture::UseTexture(unsigned int texture_num,bool activate_tex){
+     if(activate_tex)
+        glActiveTexture(GL_TEXTURE0+texture_num); 
+     glBindTexture(GL_TEXTURE_2D,this->m_texture);
  }
