@@ -12,11 +12,12 @@ class Shader;
 class Texture{
     
     public:
-        Texture(std::string* texture_path, GLenum img_type = GL_RGB, std::string tex_type = std::string("Default"));
-        Texture(unsigned int texture);
-        void CreateTexture(std::string* texture_name,GLenum type);
+        Texture(std::string texture_path, GLenum img_type = GL_RGB, std::string tex_type = std::string("Default"));
+        Texture();
+        void CreateTexture(std::string texture_path,GLenum img_type = GL_RGB);
         void UseTexture(unsigned int texture_num = 0, bool activate_tex = true);
         std::string tex_type;
+        std::string path;
         
     private:
         unsigned int m_texture;

@@ -35,14 +35,13 @@ void GameManager::EngineInit(){
     this->threads = new std::thread[this->supported_concurrency];
 
 
-    SetUpObjects();
+    //SetUpObjects();
 
     this->ready_to_start = true;
     glEnable(GL_DITHER);
     Debugging::SetPointsSize(10);    
     glEnable(GL_DEPTH_TEST);
     glfwSwapInterval(1);
-
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
         this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, &mtx, &lock_threads);
@@ -106,8 +105,8 @@ void GameManager::SetUpObjects(){
     GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
     spotLight->object_name = "Spot Light";
 
-    Texture* boxTex = new Texture(tex2,GL_RGBA);
-    Texture* boxSpec = new Texture(spec, GL_RGBA);
+    Texture* boxTex = new Texture(*tex2,GL_RGBA);
+    Texture* boxSpec = new Texture(*spec, GL_RGBA);
     
     go = new NoBahaviorObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
     go->m_material = new Material();
@@ -221,12 +220,14 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
 }
 
 void GameManager::EngnieStart(){
+    std::unique_lock<std::mutex> lck(mtx,std::defer_lock);
     if(!this->ready_to_start){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
+    
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
         (*it)->ReadyObject();
     }
@@ -234,14 +235,15 @@ void GameManager::EngnieStart(){
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
             glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
         }
+        
         //Clear the screen
         glClearColor(0.00f,0.00f,0.0,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
-        this->main_time->UpdateDelta();
 
+        this->main_time->UpdateDelta();
         glfwPollEvents();
-        lock_threads.notify_all();
+        //lock_threads.notify_all();
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
@@ -255,10 +257,10 @@ void GameManager::EngnieStart(){
             }
         }
         //Last object, the GUI, needs to be Updated on main thread
-        all_objs->at(all_objs->size()-1)->Update();
+        //all_objs->at(all_objs->size()-1)->Update();
 
         glfwSwapBuffers(this->main_window->GetWindow());
-        this->main_input->ResetValues();
+        //this->main_input->ResetValues();
 
     }
     

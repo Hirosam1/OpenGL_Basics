@@ -76,7 +76,7 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
 void Shader::AddTexture(std::string* texture_path,std::string* uniform_name,GLenum type){
     this->UseShader(false);
     this->SetUniform1i(uniform_name,this->m_textures->size());
-    this->m_textures->push_back(new Texture(texture_path,type));
+    this->m_textures->push_back(new Texture(*texture_path,type));
 
 }
 

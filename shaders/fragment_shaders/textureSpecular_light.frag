@@ -10,8 +10,11 @@ in vec3 aNormal;
 in vec3 FragPos;
 
 struct Material{
-    sampler2D texture1;
-    sampler2D specular;
+    uniform sampler2D texture_diffuse1;
+    uniform sampler2D texture_diffuse2;
+    uniform sampler2D texture_diffuse3;
+    uniform sampler2D texture_specular1;
+    uniform sampler2D texture_specular2;
     vec3 ambient;
     vec3 diffuse;
     float shininess;

@@ -1,23 +1,17 @@
 #include "graphics/Texture.hpp"
 #include "graphics/Shader.hpp"
 
-Texture::Texture(unsigned int texture){
-    if (texture == 0){
-        //Creates and binds the Texture object
-        glGenTextures(1, &this->m_texture);
-        std::cout<<"Invalid texture setting\n";
-    }else{
-        this->m_texture = texture;
-    }
+Texture::Texture(){
+    glGenTextures(1,&this->m_texture);
 }
 
-Texture::Texture(std::string* texture_path,GLenum img_type, std::string tex_type):tex_type(tex_type){
+Texture::Texture(std::string texture_path,GLenum img_type, std::string tex_type):tex_type(tex_type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
     CreateTexture(texture_path,img_type);
 }
 
-void Texture::CreateTexture(std::string* texture_path,GLenum type){
+void Texture::CreateTexture(std::string texture_path,GLenum type){
 
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
 
@@ -29,7 +23,7 @@ void Texture::CreateTexture(std::string* texture_path,GLenum type){
     //stbi_set_flip_vertically_on_load(true);  
     int width, height, nrChannels;
     //Loads image
-    unsigned char *data = stbi_load(texture_path->data(), &width, &height, &nrChannels, 0); 
+    unsigned char *data = stbi_load(texture_path.data(), &width, &height, &nrChannels, 0); 
     if(data){
     //Creats the texture image on the current bound texture object
     glTexImage2D(GL_TEXTURE_2D,0,type,width,height,0,type,GL_UNSIGNED_BYTE,data);
