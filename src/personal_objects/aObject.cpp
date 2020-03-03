@@ -60,7 +60,7 @@ void aObject::Update(){
 
         this->test_speed = 5;
 
-    if(m_input->ProcessInput(GLFW_KEY_F1) && GUIObject->f1KeyRealeased){
+    if(m_input->ProcessInput(GLFW_KEY_F1) /*&& GUIObject->f1KeyRealeased*/){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
     }

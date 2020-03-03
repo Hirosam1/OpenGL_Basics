@@ -248,7 +248,7 @@ void GameManager::EngnieStart(){
         }
         
         //Clear the screen
-        glClearColor(0.2f,0.6f,0.4,1.0f);
+        glClearColor(0.02f,0.06f,0.05,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
 
@@ -264,7 +264,7 @@ void GameManager::EngnieStart(){
         shader.SetUniformMat4f(&uniform_name,m_camera->GetView());
         uniform_name = "Projection";
         shader.SetUniformMat4f(&uniform_name, m_camera->GetProjection());
-        model = glm::scale(model,glm::vec3(0.5,0.5,0.5));
+        model = glm::scale(model,glm::vec3(0.3,0.3,0.3));
         model=  glm::translate(model, glm::vec3(0,-5,0));
         uniform_name = "Model";
         shader.SetUniformMat4f(&uniform_name,model);
@@ -286,7 +286,7 @@ void GameManager::EngnieStart(){
         //all_objs->at(all_objs->size()-1)->Update();
 
         glfwSwapBuffers(this->main_window->GetWindow());
-        //this->main_input->ResetValues();
+        this->main_input->ResetValues();
 
     }
     

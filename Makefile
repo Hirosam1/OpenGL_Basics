@@ -35,6 +35,8 @@ CXXFLAGS = -I$(INCLUDE)/ -O1 -O2 -O3
 LDLIBS_LINUX = -lglfw3 -lrt -lm -lXrandr -lassimp -lXrender -lXi -lGL -lpthread -pthread -lm -ldl -lXdamage -lXfixes -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm -lXext -lX11 -lpthread -lXdmcp -ldrm -lGL -lXinerama -lXcursor 
 LDLIBS_WIN = -lglfw3 -lglu32 -lgdi32 -lpthread 
 
+
+#For linux export LD_LIBRARY_PATH=/usr/local/lib
 linux: $(OBJ_DIR)/main.o $(OBJ_DIR)/glad.o $(GAME_MAN_OBJS) $(GAME_OBJ_OBJS) $(GAME_TOO_OBJS) $(GAME_TOO_OBJS) $(GEO_OBJS) $(GRAPHI_OBJS) $(PER_OBJS) $(LIGHT_OBJS) $(IMGUI_OBJS)
 	g++ -o $(file_name) $^ -L$(LIB_PATH)/ $(LDLIBS_LINUX)
 
