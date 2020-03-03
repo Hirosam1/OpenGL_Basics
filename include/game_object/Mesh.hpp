@@ -27,9 +27,10 @@ class Mesh{
         //void SetUpVertex(VAO* mVao);
     private:
         /* Render  data */
-        //unsigned int VAO, VBO, EBO;
         VAO* vao;
         /* Methods*/
         void SetUpMesh();
+
+        unsigned int mVAO, mVBO, mEBO;
 };
 

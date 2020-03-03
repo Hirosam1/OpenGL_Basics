@@ -8,6 +8,7 @@ void Mesh::SetUpMesh(){
     vao = new VAO();
     glBindVertexArray(vao->m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER,vao->m_VBO);
+
     glBufferData(GL_ARRAY_BUFFER,vertices.size() * sizeof(Vertex), &vertices[0],GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,vao->m_EBO);
@@ -38,7 +39,7 @@ void Mesh::Draw(Shader* shader){
         else if(name == "texture_specular")
             number = std::to_string(specularNr++);
         name = ("material." + name + number);
-        shader->SetUniform1f(&name,i);
+        shader->SetUniform1i(&name,i);
         textures[i].UseTexture(0,false);
     }
     vao->UseVAO();

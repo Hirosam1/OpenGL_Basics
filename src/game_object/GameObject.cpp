@@ -96,14 +96,14 @@ void GameObject::SetUpVertex(){
 void GameObject::AddTexture(std::string* tex_path, GLenum type, std::string* uniform_name){
    if(this->shader != nullptr){
       uniform_name = uniform_name != nullptr ? uniform_name : &bb->Basic_tex;
-      this->shader->AddTexture(tex_path,uniform_name,type);
+      /*this->shader->AddTexture(tex_path,uniform_name,type);*/
    }
 }
 
 void GameObject::AddTexture(Texture* texture, std::string* uniform_name){
    if(this->shader != nullptr){
       uniform_name = uniform_name != nullptr ? uniform_name : &bb->Basic_tex;
-      this->shader->AddTexture(texture, uniform_name);
+      /*this->shader->AddTexture(texture, uniform_name);*/
    }
 }
 

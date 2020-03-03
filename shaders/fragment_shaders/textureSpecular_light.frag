@@ -134,7 +134,7 @@ uniform int hasSpotLight;
 void main()
 {
     //vec4 texColor = vec4(texture(material.texture1,TexCoord));
-
+    
     vec3 norm = normalize(aNormal);
     vec3 result = CalcDirLight(dirLight, norm);
 
@@ -146,4 +146,5 @@ void main()
     }
 
     FragColor = vec4(result,1);
+
 } 

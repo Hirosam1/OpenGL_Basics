@@ -62,7 +62,7 @@ void GameManager::SetUpObjects(){
     std::string* spec = new std::string("textures/container2_specular.png");
     std::string* spec2 = new std::string("textures/Arrow_specular.png");
 
-    Camera* m_camera = new Camera(this->main_window);
+    m_camera = new Camera(this->main_window);
 
 
     Shape* cube  = new Cube();
@@ -225,6 +225,17 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
+
+    /*TEST INIT*/
+    m_camera = new Camera(this->main_window);
+    GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    CameraMov->object_name = "Camera Movement Game Object";
+    m_camera->camera_pos = glm::vec3(0,0,5);
+    Shader shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/simple.frag");
+    std::string path = std::string("models/nanosuit_simple/nanosuit.obj");
+    Model m_model = Model(path);
+    /*TEST END*/
+
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     
@@ -237,14 +248,29 @@ void GameManager::EngnieStart(){
         }
         
         //Clear the screen
-        glClearColor(0.00f,0.00f,0.0,1.0f);
+        glClearColor(0.2f,0.6f,0.4,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
-        lock_threads.notify_all();
+        //lock_threads.notify_all();
         //Render Objects
+        /*TEST INIT*/
+        CameraMov->Update();
+        shader.UseShader();
+        glm::mat4 model = glm::mat4(1.0);
+        std::string uniform_name = std::string("View");
+        shader.SetUniformMat4f(&uniform_name,m_camera->GetView());
+        uniform_name = "Projection";
+        shader.SetUniformMat4f(&uniform_name, m_camera->GetProjection());
+        model = glm::scale(model,glm::vec3(0.5,0.5,0.5));
+        model=  glm::translate(model, glm::vec3(0,-5,0));
+        uniform_name = "Model";
+        shader.SetUniformMat4f(&uniform_name,model);
+        m_model.Draw(&shader);
+        /*TEST END*/
+        /*
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
             Light* is_light = dynamic_cast<Light*>(*it);
@@ -255,7 +281,7 @@ void GameManager::EngnieStart(){
             }else{
                 is_light->LampColorBuffering();
             }
-        }
+        }*/
         //Last object, the GUI, needs to be Updated on main thread
         //all_objs->at(all_objs->size()-1)->Update();
 
