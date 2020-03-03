@@ -208,7 +208,7 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         wait_main->wait(lck);
         lck.unlock();
         //Update all minus the last one
-        while(pos < all_objs->size()-1){
+        while(all_objs->size() > 0 && pos < all_objs->size()-1){
             pos = id + supported_concurrency * i++;
             if (pos < all_objs->size()-1){
                 all_objs->at(pos)->Update();
@@ -243,7 +243,7 @@ void GameManager::EngnieStart(){
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
-        //lock_threads.notify_all();
+        lock_threads.notify_all();
         //Render Objects
         for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
             (*it)->UpdateAndBuffer();
