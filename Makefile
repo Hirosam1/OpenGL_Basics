@@ -33,7 +33,7 @@ IMGUI_OBJS = $(patsubst $(SRC_DIR)/imgui/%.cpp,$(OBJ_DIR)/%.o,$(IMGUI_SRC))
 
 CXXFLAGS = -I$(INCLUDE)/ -O1 -O2 -O3
 LDLIBS_LINUX = -lglfw3 -lrt -lm -lXrandr -lassimp -lXrender -lXi -lGL -lpthread -pthread -lm -ldl -lXdamage -lXfixes -lX11-xcb -lxcb-glx -lxcb-dri2 -lXxf86vm -lXext -lX11 -lpthread -lXdmcp -ldrm -lGL -lXinerama -lXcursor 
-LDLIBS_WIN = -lglfw3 -lglu32 -lgdi32 -lpthread 
+LDLIBS_WIN = -lassimp -lglfw3 -lglu32 -lgdi32 -lpthread 
 
 
 #For linux export LD_LIBRARY_PATH=/usr/local/lib
