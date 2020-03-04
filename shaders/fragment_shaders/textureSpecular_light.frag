@@ -78,10 +78,6 @@ vec3 CalcPointLight(PointLight light,vec3 normal, vec3 fragPos){
     float distance = length(light.positionVS - FragPos);
     float constant = clamp(light.constant,0.0,1.0);
 
-    if(light.linear  < 0.01){
-        discard;
-    }
-
     float attenuation = 1.0/(constant + (light.linear * distance) + (light.quadratic * (distance * distance)));
     //Ambient
     vec3 ambient = light.ambient * vec3(texture(material.texture1,TexCoord)) * material.ambient;

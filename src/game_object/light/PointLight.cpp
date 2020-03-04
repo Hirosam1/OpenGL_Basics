@@ -5,7 +5,6 @@ Light(bb,m_camera,shape,initial_pos,vert,frag), constant(constant),linear(linear
     char buffer[50];
     snprintf(buffer,sizeof(buffer),bb->PointLights_prefix.data(),this->index);
     this->LightPrefix = std::string(buffer);
-
 }
 
 void PointLight::LightBuffering(GameObject* go){
