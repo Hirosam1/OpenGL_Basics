@@ -1,12 +1,12 @@
 #include "game_object/Light.hpp"
 
-SpotLight::SpotLight(BasicsBlock* bb, Camera* m_camera, Mesh* shape, float initial_pos[3], std::string* vert, std::string* frag, float direction[3]):
-                        Light(bb,m_camera,shape,initial_pos,vert,frag), direction(direction){
+SpotLight::SpotLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], std::string vert, std::string frag, float direction[3]):
+                        Light(bb,m_camera,model,initial_pos,vert,frag), direction(direction){
 
 }
 
-SpotLight::SpotLight(BasicsBlock* bb, Camera* m_camera, Mesh* shape, float initial_pos[3], std::string* vert, std::string* frag):
-                        Light(bb,m_camera,shape,initial_pos,vert,frag), direction(this->light_pos){
+SpotLight::SpotLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], std::string vert, std::string frag):
+                        Light(bb,m_camera,model,initial_pos,vert,frag), direction(this->light_pos){
 
 }
 

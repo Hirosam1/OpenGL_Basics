@@ -1,11 +1,11 @@
 #include "game_object/Light.hpp"
 
-DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Mesh* shape,float initial_pos[3], std::string* vert, std::string* frag, float direction[3]): 
-                    Light(bb,m_camera,shape,initial_pos,vert,frag), direction(direction){
+DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag, float direction[3]): 
+                    Light(bb,m_camera,model,initial_pos,vert,frag), direction(direction){
 }
 
-DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Mesh* shape,float initial_pos[3], std::string* vert, std::string* frag): 
-                    Light(bb,m_camera,shape,initial_pos,vert,frag), direction(this->light_pos){
+DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag): 
+                    Light(bb,m_camera,model,initial_pos,vert,frag), direction(this->light_pos){
                     
 }
 

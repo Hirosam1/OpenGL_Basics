@@ -2,7 +2,7 @@
 
 class NoBahaviorObject : public GameObject{
     public:
-        NoBahaviorObject(BasicsBlock* bb, Camera* camera, Mesh* shape, float initial_pos[3],std::string* v, std::string* f);
+        NoBahaviorObject(BasicsBlock* bb, Camera* camera, Model* model, float initial_pos[3],std::string v, std::string f);
         void Update() override;
 
 };

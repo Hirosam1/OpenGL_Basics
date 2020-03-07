@@ -88,13 +88,13 @@ void bObject::RenderGUI(){
             }
         }
         
-        vec_pos[0] = (*obj_iterator)->model[3][0];
-        vec_pos[1] = (*obj_iterator)->model[3][1];
-        vec_pos[2] = (*obj_iterator)->model[3][2];
+        vec_pos[0] = (*obj_iterator)->model_mat[3][0];
+        vec_pos[1] = (*obj_iterator)->model_mat[3][1];
+        vec_pos[2] = (*obj_iterator)->model_mat[3][2];
         ImGui::SliderFloat3("Object position", vec_pos,-5.0,5.0);
-        (*obj_iterator)->model[3][0] = vec_pos[0];
-        (*obj_iterator)->model[3][1] = vec_pos[1];
-        (*obj_iterator)->model[3][2] = vec_pos[2];
+        (*obj_iterator)->model_mat[3][0] = vec_pos[0];
+        (*obj_iterator)->model_mat[3][1] = vec_pos[1];
+        (*obj_iterator)->model_mat[3][2] = vec_pos[2];
 
         if ((*obj_iterator)->m_material != nullptr){
             vec_color = glm::value_ptr((*obj_iterator)->m_material->diffuse_color);

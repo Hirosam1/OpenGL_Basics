@@ -1,7 +1,7 @@
 #include "game_object/Light.hpp"
 
-PointLight::PointLight(BasicsBlock* bb, Camera* m_camera,Mesh* shape,float initial_pos[3],std::string* vert, std::string* frag , int index,float linear, float quadratic, float constant) : 
-Light(bb,m_camera,shape,initial_pos,vert,frag), constant(constant),linear(linear),quadratic(quadratic),index(index){
+PointLight::PointLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3],std::string vert, std::string frag , int index,float linear, float quadratic, float constant) : 
+Light(bb,m_camera,model,initial_pos,vert,frag), constant(constant),linear(linear),quadratic(quadratic),index(index){
     char buffer[50];
     snprintf(buffer,sizeof(buffer),bb->PointLights_prefix.data(),this->index);
     this->LightPrefix = std::string(buffer);

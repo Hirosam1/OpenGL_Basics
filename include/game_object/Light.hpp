@@ -7,8 +7,8 @@ class GameManager;
 class Light : public GameObject{
     public:
         friend GameManager;
-        Light(BasicsBlock* bb, Camera* m_camera,Mesh* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_color[3],float light_intensity = 1.0);
-        Light(BasicsBlock* bb, Camera* m_camera,Mesh* shape, float initial_pos[3],std::string* vert, std::string* frag ,float light_intensity = 1.0);
+        Light(BasicsBlock* bb, Camera* m_camera,Model* model, float initial_pos[3],std::string vert, std::string frag ,float light_color[3],float light_intensity = 1.0);
+        Light(BasicsBlock* bb, Camera* m_camera,Model* model, float initial_pos[3],std::string vert, std::string frag ,float light_intensity = 1.0);
         Light(BasicsBlock* bb, Camera* m_camera, float initial_pos[3],float light_intensity = 1.0);
         glm::vec3 light_color;
         float* light_pos;
@@ -25,7 +25,7 @@ class Light : public GameObject{
 
 class PointLight : public Light{
     public:
-        PointLight(BasicsBlock* bb, Camera* m_camera,Mesh* shape,float initial_pos[3], std::string* vert, std::string* frag, int index,float linear = 0.45f, float quadratic = 0.23f, float constant = 1.0f);
+        PointLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag, int index,float linear = 0.45f, float quadratic = 0.23f, float constant = 1.0f);
         float constant;
         float linear;
         float quadratic;
@@ -39,8 +39,8 @@ class PointLight : public Light{
 
 class DirLight : public Light{
     public:
-        DirLight(BasicsBlock* bb, Camera* m_camera,Mesh* shape,float initial_pos[3], std::string* vert, std::string* frag, float direction[3]);
-        DirLight(BasicsBlock* bb, Camera* m_camera,Mesh* shape,float initial_pos[3], std::string* vert, std::string* frag);
+        DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag, float direction[3]);
+        DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag);
         float* direction;
     private:
         void LightBuffering(GameObject *go) override;
@@ -48,8 +48,8 @@ class DirLight : public Light{
 
 class SpotLight : public Light{
     public:
-        SpotLight(BasicsBlock* bb, Camera* m_camera, Mesh* shape, float initial_pos[3], std::string* vert, std::string* frag, float direction[3]);
-        SpotLight(BasicsBlock* bb, Camera* m_camera, Mesh* shape, float initial_pos[3], std::string* vert, std::string* frag);
+        SpotLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], std::string vert, std::string frag, float direction[3]);
+        SpotLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], std::string vert, std::string frag);
         SpotLight(BasicsBlock* bb, Camera* m_camera, float initial_pos[3], float direction[3]);
         float* direction;
     private:

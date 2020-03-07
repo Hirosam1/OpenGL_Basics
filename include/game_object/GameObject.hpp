@@ -20,7 +20,7 @@
 #include "graphics/Material.hpp"
 #include "graphics/Texture.hpp"
 
-#include "game_object/Mesh.hpp"
+#include "game_object/Model.hpp"
 
 
 class GameManager;
@@ -32,9 +32,9 @@ class GameObject{
         //Constructors
         GameObject(BasicsBlock* basic_block);
         GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
-        GameObject(BasicsBlock* basic_block,Camera* m_camera,Mesh* m_mesh,float initial_pos[3],
-        std::string* vert_shader_path = new std::string("shaders/vertex_shaders/MVP_vertex.vert"),
-        std::string* frag_shader_path = new std::string("shaders/fragment_shaders/basic_fragment.frag"));
+        GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],
+        std::string vert_shader_path =  std::string("shaders/vertex_shaders/MVP_vertex.vert"),
+        std::string frag_shader_path =  std::string("shaders/fragment_shaders/basic_fragment.frag"));
 
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
@@ -42,18 +42,21 @@ class GameObject{
         void AddTexture(std::string* tex_path, GLenum type = GL_RGB, std::string* uniform_name = nullptr);
         void AddTexture(Texture* texture,std::string* uniform_name = nullptr);
 
-        Mesh* m_mesh;
-
+        /*Shared attributes*/
         //The camera containing the view matrix
         Camera* m_camera;
-        //The model matrix
-        glm::mat4 model; 
-        //Shader Object
-        Shader* m_shader;
         //Time object
         Time* m_time;
         //The material of the object
         Material* m_material;
+
+        /*Personal attributes*/
+        //Shader Object
+        Shader *m_shader;
+        //Model of the object
+        Model* m_model;
+        //The model matrix
+        glm::mat4 model_mat; 
 
         bool change = false;
 
@@ -68,12 +71,9 @@ class GameObject{
         //Sets the MVP to its initial position
         void SetInitialMVP();
 
-        //VAO game object
-        VAO* m_vao;
-
         //path to the shaders
-        std::string* vertex_shader_path;
-        std::string* fragment_shader_path;
+        std::string vertex_shader_path;
+        std::string fragment_shader_path;
 
     protected:
         BasicsBlock* bb;
