@@ -7,6 +7,7 @@
 #include "graphics/Texture.hpp"
 #include "game_object/VAO.hpp"
 #include "graphics/Shader.hpp"
+#include "graphics/Material.hpp"
 
 struct Vertex {
     glm::vec3 Position;
@@ -21,9 +22,9 @@ class Mesh{
         std::vector<unsigned int> indices;
         std::vector<Texture> textures;
         /* Methods */
-        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material);
         void Draw(Shader* shader);
-
+        Material m_material;
         //void SetUpVertex(VAO* mVao);
     private:
         /* Render  data */

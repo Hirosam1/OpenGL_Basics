@@ -57,103 +57,33 @@ void GameManager::SetUpObjects(){
     std::string* fragSpec = new std::string("shaders/fragment_shaders/textureSpecular_light.frag");
     std::string* fragDefault = new std::string("shaders/fragment_shaders/light.frag");
     std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
+    /*
     std::string* tex = new std::string("textures/Arrow.png");
     std::string* tex2 = new std::string("textures/container2.png");
     std::string* spec = new std::string("textures/container2_specular.png");
-    std::string* spec2 = new std::string("textures/Arrow_specular.png");
+    std::string* spec2 = new std::string("textures/Arrow_specular.png");*/
 
     m_camera = new Camera(this->main_window);
 
-
-    Shape* cube  = new Cube();
-    Shape* plane = new Plane();
-    Shape* triag = new Triangle();
-    Shape* cubeTex = new CubeTex();
-
     std::cout<<"creating game objects...\n";
     GameObject *go,*go2, *go4, * go5;
-
+    /*
     GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{0.3,0.5,-0.5},vertDefault,lamp,this->basic_block->n_point_lights++);
-    VAO* light_vao = new VAO();
-        light_vao->SetAttribPoint(3,6);
-        light_vao->SetUpObject();
-    m_light->SetUpVertex(light_vao);
-    m_light->model = glm::scale(m_light->model,glm::vec3(0.2,0.2,0.2));
-    dynamic_cast<Light*>(m_light)->light_intensity = 0.7;
-    m_light->object_name = "Point Light 1";
 
     GameObject* light2 = new PointLight(this->basic_block,m_camera,cube,new float[3]{0.0,0.2,3.0},vertDefault,lamp,this->basic_block->n_point_lights++);
-    VAO* light2_vao = new VAO();
-        light2_vao->SetAttribPoint(3,6);
-        light2_vao->SetUpObject();
-    light2->SetUpVertex(light2_vao);
-    light2->model = glm::scale(light2->model,glm::vec3(0.2,0.2,0.2));
-    dynamic_cast<Light*>(light2)->light_intensity = 0.8;
-    dynamic_cast<Light*>(light2)->light_color = glm::vec3(1,1,0.6);
-    light2->object_name = "Point Light 2";
 
     GameObject* m_dirLight = new DirLight(this->basic_block,m_camera,cube,new float[3]{-0.3,-1,1.2},vertDefault,lamp);
-    VAO* DirLight_vao = new VAO();
-        DirLight_vao->SetAttribPoint(3,6);
-        DirLight_vao->SetUpObject();
-    m_dirLight->SetUpVertex(DirLight_vao);
-    m_dirLight->model = glm::scale(m_dirLight->model,glm::vec3(0.4,0.4,0.4));
-    dynamic_cast<Light*>(m_dirLight)->light_intensity = 0.2;
-    m_dirLight->object_name = "Directional light";
 
 
     GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
     spotLight->object_name = "Spot Light";
-
-    Texture* boxTex = new Texture(*tex2,GL_RGBA);
-    Texture* boxSpec = new Texture(*spec, GL_RGBA);
-    
-    go = new NoBahaviorObject(this->basic_block , m_camera,cubeTex,new float[3]{0.5,-0.8,2},vertTex,fragSpec);
-    go->m_material = new Material();
-    go->m_material->shininess = 64.0;
-    go->m_material->specular_color  = glm::vec3(0.7,0.7,0.7);
-    VAO* goVAO = new VAO();
-        goVAO->SetAttribPoint(3);
-        goVAO->SetAttribPoint(3);
-        goVAO->SetAttribPoint(2);
-        goVAO->SetUpObject();
-    go->SetUpVertex(goVAO);
-    go->AddTexture(boxTex);
-    go->AddTexture(boxSpec,new std::string("material.specular"));
-    go->object_name = "Cube With Specular 1";
-
-    go2 = new NoBahaviorObject(this->basic_block ,m_camera,plane,new float[3]{-1,0.3,0},vertTex,fragTex);
-    VAO* go2VAO = new VAO();
-        go2VAO->SetAttribPoint(3);
-        go2VAO->SetAttribPoint(3);
-        go2VAO->SetAttribPoint(2);
-        go2VAO->SetUpObject();
-    go2->SetUpVertex(go2VAO);
-    go2->AddTexture(tex,GL_RGBA);
-    go2->m_material = new Material(glm::vec3(0.9f,0.9f, 0.2f));
-    go2->m_material->specular_color =  glm::vec3(0.3,0.6,0.2);
-    go2->m_material->shininess = 64.0f;
-    go2->object_name = "Arrow";
-    
+   
     GameObject* GUIObject = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
     GUIObject->object_name = "GUI gameObject";
 
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
-    go5 = new NoBahaviorObject(basic_block,m_camera,cubeTex,new float[3]{0.5,-0.8,0},vertTex,fragSpec);
-    VAO* go5VAO = new VAO();
-        go5VAO->SetAttribPoint(3);
-        go5VAO->SetAttribPoint(3);
-        go5VAO->SetAttribPoint(2);
-        go5VAO->SetUpObject();
-    go5->SetUpVertex(go5VAO);
-    go5->m_material = new Material();
-    go5->m_material->shininess = 64;
-    go5->m_material->specular_color = glm::vec3(0.5,0.5,0.5);
-    go5->AddTexture(boxTex);
-    go5->AddTexture(boxSpec,new std::string("material.specular"));
-    go5->object_name = "Cube with specular 2";
 
     all_objs->push_back(go);
     all_objs->push_back(go5);
@@ -188,10 +118,8 @@ void GameManager::SetUpObjects(){
     delete fragSpec;
     delete fragDefault;
     delete lamp;
-    delete tex;
-    delete tex2;
-    delete spec;
-    delete spec2;
+
+    */
 
 }
 
@@ -232,7 +160,9 @@ void GameManager::EngnieStart(){
     CameraMov->object_name = "Camera Movement Game Object";
     m_camera->camera_pos = glm::vec3(0,0,5);
     Shader shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/simple.frag");
-    std::string path = std::string("models/nanosuit_simple/nanosuit.obj");
+    //std::string path = std::string("models/nanosuit_simple/nanosuit.obj");
+    //std::string path = std::string("models/donut/donut.obj");
+    std::string path = std::string("models/box/Box.obj");
     Model m_model = Model(path);
     /*TEST END*/
 
@@ -265,6 +195,7 @@ void GameManager::EngnieStart(){
         uniform_name = "Projection";
         shader.SetUniformMat4f(&uniform_name, m_camera->GetProjection());
         model = glm::scale(model,glm::vec3(0.3,0.3,0.3));
+        //model = glm::scale(model,glm::vec3(10,10,10));
         model=  glm::translate(model, glm::vec3(0,-5,0));
         uniform_name = "Model";
         shader.SetUniformMat4f(&uniform_name,model);

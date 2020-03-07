@@ -1,6 +1,7 @@
 #include "game_object/Mesh.hpp"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures): vertices(vertices), indices(indices), textures(textures){
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material): 
+    vertices(vertices), indices(indices), textures(textures), m_material(m_material){
     this->SetUpMesh();
 }
 
@@ -30,10 +31,18 @@ void Mesh::SetUpMesh(){
 void Mesh::Draw(Shader* shader){
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
+    std::string name = "material.has_TexDiffuse";
+    if( textures.size() > 0){
+        shader->SetUniform1i(&name,1);
+    }else{
+        shader->SetUniform1i(&name,0);
+    }
     for(unsigned int i = 0; i < textures.size() ; i++){
+        
         glActiveTexture(GL_TEXTURE0+i);
         std::string number;
-        std::string name = textures[i].tex_type;
+        name = textures[i].tex_type;
+        
         if(name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if(name == "texture_specular")
@@ -41,7 +50,11 @@ void Mesh::Draw(Shader* shader){
         name = ("material." + name + number);
         shader->SetUniform1i(&name,i);
         textures[i].UseTexture(0,false);
+        name = "material.has_diffuse";
+        
     }
+    name = "material.diffuse";
+    shader->SetUniformVec3f(&name, m_material.main_color);
     vao->UseVAO();
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
