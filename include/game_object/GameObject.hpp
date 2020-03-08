@@ -35,6 +35,7 @@ class GameObject{
         GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],
         std::string vert_shader_path =  std::string("shaders/vertex_shaders/MVP_vertex.vert"),
         std::string frag_shader_path =  std::string("shaders/fragment_shaders/basic_fragment.frag"));
+        GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader);
 
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
@@ -49,23 +50,24 @@ class GameObject{
         Time* m_time;
         //The material of the object
         Material* m_material;
+        //Shader Object
+        Shader *m_shader = nullptr;
+        //Model of the object
+        Model* m_model = nullptr;
 
         /*Personal attributes*/
-        //Shader Object
-        Shader *m_shader;
-        //Model of the object
-        Model* m_model;
         //The model matrix
         glm::mat4 model_mat; 
 
         bool change = false;
 
     private: 
+        void UseShader();
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO
-            -> Copile and use shaders
-            -> Handles Textures */
-        void UpdateAndBuffer();
+            -> Buffer MVP
+            -> Draw model */
+        void BufferAndDraw();
 
         void ReadyObject();
         //Sets the MVP to its initial position

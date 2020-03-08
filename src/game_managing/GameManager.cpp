@@ -35,7 +35,7 @@ void GameManager::EngineInit(){
     this->threads = new std::thread[this->supported_concurrency];
 
 
-    //SetUpObjects();
+    SetUpObjects();
 
     this->ready_to_start = true;
     glEnable(GL_DITHER);
@@ -57,48 +57,51 @@ void GameManager::SetUpObjects(){
     std::string* fragSpec = new std::string("shaders/fragment_shaders/textureSpecular_light.frag");
     std::string* fragDefault = new std::string("shaders/fragment_shaders/light.frag");
     std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
-    /*
-    std::string* tex = new std::string("textures/Arrow.png");
-    std::string* tex2 = new std::string("textures/container2.png");
-    std::string* spec = new std::string("textures/container2_specular.png");
-    std::string* spec2 = new std::string("textures/Arrow_specular.png");*/
+
 
     m_camera = new Camera(this->main_window);
-
+    m_camera->camera_pos = glm::vec3(-3.0f,2.0f,20.0f);
+    m_camera->camera_front = glm::vec3(0,0,-1);
+     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     std::cout<<"creating game objects...\n";
-    GameObject *go,*go2, *go4, * go5;
-    /*
-    GameObject* m_light = new PointLight(this->basic_block,m_camera,cube,new float[3]{0.3,0.5,-0.5},vertDefault,lamp,this->basic_block->n_point_lights++);
 
-    GameObject* light2 = new PointLight(this->basic_block,m_camera,cube,new float[3]{0.0,0.2,3.0},vertDefault,lamp,this->basic_block->n_point_lights++);
+    Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
+    Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
+    Shader* shader_lamp2 = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
+    //std::string path = std::string("models/nanosuit_simple/nanosuit.obj");
+    //std::string path = std::string("models/donut/donut.obj");
+    std::string path = std::string("models/box/Box.obj");
+    Model* m_model = new Model(path);
 
-    GameObject* m_dirLight = new DirLight(this->basic_block,m_camera,cube,new float[3]{-0.3,-1,1.2},vertDefault,lamp);
+    GameObject* pointLight = new PointLight(basic_block,m_camera,m_model,new float[3]{0,0,5},shader_lamp,basic_block->n_point_lights++);
+    pointLight->model_mat = glm::scale(pointLight->model_mat,glm::vec3(0.2,0.2,0.2));
+    pointLight->object_name = "Point Light1";
+    GameObject* pointLight2 = new  PointLight(basic_block,m_camera,m_model,new float[3]{0,-5,0},shader_lamp2,basic_block->n_point_lights++);
+    pointLight2->model_mat = glm::scale(pointLight2->model_mat,glm::vec3(0.2,0.2,0.2));
+    pointLight2->object_name = "Point Light 2";
 
 
     GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
     spotLight->object_name = "Spot Light";
-   
     GameObject* GUIObject = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
     GUIObject->object_name = "GUI gameObject";
 
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
+    GameObject* BoxObject = new NoBahaviorObject(basic_block,m_camera, m_model, new float[3]{0,1,-2},shader);
 
-    all_objs->push_back(go);
-    all_objs->push_back(go5);
-    all_objs->push_back(go2);
     all_objs->push_back(CameraMov);
-    all_objs->push_back(m_light);
-    all_objs->push_back(light2);
-    all_objs->push_back(m_dirLight);
+    
     all_objs->push_back(spotLight);
+    all_objs->push_back(BoxObject);
+    all_objs->push_back(pointLight);
+    all_objs->push_back(pointLight2);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
-
-    all_lights.push_back(dynamic_cast<Light*>(m_light));
-    all_lights.push_back(dynamic_cast<Light*>(m_dirLight));
-    all_lights.push_back(dynamic_cast<Light*>(light2));
+    
+    all_lights.push_back(dynamic_cast<Light*>(pointLight));
+    all_lights.push_back(dynamic_cast<Light*>(pointLight2));
     all_lights.push_back(dynamic_cast<Light*>(spotLight));
 
     vertDefault->clear();
@@ -107,10 +110,6 @@ void GameManager::SetUpObjects(){
     fragSpec->clear();
     fragDefault->clear();
     lamp->clear();
-    tex->clear();
-    tex2->clear();
-    spec->clear();
-    spec2->clear();
 
     delete vertDefault;
     delete vertTex;
@@ -119,7 +118,6 @@ void GameManager::SetUpObjects(){
     delete fragDefault;
     delete lamp;
 
-    */
 
 }
 
@@ -154,21 +152,8 @@ void GameManager::EngnieStart(){
         exit(-1);
     }
 
-    /*TEST INIT*/
-    m_camera = new Camera(this->main_window);
-    GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
-    CameraMov->object_name = "Camera Movement Game Object";
-    m_camera->camera_pos = glm::vec3(0,0,5);
-    Shader shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/simple.frag");
-    //std::string path = std::string("models/nanosuit_simple/nanosuit.obj");
-    //std::string path = std::string("models/donut/donut.obj");
-    std::string path = std::string("models/box/Box.obj");
-    Model m_model = Model(path);
-    /*TEST END*/
-
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
-    
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
         (*it)->ReadyObject();
     }
@@ -185,36 +170,26 @@ void GameManager::EngnieStart(){
         this->main_time->UpdateDelta();
         glfwPollEvents();
         //lock_threads.notify_all();
-        //Render Objects
-        /*TEST INIT*/
-        CameraMov->Update();
-        shader.UseShader();
-        glm::mat4 model = glm::mat4(1.0);
-        std::string uniform_name = std::string("View");
-        shader.SetUniformMat4f(&uniform_name,m_camera->GetView());
-        uniform_name = "Projection";
-        shader.SetUniformMat4f(&uniform_name, m_camera->GetProjection());
-        model = glm::scale(model,glm::vec3(0.3,0.3,0.3));
-        //model = glm::scale(model,glm::vec3(10,10,10));
-        model=  glm::translate(model, glm::vec3(0,-5,0));
-        uniform_name = "Model";
-        shader.SetUniformMat4f(&uniform_name,model);
-        m_model.Draw(&shader);
-        /*TEST END*/
-        /*
-        for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
-            (*it)->UpdateAndBuffer();
-            Light* is_light = dynamic_cast<Light*>(*it);
-            if(is_light == NULL){
-                for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
-                    (*lit)->LightBuffering((*it));
+        //Render Objects     
+        for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
+            (*it)->Update();
+            if((*it)->m_shader != nullptr){
+                (*it)->UseShader();
+                Light* is_light = dynamic_cast<Light*>(*it);
+                if(is_light == NULL){
+                    for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
+                        (*lit)->LightBuffering((*it));
+                    }
+                }else{
+                    is_light->LampColorBuffering();
                 }
-            }else{
-                is_light->LampColorBuffering();
+
+                (*it)->BufferAndDraw();
+                glUseProgram(0);
             }
-        }*/
+        }
         //Last object, the GUI, needs to be Updated on main thread
-        //all_objs->at(all_objs->size()-1)->Update();
+        all_objs->at(all_objs->size()-1)->Update();
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();

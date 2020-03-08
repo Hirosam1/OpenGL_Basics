@@ -54,7 +54,6 @@ void bObject::Update(){
     }
     #endif
     
-   //if(show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
     if(show_cursor == GLFW_CURSOR_NORMAL) RenderGUI();
     if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
         
@@ -117,7 +116,6 @@ void bObject::RenderGUI(){
             ImGui::SliderFloat("Light Intensity", &light->light_intensity,0.0f,1.0f);
             ImGui::NewLine();
         }
-
         ImGui::Text("FPS: %f", 1/m_time->delta_time);
 
         ImGui::End();

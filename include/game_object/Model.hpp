@@ -18,9 +18,10 @@ class Model{
         void Draw(Shader* shader);
 
         std::vector<Texture> textures_loaded;
+        std::vector<Mesh> meshes;
     private:
         /*Model data*/
-        std::vector<Mesh> meshes;
+        //std::vector<Mesh> meshes;
         std::string directory;
         /*Functions*/
         void LoadModel(std::string path);

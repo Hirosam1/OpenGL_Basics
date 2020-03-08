@@ -16,12 +16,12 @@ Camera* m_camera,float initial_pos[3]):GameObject
 }
 
 void aObject::Ready(){
-    /*
+    
     for(auto e = bb->all_objs->begin(); e != bb->all_objs->end(); e++){
         if((*e)->object_name == "GUI gameObject"){
             GUIObject = dynamic_cast<bObject*>(*e);
         }
-    }*/
+    }
 }
 
 void aObject::Update(){
@@ -37,7 +37,7 @@ void aObject::Update(){
          m_camera->MakeProjection(glm::radians(fov));
     }
 
-    if(/*GUIObject->show_cursor == GLFW_CURSOR_DISABLED*/ true) CalculateCam();
+    if(GUIObject->show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
 
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 15;
@@ -60,7 +60,7 @@ void aObject::Update(){
 
         this->test_speed = 5;
 
-    if(m_input->ProcessInput(GLFW_KEY_F1) /*&& GUIObject->f1KeyRealeased*/){
+    if(m_input->ProcessInput(GLFW_KEY_F1) && GUIObject->f1KeyRealeased){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
     }

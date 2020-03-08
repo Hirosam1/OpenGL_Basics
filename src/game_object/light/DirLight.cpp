@@ -1,17 +1,16 @@
 #include "game_object/Light.hpp"
 
-DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag, float direction[3]): 
-                    Light(bb,m_camera,model,initial_pos,vert,frag), direction(direction){
+DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader, float direction[3]): 
+                    Light(bb,m_camera,model,initial_pos,m_shader), direction(direction){
 }
 
-DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], std::string vert, std::string frag): 
-                    Light(bb,m_camera,model,initial_pos,vert,frag), direction(this->light_pos){
+DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader): 
+                    Light(bb,m_camera,model,initial_pos,m_shader), direction(this->light_pos){
                     
 }
 
 void DirLight::LightBuffering(GameObject* go){
     if(go->m_shader != nullptr){
-        go->m_shader->UseShader();
         std::string uniform_name = bb->DirLight_prefix + bb->Light_ambient;
         go->m_shader->SetUniformVec3f(&uniform_name,this->light_ambient);
         uniform_name = bb->DirLight_prefix + bb->Light_diffuse;
