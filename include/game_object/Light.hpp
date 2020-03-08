@@ -26,7 +26,7 @@ class Light : public GameObject{
 
 class PointLight : public Light{
     public:
-        PointLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader, int index,float linear = 0.45f, float quadratic = 0.23f, float constant = 1.0f);
+        PointLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader, int index,float linear = 0.12f, float quadratic = 0.04f, float constant = 1.0f);
         float constant;
         float linear;
         float quadratic;

@@ -5,12 +5,10 @@ Light(bb,m_camera,model,initial_pos,m_shader), constant(constant),linear(linear)
     char buffer[50];
     snprintf(buffer,sizeof(buffer),bb->PointLights_prefix.data(),this->index);
     this->LightPrefix = std::string(buffer);
-
 }
 
 void PointLight::LightBuffering(GameObject* go){
     if(go->m_shader != nullptr){
-
         go->m_shader->SetUniform1i(&bb->n_point_lights_string,bb->n_point_lights);
         std::string uniform_name = this->LightPrefix + bb->Light_ambient;
 

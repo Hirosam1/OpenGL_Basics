@@ -136,9 +136,7 @@ void main()
     if(material.has_TexDiffuse){
         texDiffColor = vec3(texture(material.texture_diffuse1,TexCoord));
     }
-
     if(material.has_TexSpecular){
-        discard;
         texSpecColor = vec3(texture(material.texture_specular1,TexCoord));
     }
     

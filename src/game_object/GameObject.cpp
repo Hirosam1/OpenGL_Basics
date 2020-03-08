@@ -38,7 +38,7 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
       this->m_shader->SetUniformMat4f(&bb->Projection_string, m_camera->GetProjection());
       this->m_shader->SetUniformMat4f(&bb->Model_string,model_mat);
       this->m_shader->SetUniformVec3f(&bb->Mat_ambient,glm::vec3(1.0));
-      this->m_shader->SetUniformVec3f(&bb->Mat_diffuse,glm::vec3(1.0,0.8,0.8));
+      this->m_shader->SetUniformVec3f(&bb->Mat_diffuse,glm::vec3(1.0,1.0,1.0));
       this->m_shader->SetUniformVec3f(&bb->Mat_specular,glm::vec3(1.0,1.0,1.0));
       this->m_shader->SetUniform1f(&bb->Mat_shininess,64);
 

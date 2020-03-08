@@ -73,17 +73,25 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene){
 
     //process naterial
     Material m_material;
+    bool has_texDiff = false;
+    bool has_texSpec = false;
     if(mesh->mMaterialIndex >= 0){
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        if(diffuseMaps.size() > 0){
+            has_texDiff = true;
+        }
         textures.insert(textures.end(),diffuseMaps.begin(),diffuseMaps.end());
 
         std::vector<Texture> specularMaps = LoadMaterialTextures(material,aiTextureType_SPECULAR, "texture_specular");
+        if(specularMaps.size() > 0){
+            has_texSpec = true;
+        }
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
         m_material = LoadMaterial(material);
     }
 
-    return Mesh(vertices,indices,textures, m_material);
+    return Mesh(vertices,indices,textures, m_material,has_texDiff,has_texSpec);
 
 }
 
@@ -122,5 +130,8 @@ Material Model::LoadMaterial(aiMaterial* mat){
     aiColor4D color (0,0,0,1);
     aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &color);
     Material m_material = Material(glm::vec3(color.r,color.g,color.b));
+    color = aiColor4D(0,0,0,1);
+    aiGetMaterialColor(mat, AI_MATKEY_COLOR_SPECULAR, &color);
+    m_material.specular_color = glm::vec3(color.r,color.g,color.b);
     return m_material;
 }

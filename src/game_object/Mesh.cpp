@@ -1,7 +1,7 @@
 #include "game_object/Mesh.hpp"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material): 
-    vertices(vertices), indices(indices), textures(textures), m_material(m_material){
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material, bool has_texDiff, bool has_texSpec): 
+    vertices(vertices), indices(indices), textures(textures), m_material(m_material), has_texDiff(has_texDiff), has_texSpec(has_texSpec){
     this->SetUpMesh();
 }
 
@@ -34,7 +34,11 @@ void Mesh::Draw(Shader* shader){
     std::string name = "material.has_TexDiffuse";
     if( textures.size() > 0){
         shader->SetUniform1i(&name,1);
+        name = "material.has_TexSpecular";
+        shader->SetUniform1i(&name,1);
     }else{
+        shader->SetUniform1i(&name,0);
+        name = "material.has_TexSpecular";
         shader->SetUniform1i(&name,0);
     }
     for(unsigned int i = 0; i < textures.size() ; i++){

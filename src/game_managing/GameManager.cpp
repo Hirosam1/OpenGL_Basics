@@ -67,17 +67,19 @@ void GameManager::SetUpObjects(){
 
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-    Shader* shader_lamp2 = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-    //std::string path = std::string("models/nanosuit_simple/nanosuit.obj");
-    //std::string path = std::string("models/donut/donut.obj");
-    std::string path = std::string("models/box/Box.obj");
-    Model* m_model = new Model(path);
+    std::string path_nanoSuit = std::string("models/nanosuit_simple/nanosuit.obj");
+    std::string path_box = std::string("models/box/Box.obj");
+    Model* box = new Model(path_box);
+    Model* nano_suit = new Model(path_nanoSuit);
 
-    GameObject* pointLight = new PointLight(basic_block,m_camera,m_model,new float[3]{0,0,5},shader_lamp,basic_block->n_point_lights++);
+    GameObject* pointLight = new PointLight(basic_block,m_camera,box,new float[3]{-1,-2.2,2},shader_lamp,basic_block->n_point_lights++);
     pointLight->model_mat = glm::scale(pointLight->model_mat,glm::vec3(0.2,0.2,0.2));
+    dynamic_cast<Light*>(pointLight)->light_color = glm::vec3(0.97,0.0,1.00);
     pointLight->object_name = "Point Light1";
-    GameObject* pointLight2 = new  PointLight(basic_block,m_camera,m_model,new float[3]{0,-5,0},shader_lamp2,basic_block->n_point_lights++);
+
+    GameObject* pointLight2 = new  PointLight(basic_block,m_camera,box,new float[3]{2,1,-3},shader_lamp,basic_block->n_point_lights++);
     pointLight2->model_mat = glm::scale(pointLight2->model_mat,glm::vec3(0.2,0.2,0.2));
+    dynamic_cast<Light*>(pointLight2)->light_color = glm::vec3(0.0,0.44,1.00);
     pointLight2->object_name = "Point Light 2";
 
 
@@ -89,14 +91,20 @@ void GameManager::SetUpObjects(){
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
-    GameObject* BoxObject = new NoBahaviorObject(basic_block,m_camera, m_model, new float[3]{0,1,-2},shader);
+    GameObject* NanoSuit = new NoBahaviorObject(basic_block,m_camera, nano_suit, new float[3]{0,-2,1},shader);
+    NanoSuit->model_mat = glm::scale(NanoSuit->model_mat,glm::vec3(0.2,0.2,0.2));
+    NanoSuit->object_name = "NanoSuit";
+
+    GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{2,-1,1},shader);
+    Box->object_name = "Box";
+    Box->model_mat = glm::scale(Box->model_mat,glm::vec3(0.5,0.5,0.5));
 
     all_objs->push_back(CameraMov);
-    
-    all_objs->push_back(spotLight);
-    all_objs->push_back(BoxObject);
+    all_objs->push_back(NanoSuit);
+    all_objs->push_back(Box);
     all_objs->push_back(pointLight);
     all_objs->push_back(pointLight2);
+    all_objs->push_back(spotLight);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
     
@@ -169,6 +177,7 @@ void GameManager::EngnieStart(){
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
+        /*Weird lag into position of gameobject, I belive that making a barrier after notify all will do*/
         //lock_threads.notify_all();
         //Render Objects     
         for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){

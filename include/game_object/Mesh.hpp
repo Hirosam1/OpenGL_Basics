@@ -22,9 +22,11 @@ class Mesh{
         std::vector<unsigned int> indices;
         std::vector<Texture> textures;
         /* Methods */
-        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material);
+        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material, bool has_texDiff = false, bool has_texSpec = false);
         void Draw(Shader* shader);
         Material m_material;
+        bool has_texDiff;
+        bool has_texSpec;
         //void SetUpVertex(VAO* mVao);
     private:
         /* Render  data */
