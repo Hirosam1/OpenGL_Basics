@@ -3,7 +3,7 @@ INCLUDE = ./include
 SRC_DIR = src
 OBJ_DIR = objs
 
-file_name = MyOpenGLTest
+file_name = SNAIL
 
 LIB_PATH = lib
 
