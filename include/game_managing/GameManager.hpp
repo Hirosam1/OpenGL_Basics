@@ -9,6 +9,9 @@
 #include<mutex>
 #include<condition_variable>
 
+
+#include "game_object/Model.hpp"
+
 #include "personal_objects/aObject.hpp"
 #include "personal_objects/bObject.hpp"
 #include "personal_objects/cObject.hpp"
@@ -69,6 +72,8 @@ class GameManager{
         //Conditional variable
         std::condition_variable lock_threads;
         
+        /*TEST*/
+        Camera* m_camera;
 
         //------------------------------------- Methods ----------------------------------------------------------------
         

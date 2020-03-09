@@ -6,7 +6,12 @@ Shader::Shader(){
     this->vertex_shader = 0;
     this->fragment_shader = 0;
     this->shader_program = 0;
-    this->m_textures = new std::list<Texture*>();
+}
+
+Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path){
+    LoadShader(&vertex_shader_path, GL_VERTEX_SHADER);
+    LoadShader(&fragment_shader_path, GL_FRAGMENT_SHADER);
+    LinkShaders();
 }
 
 unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
@@ -73,29 +78,7 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
     return shader_program;
 }
 
-void Shader::AddTexture(std::string* texture_path,std::string* uniform_name,GLenum type){
-    this->UseShader(false);
-    this->SetUniform1i(uniform_name,this->m_textures->size());
-    this->m_textures->push_back(new Texture(texture_path,type));
-
-}
-
-void Shader::AddTexture(Texture* texture,std::string* uniform_name){
-    this->UseShader(false);
-    this->SetUniform1i(uniform_name,this->m_textures->size());
-    this->m_textures->push_back(texture);
-
-}
-
 void Shader::UseShader(bool use_texture){
-    unsigned int tex_number = 0; 
-    if(this->m_textures->size() > 0 && use_texture){
-        for (Texture* const& it: *this->m_textures)
-        {
-            
-            it->UseTexture(tex_number++);
-        }
-    }
     glUseProgram(this->shader_program);
 }
 

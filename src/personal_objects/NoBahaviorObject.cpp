@@ -1,6 +1,6 @@
 #include "personal_objects/NoBehaviorObject.hpp"
 
-NoBahaviorObject::NoBahaviorObject(BasicsBlock* bb, Camera* camera, Shape* shape, float initial_pos[3],std::string* v, std::string* f):GameObject(bb,camera,shape,initial_pos,v,f){
+NoBahaviorObject::NoBahaviorObject(BasicsBlock* bb, Camera* camera, Model* model, float initial_pos[3],Shader* m_shader):GameObject(bb,camera,model,initial_pos,m_shader){
 
 }
 

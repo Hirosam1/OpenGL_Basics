@@ -9,11 +9,10 @@
 #include <list>
 #include"game_tools/FileManagementTools.hpp"
 
-class Texture;
-
 class Shader{
     public:
         Shader();
+        Shader(std::string vertex_shader_path, std::string fragment_shader_path);
         unsigned int LoadShader(std::string* shader_path, GLenum shder_type);
         int LinkShaders();
         //Uses shader before rendering
@@ -26,13 +25,10 @@ class Shader{
         void SetUniform1f(std::string* shader_name, float i);
         void SetUniformVec3f(std::string* uniform_name,glm::vec3 vec3);
         //Creates a texture object and uses the path name to apply it
-        void AddTexture(std::string* texture_path,std::string* uniform_name,GLenum type = GL_RGB);
-        void AddTexture(Texture* texture,std::string* uniform_name);
     protected:
         unsigned int shader_comp;
         unsigned int vertex_shader;
         unsigned int fragment_shader;
         unsigned int shader_program;
         unsigned int CreateShaderProgram(unsigned int vertex_shader, unsigned int fragment_shader);
-        std::list<Texture*>* m_textures;
 };

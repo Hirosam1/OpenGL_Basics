@@ -16,6 +16,7 @@ Camera* m_camera,float initial_pos[3]):GameObject
 }
 
 void aObject::Ready(){
+    
     for(auto e = bb->all_objs->begin(); e != bb->all_objs->end(); e++){
         if((*e)->object_name == "GUI gameObject"){
             GUIObject = dynamic_cast<bObject*>(*e);
@@ -24,6 +25,7 @@ void aObject::Ready(){
 }
 
 void aObject::Update(){
+   
     if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
         yaw = -75;
         pitch = -15;
@@ -94,7 +96,6 @@ void aObject::CalculateCam(){
 
         pitch = pitch > 89.4f ? 89.4f : pitch < -89.4f ? -89.4f :  pitch; 
     }
-    
     camera_front.y = sin(glm::radians(pitch));
     camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
