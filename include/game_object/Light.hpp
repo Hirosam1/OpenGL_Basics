@@ -41,7 +41,8 @@ class PointLight : public Light{
 class DirLight : public Light{
     public:
         DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader, float direction[3]);
-        DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader);
+        DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float direction[3], Shader* m_shader);
+        DirLight(BasicsBlock* bb, Camera* m_camera, float direction[3]);
         float* direction;
     private:
         void LightBuffering(GameObject *go) override;

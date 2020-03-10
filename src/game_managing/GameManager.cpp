@@ -51,13 +51,6 @@ void GameManager::EngineInit(){
 
 
 void GameManager::SetUpObjects(){
-    std::string* vertDefault = new std::string("shaders/vertex_shaders/MVP_vertex.vert");
-    std::string* vertTex = new std::string("shaders/vertex_shaders/MVP_texture_vertex.vert");
-    std::string* fragTex = new std::string("shaders/fragment_shaders/texture_light.frag");
-    std::string* fragSpec = new std::string("shaders/fragment_shaders/textureSpecular_light.frag");
-    std::string* fragDefault = new std::string("shaders/fragment_shaders/light.frag");
-    std::string* lamp = new std::string("shaders/fragment_shaders/lamp.frag");
-
 
     m_camera = new Camera(this->main_window);
     m_camera->camera_pos = glm::vec3(-3.0f,2.0f,20.0f);
@@ -69,63 +62,49 @@ void GameManager::SetUpObjects(){
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
     std::string path_nanoSuit = std::string("models/nanosuit_simple/nanosuit.obj");
     std::string path_box = std::string("models/box/Box.obj");
+    std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy_2.obj");
     Model* box = new Model(path_box);
-    Model* nano_suit = new Model(path_nanoSuit);
+    //Model* nano_suit = new Model(path_nanoSuit);
+    Model* mushroom_model = new Model(path_mushroom);
 
-    GameObject* pointLight = new PointLight(basic_block,m_camera,box,new float[3]{-1,-2.2,2},shader_lamp,basic_block->n_point_lights++);
+    GameObject* pointLight = new PointLight(basic_block,m_camera,box,new float[3]{-1,-2,3},shader_lamp,basic_block->n_point_lights++);
     pointLight->model_mat = glm::scale(pointLight->model_mat,glm::vec3(0.2,0.2,0.2));
-    dynamic_cast<Light*>(pointLight)->light_color = glm::vec3(0.97,0.0,1.00);
-    pointLight->object_name = "Point Light1";
+    dynamic_cast<Light*>(pointLight)->light_color = glm::vec3(0.53,0.80,0.86);
+    dynamic_cast<Light*>(pointLight)->light_intensity = 0.4;
+    pointLight->object_name = "Point Light";
 
-    GameObject* pointLight2 = new  PointLight(basic_block,m_camera,box,new float[3]{2,1,-3},shader_lamp,basic_block->n_point_lights++);
-    pointLight2->model_mat = glm::scale(pointLight2->model_mat,glm::vec3(0.2,0.2,0.2));
-    dynamic_cast<Light*>(pointLight2)->light_color = glm::vec3(0.0,0.44,1.00);
-    pointLight2->object_name = "Point Light 2";
-
+    GameObject* dirLight = new DirLight(basic_block,m_camera,new float[3]{0,-0.7,-0.2});
+    dirLight->object_name = "Directional Light";
+    dynamic_cast<Light*>(dirLight)->light_color = glm::vec3(0.95,0.91,0.54);
 
     GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
     spotLight->object_name = "Spot Light";
     GameObject* GUIObject = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
     GUIObject->object_name = "GUI gameObject";
+    dynamic_cast<Light*>(spotLight)->light_intensity = 0;
 
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
-    GameObject* NanoSuit = new NoBahaviorObject(basic_block,m_camera, nano_suit, new float[3]{0,-2,1},shader);
-    NanoSuit->model_mat = glm::scale(NanoSuit->model_mat,glm::vec3(0.2,0.2,0.2));
-    NanoSuit->object_name = "NanoSuit";
+    GameObject* mushroom = new NoBahaviorObject(basic_block,m_camera, mushroom_model, new float[3]{0,-2,1},shader);
+    mushroom->object_name = "Mushroom";
 
     GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{2,-1,1},shader);
     Box->object_name = "Box";
     Box->model_mat = glm::scale(Box->model_mat,glm::vec3(0.5,0.5,0.5));
 
     all_objs->push_back(CameraMov);
-    all_objs->push_back(NanoSuit);
+    all_objs->push_back(mushroom);
     all_objs->push_back(Box);
     all_objs->push_back(pointLight);
-    all_objs->push_back(pointLight2);
+    all_objs->push_back(dirLight);
     all_objs->push_back(spotLight);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
     
     all_lights.push_back(dynamic_cast<Light*>(pointLight));
-    all_lights.push_back(dynamic_cast<Light*>(pointLight2));
+    all_lights.push_back(dynamic_cast<Light*>(dirLight));
     all_lights.push_back(dynamic_cast<Light*>(spotLight));
-
-    vertDefault->clear();
-    vertTex->clear();
-    fragTex->clear();
-    fragSpec->clear();
-    fragDefault->clear();
-    lamp->clear();
-
-    delete vertDefault;
-    delete vertTex;
-    delete fragTex;
-    delete fragSpec;
-    delete fragDefault;
-    delete lamp;
-
 
 }
 

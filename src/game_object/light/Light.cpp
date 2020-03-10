@@ -18,7 +18,6 @@ Light::Light(BasicsBlock* bb, Camera* m_camera,Model* model, float initial_pos[3
     
     float* mat_model = glm::value_ptr(this->model_mat);
     this->light_pos = &mat_model[12];
-
 }
 
 Light::Light(BasicsBlock* bb, Camera* m_camera, float initial_pos[3], float light_intensity) : 

@@ -4,7 +4,7 @@
 aObject::aObject(BasicsBlock* bc, 
 Camera* m_camera,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
-    m_camera->camera_pos = glm::vec3(-3.0f,2.0f,10.0f);
+    m_camera->camera_pos = glm::vec3(-3.0f,0.0f,10.0f);
     yaw = -75.0f;
     pitch = -15.0f;
     sensitivity= 0.125;
@@ -26,12 +26,12 @@ void aObject::Ready(){
 
 void aObject::Update(){
    
-    if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
+    if (m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
         yaw = -75;
         pitch = -15;
          camera_front = glm::vec3(0,0,-1);
          m_camera->camera_pos.x = -3.0f;
-         m_camera->camera_pos.y = 2.0f;
+         m_camera->camera_pos.y = 0.0f;
          m_camera->camera_pos.z = 10;
          fov = 45;
          m_camera->MakeProjection(glm::radians(fov));
@@ -41,6 +41,9 @@ void aObject::Update(){
 
     if(this->m_input->ProcessInput(GLFW_KEY_LEFT_SHIFT,GLFW_PRESS)){
         this->test_speed = 15;
+    }
+    if(this->m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
+        this->test_speed = 2;
     }
     if(this->m_input->ProcessInput(GLFW_KEY_D,GLFW_PRESS)){
         m_camera->camera_pos += glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 

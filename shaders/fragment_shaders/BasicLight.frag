@@ -1,5 +1,5 @@
 #version 330 core
-#define MAX_POINT_LIGHTS 4
+#define MAX_POINT_LIGHTS 2
 //We declare an output, we only need one
 out vec4 FragColor;
 uniform int n_point_lights;
@@ -43,7 +43,6 @@ struct PointLight{
 struct SpotLight{
     vec3 positionVS;
     vec3 directionVS;
-    vec3 ambient;
     vec3 diffuse;
     vec3 specular;
 
@@ -107,9 +106,6 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 texDiffColor
     //calculates intensity
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff)/epsilon,0.0,1.0);
-    //Ambient
-    vec3 ambient = light.ambient * texDiffColor * material.ambient;
-    ambient *= intensity * attenuation;
     //Difuse
     float diff = max(dot(normal,lightDir),0);
     vec3 diffuse = (diff * material.diffuse) * texDiffColor * light.diffuse;
@@ -120,7 +116,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 texDiffColor
     vec3 specular = light.specular * (spec * texSpecColor);
     specular *=  intensity * attenuation;
 
-    return (ambient + diffuse + specular);
+    return (diffuse + specular);
 }
 
 uniform PointLight pointLights[MAX_POINT_LIGHTS];

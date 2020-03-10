@@ -4,9 +4,13 @@ DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_
                     Light(bb,m_camera,model,initial_pos,m_shader), direction(direction){
 }
 
-DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader): 
-                    Light(bb,m_camera,model,initial_pos,m_shader), direction(this->light_pos){
+DirLight::DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float direction[3], Shader* m_shader): 
+                    Light(bb,m_camera,model,direction,m_shader), direction(this->light_pos){
                     
+}
+
+DirLight::DirLight(BasicsBlock* bb, Camera* m_camera, float direction[3]) : Light(bb,m_camera,direction), direction(this->light_pos){
+
 }
 
 void DirLight::LightBuffering(GameObject* go){

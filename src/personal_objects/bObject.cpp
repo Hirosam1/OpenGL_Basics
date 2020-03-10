@@ -5,13 +5,6 @@
 
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
-    m_camera->camera_pos = glm::vec3(-3.0f,2.0f,10.0f);
-    yaw = -75.0f;
-    pitch = -15.0f;
-    sensitivity= 0.125;
-    camera_front = glm::vec3(0,0,-1);
-    lastX = m_window->GetWidth()/2;
-    lastY = m_window->GetHeight()/2;
     m_deque_test = new std::deque<char*>();
     fov = 45;
     didExit = false;
@@ -29,17 +22,6 @@ void bObject::Ready(){
 }
 
 void bObject::Update(){
-    if (m_input->ProcessInput(GLFW_KEY_LEFT_CONTROL,GLFW_PRESS)){
-        yaw = -75;
-        pitch = -15;
-         camera_front = glm::vec3(0,0,-1);
-         m_camera->camera_pos.x = -3.0f;
-         m_camera->camera_pos.y = 2.0f;
-         m_camera->camera_pos.z = 10;
-         fov = 45;
-         m_camera->MakeProjection(glm::radians(fov));
-    }
-
     #ifdef __unix__
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
     if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
@@ -64,6 +46,13 @@ void bObject::Update(){
     }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE)){
         f1KeyRealeased = true;
     }
+
+    if(m_input->ProcessInput(GLFW_KEY_1)){
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }else if(m_input->ProcessInput(GLFW_KEY_2)){
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    }
+
 }
 
 void bObject::RenderGUI(){
