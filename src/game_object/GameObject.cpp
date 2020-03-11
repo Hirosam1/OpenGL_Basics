@@ -33,22 +33,47 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
 //Updates the data and send it to GPU
  void GameObject::BufferAndDraw(){
    if(this->m_shader != nullptr && m_model != nullptr){
-
-      this->m_shader->SetUniformMat4f(&bb->View_string,m_camera->GetView());
-      this->m_shader->SetUniformMat4f(&bb->Projection_string, m_camera->GetProjection());
-      this->m_shader->SetUniformMat4f(&bb->Model_string,model_mat);
-      this->m_shader->SetUniformVec3f(&bb->Mat_ambient,glm::vec3(1.0));
-      this->m_shader->SetUniformVec3f(&bb->Mat_diffuse,glm::vec3(1.0,1.0,1.0));
-      this->m_shader->SetUniformVec3f(&bb->Mat_specular,glm::vec3(1.0,1.0,1.0));
-      this->m_shader->SetUniform1f(&bb->Mat_shininess,64);
-
+      if(isSelected){
+         glEnable(GL_STENCIL_TEST);
+         glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+         glStencilFunc(GL_ALWAYS,1,0xff);
+         glStencilMask(0xff);
+      }
+      
+      this->BufferData();
       this->m_model->Draw(this->m_shader);
+
+      if(isSelected){
+         glm::mat4 original_mat = this->model_mat;
+         this->model_mat = glm::scale(this->model_mat,glm::vec3(1.03));
+         bb->outline_shader.UseShader();
+         glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel taht wasnt draw
+         glStencilMask(0x00);//Disable stencil write
+         this->BufferData();
+         this->m_model->Draw(this->m_shader);
+         this->model_mat = original_mat;
+         isSelected = false;
+         glStencilMask(0xFF);
+         glStencilFunc(GL_ALWAYS, 1, 0xFF);//Clear stencil
+         glDisable(GL_STENCIL_TEST);
+
+      }
 
       glBindTexture(GL_TEXTURE_2D,0);
       glBindVertexArray(0);
+
+      
    }
 
  }
+
+void GameObject::BufferData(){
+   this->m_shader->SetUniformMat4f(&bb->View_string,m_camera->GetView());
+   this->m_shader->SetUniformMat4f(&bb->Projection_string, m_camera->GetProjection());
+   this->m_shader->SetUniformMat4f(&bb->Model_string,model_mat);
+   this->m_shader->SetUniformVec3f(&bb->Mat_specular,glm::vec3(1.0,1.0,1.0));
+   this->m_shader->SetUniform1f(&bb->Mat_shininess,64);
+}
 
  void GameObject::UseShader(){
     this->m_shader->UseShader();

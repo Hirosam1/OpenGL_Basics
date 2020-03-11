@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <mutex>
+#include "graphics/Shader.hpp"
 
 class Window;
 class InputManager;
@@ -19,7 +20,8 @@ class BasicsBlock{
         int n_point_lights = 0;
         //Threading
         std::mutex global_mutex;
-
+        //Shader responsible for drawing the outline of objects
+        Shader outline_shader;
         //I probably should put those strings on a file?
         std::string Model_string;
         std::string View_string;

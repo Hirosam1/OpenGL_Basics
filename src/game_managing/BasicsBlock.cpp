@@ -2,6 +2,8 @@
 BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time,std::vector<GameObject*>* all_objs):
 m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     
+    this->outline_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Outline.frag");
+
     this->Model_string = std::string("Model");
     this->View_string = std::string("View");
     this->Projection_string = std::string("Projection");

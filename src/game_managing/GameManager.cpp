@@ -140,9 +140,7 @@ void GameManager::EngnieStart(){
         exit(-1);
     }
     glEnable(GL_DEPTH_TEST);
-    //Disable update of deth buffer
-    //glDepthMask(GL_FALSE); 
-    //glDepthFunc(GL_GREATER);  
+
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
@@ -155,7 +153,7 @@ void GameManager::EngnieStart(){
         
         //Clear the screen
         glClearColor(0.02f,0.06f,0.05,1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
        
 
         this->main_time->UpdateDelta();

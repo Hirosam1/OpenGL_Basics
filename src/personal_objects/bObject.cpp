@@ -75,7 +75,7 @@ void bObject::RenderGUI(){
                 obj_iterator++;
             }
         }
-        
+        (*obj_iterator)->isSelected = true;
         vec_pos[0] = (*obj_iterator)->model_mat[3][0];
         vec_pos[1] = (*obj_iterator)->model_mat[3][1];
         vec_pos[2] = (*obj_iterator)->model_mat[3][2];

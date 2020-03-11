@@ -61,6 +61,8 @@ class GameObject{
 
         bool change = false;
 
+        bool isSelected = false;
+
     private: 
         void UseShader();
         /*Updates entearly the game object
@@ -72,6 +74,9 @@ class GameObject{
         void ReadyObject();
         //Sets the MVP to its initial position
         void SetInitialMVP();
+
+        //Buffer data into shader 
+        void BufferData();
 
         //path to the shaders
         std::string vertex_shader_path;
