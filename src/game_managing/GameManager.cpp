@@ -139,7 +139,10 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
-
+    glEnable(GL_DEPTH_TEST);
+    //Disable update of deth buffer
+    //glDepthMask(GL_FALSE); 
+    //glDepthFunc(GL_GREATER);  
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
