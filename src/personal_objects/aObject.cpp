@@ -57,6 +57,11 @@ void aObject::Update(){
     }else if(this->m_input->ProcessInput(GLFW_KEY_W,GLFW_PRESS)){
         m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * m_camera->camera_front;
     }
+    if(this->m_input->ProcessInput(GLFW_KEY_Q)){
+        m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * m_camera->camera_up;
+    }else if(m_input->ProcessInput(GLFW_KEY_E)){
+        m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * m_camera->camera_up;
+    }
 
     m_camera->camera_front = camera_front;
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);

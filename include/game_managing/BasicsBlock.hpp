@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <mutex>
 
 class Window;
 class InputManager;
@@ -16,6 +17,8 @@ class BasicsBlock{
         Time* m_time;
         std::vector<GameObject*>* all_objs;
         int n_point_lights = 0;
+        //Threading
+        std::mutex global_mutex;
 
         //I probably should put those strings on a file?
         std::string Model_string;

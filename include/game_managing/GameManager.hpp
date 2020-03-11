@@ -71,6 +71,9 @@ class GameManager{
 
         //Conditional variable
         std::condition_variable lock_threads;
+        std::condition_variable wall;
+        //Keep track of threads
+        unsigned int count = 0;
         
         /*TEST*/
         Camera* m_camera;
@@ -91,7 +94,7 @@ class GameManager{
 
         static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,
             unsigned int supported_concurrency,Window* window,
-            std::mutex *mtx, std::condition_variable *wait_main);
+            std::mutex *mtx,std::condition_variable *wait_main);
 
     public:
         int MAX_FRAMERATE = 60;

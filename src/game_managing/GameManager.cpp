@@ -44,7 +44,8 @@ void GameManager::EngineInit(){
     glfwSwapInterval(1);
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
-        this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, &mtx, &lock_threads);
+    this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, 
+                                        &basic_block->global_mutex,&lock_threads);
     }
 
 }
@@ -133,7 +134,7 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
 }
 
 void GameManager::EngnieStart(){
-    std::unique_lock<std::mutex> lck(mtx,std::defer_lock);
+    std::unique_lock<std::mutex> lck(basic_block->global_mutex,std::defer_lock);
     if(!this->ready_to_start){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
@@ -156,11 +157,12 @@ void GameManager::EngnieStart(){
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
-        /*Weird lag into position of gameobject, I belive that making a barrier after notify all will do*/
-        //lock_threads.notify_all();
+        /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
+        lock_threads.notify_all();
+        //Wait for the last thread
+        //wall.wait(lck);
         //Render Objects     
         for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
-            (*it)->Update();
             if((*it)->m_shader != nullptr){
                 (*it)->UseShader();
                 Light* is_light = dynamic_cast<Light*>(*it);
