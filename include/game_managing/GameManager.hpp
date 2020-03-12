@@ -4,6 +4,7 @@
 #include<GLFW/glfw3.h>
 #include<string>
 #include<vector>
+#include<map>
 #include<thread>
 #include <chrono>
 #include<mutex>
@@ -63,6 +64,8 @@ class GameManager{
         //All objects to be rendered/prossessed on the scene
         std::vector<GameObject*>* all_objs;
         std::vector<Light*> all_lights;
+        std::vector<GameObject*> all_opaque_objs;
+        //std::map<float, GameObject*> all_opaque_objs;
 
         //Global time manager
         Time* main_time;
@@ -96,6 +99,9 @@ class GameManager{
         static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,
             unsigned int supported_concurrency,Window* window,
             std::mutex *mtx,std::condition_variable *wait_main);
+
+
+        void RenderObjects();
 
     public:
         int MAX_FRAMERATE = 60;

@@ -5,19 +5,25 @@ Texture::Texture(){
     glGenTextures(1,&this->m_texture);
 }
 
-Texture::Texture(std::string texture_path,GLenum img_type, std::string tex_type):tex_type(tex_type){
+Texture::Texture(std::string texture_path,GLenum img_type, bool repeat):tex_type(tex_type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
-    CreateTexture(texture_path,img_type);
+    CreateTexture(texture_path,img_type, repeat);
 }
 
-void Texture::CreateTexture(std::string texture_path,GLenum type){
+void Texture::CreateTexture(std::string texture_path,bool repeat,GLenum type){
+    GLenum warraping_method = 0;
+    if(repeat){
+        warraping_method = GL_REPEAT;
+    }else{
+        warraping_method = GL_CLAMP_TO_EDGE;
+    }
 
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
 
     //Sets the parameters for warapping and filtering
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,warraping_method);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,warraping_method);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
     //stbi_set_flip_vertically_on_load(true);  

@@ -63,6 +63,8 @@ class GameObject{
 
         bool isSelected = false;
 
+        bool isOpaque = false;
+
     private: 
         void UseShader();
         /*Updates entearly the game object

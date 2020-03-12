@@ -41,6 +41,8 @@ void GameManager::EngineInit(){
     glEnable(GL_DITHER);
     Debugging::SetPointsSize(10);    
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);  
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
     glfwSwapInterval(1);
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
@@ -61,12 +63,15 @@ void GameManager::SetUpObjects(){
 
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-    std::string path_nanoSuit = std::string("models/nanosuit_simple/nanosuit.obj");
+    Shader* shader_window = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Window.frag");
+    std::string path_grass = std::string("models/grass/Grass.obj");
+    std::string path_window = std::string("models/window/Window.obj");
     std::string path_box = std::string("models/box/Box.obj");
     std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy_2.obj");
     Model* box = new Model(path_box);
-    //Model* nano_suit = new Model(path_nanoSuit);
+    Model* grass = new Model(path_grass,false);
     Model* mushroom_model = new Model(path_mushroom);
+    Model * window = new Model(path_window,false);
 
     GameObject* pointLight = new PointLight(basic_block,m_camera,box,new float[3]{-1,-2,3},shader_lamp,basic_block->n_point_lights++);
     pointLight->model_mat = glm::scale(pointLight->model_mat,glm::vec3(0.2,0.2,0.2));
@@ -94,22 +99,37 @@ void GameManager::SetUpObjects(){
     Box->object_name = "Box";
     Box->model_mat = glm::scale(Box->model_mat,glm::vec3(0.5,0.5,0.5));
 
-    GameObject* pulseLight = new PulsingLight(basic_block,m_camera,new float[3]{0,0,0});
+    GameObject* Window = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{2,-1,1.51},shader_window);
+    Window->object_name = "Window";
+    Window->isOpaque = true;
+
+    GameObject* Window2 = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{-2,-1,1.51},shader_window);
+    Window2->object_name = "Window2";
+    Window2->isOpaque = true;
+
+    GameObject* pulseLight = new PulsingLight(basic_block,m_camera,new float[3]{0,0,2});
     pulseLight->object_name = "Pulsing Light";
 
+    all_objs->push_back(Window);
+    all_objs->push_back(Window2);
     all_objs->push_back(CameraMov);
     all_objs->push_back(mushroom);
     all_objs->push_back(Box);
     all_objs->push_back(pointLight);
     all_objs->push_back(dirLight);
     all_objs->push_back(spotLight);
-    all_objs->push_back(pulseLight);
+    all_objs->push_back(pulseLight);  
     //UI needs to be last?
     all_objs->push_back(GUIObject);
-    
+    //Sets the lights objs
     all_lights.push_back(dynamic_cast<Light*>(pointLight));
     all_lights.push_back(dynamic_cast<Light*>(dirLight));
     all_lights.push_back(dynamic_cast<Light*>(spotLight));
+
+    all_opaque_objs.push_back(Window);
+    all_opaque_objs.push_back(Window2);
+
+
 
 }
 
@@ -143,7 +163,7 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
-    glEnable(GL_DEPTH_TEST);
+    
 
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
@@ -164,25 +184,9 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
         /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
         lock_threads.notify_all();
-        //Render Objects     
-        for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
-            if((*it)->m_shader != nullptr){
-                (*it)->UseShader();
-                Light* is_light = dynamic_cast<Light*>(*it);
-                if(is_light == NULL){
-                    for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
-                        (*lit)->LightBuffering((*it));
-                    }
-                }else{
-                    is_light->LampColorBuffering();
-                }
 
-                (*it)->BufferAndDraw();
-                glUseProgram(0);
-            }
-        }
-        //Last object, the GUI, needs to be Updated on main thread
-        all_objs->at(all_objs->size()-1)->Update();
+        //Render all objects in scene
+        this->RenderObjects();
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();
@@ -191,6 +195,44 @@ void GameManager::EngnieStart(){
     
     this->TerminateEngine();
     
+}
+
+void GameManager::RenderObjects(){
+     //Render non opaque Objects     
+    for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
+        if((*it)->m_shader != nullptr){
+            (*it)->UseShader();
+            Light* is_light = dynamic_cast<Light*>(*it);
+            if(is_light == NULL){
+                for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
+                    (*lit)->LightBuffering((*it));
+                }
+            }else{
+                is_light->LampColorBuffering();
+            }
+            if(!(*it)->isOpaque){
+                (*it)->BufferAndDraw();
+            }
+            glUseProgram(0);
+        }
+    }
+    //renders opaque objects
+    std::map<float,GameObject*> sorted;
+    for(unsigned int i = 0; i < all_opaque_objs.size(); i++){
+        float distance = glm::length(m_camera->camera_pos - glm::vec3(all_opaque_objs[i]->model_mat[3][0],
+                                                                        all_opaque_objs[i]->model_mat[3][1],
+                                                                        all_opaque_objs[i]->model_mat[3][2]));
+        sorted[distance] = all_opaque_objs[i];
+    }       
+
+    for(std::map<float,GameObject*>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it){
+        it->second->UseShader();
+        it->second->BufferAndDraw();
+    }
+    glUseProgram(0);
+    sorted.clear();
+    //Last object, the GUI, needs to be Updated on main thread
+    all_objs->at(all_objs->size()-1)->Update();
 }
 
 void GameManager::TerminateEngine(){

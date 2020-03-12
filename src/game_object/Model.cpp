@@ -113,7 +113,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType 
         //If it wasn't loads it 
         if(!skip){
             Texture texture = Texture();
-            texture.CreateTexture( directory + "/" + std::string(str.C_Str()));
+            texture.CreateTexture( directory + "/" + std::string(str.C_Str()),repeat);
             texture.tex_type = type_name;
             texture.path = str.C_Str();
             textures.push_back(texture);

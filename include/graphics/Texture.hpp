@@ -10,9 +10,9 @@
 class Texture{
     
     public:
-        Texture(std::string texture_path, GLenum img_type = GL_RGBA, std::string tex_type = std::string("Default"));
+        Texture(std::string texture_path, GLenum img_type = GL_RGBA, bool repeat = false);
         Texture();
-        void CreateTexture(std::string texture_path,GLenum img_type = GL_RGBA);
+        void CreateTexture(std::string texture_path,bool repeat,GLenum img_type = GL_RGBA);
         void UseTexture(unsigned int texture_num = 0, bool activate_tex = true);
         std::string tex_type;
         std::string path;

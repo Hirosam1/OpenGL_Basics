@@ -12,11 +12,11 @@
 
 class Model{
     public:
-        Model(std::string path){
+        Model(std::string path, bool texture_repeat = true):repeat(texture_repeat){
             LoadModel(path);
         }
         void Draw(Shader* shader);
-
+        bool repeat;
         std::vector<Texture> textures_loaded;
         std::vector<Mesh> meshes;
     private:

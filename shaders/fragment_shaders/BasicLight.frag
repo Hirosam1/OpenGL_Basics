@@ -127,23 +127,23 @@ uniform int hasSpotLight;
 
 void main()
 {
-    vec3 texDiffColor = vec3(1);
-    vec3 texSpecColor = vec3(1);
+    vec4 texDiffColor = vec4(1);
+    vec4 texSpecColor = vec4(1);
     if(material.has_TexDiffuse){
-        texDiffColor = vec3(texture(material.texture_diffuse1,TexCoord));
+        texDiffColor = texture(material.texture_diffuse1,TexCoord);
     }
     if(material.has_TexSpecular){
-        texSpecColor = vec3(texture(material.texture_specular1,TexCoord));
+        texSpecColor = texture(material.texture_specular1,TexCoord);
     }
-    
+
     vec3 norm = normalize(aNormal);
-    vec3 result = CalcDirLight(dirLight, norm,texDiffColor,texSpecColor);
+    vec3 result = CalcDirLight(dirLight, norm,vec3(texDiffColor),vec3(texSpecColor));
 
     if (hasSpotLight > 0 ){
-        result += CalcSpotLight(spotLight, norm, FragPos,texDiffColor,texSpecColor);
+        result += CalcSpotLight(spotLight, norm, FragPos,vec3(texDiffColor),vec3(texSpecColor));
     }
     for(int i = 0; i < n_point_lights && i < MAX_POINT_LIGHTS; i++){
-        result += CalcPointLight(pointLights[i], norm, FragPos,texDiffColor,texSpecColor);
+        result += CalcPointLight(pointLights[i], norm, FragPos,vec3(texDiffColor),vec3(texSpecColor));
     }
 
     FragColor = vec4(result,1);
