@@ -94,12 +94,16 @@ void GameManager::SetUpObjects(){
     Box->object_name = "Box";
     Box->model_mat = glm::scale(Box->model_mat,glm::vec3(0.5,0.5,0.5));
 
+    GameObject* pulseLight = new PulsingLight(basic_block,m_camera,new float[3]{0,0,0});
+    pulseLight->object_name = "Pulsing Light";
+
     all_objs->push_back(CameraMov);
     all_objs->push_back(mushroom);
     all_objs->push_back(Box);
     all_objs->push_back(pointLight);
     all_objs->push_back(dirLight);
     all_objs->push_back(spotLight);
+    all_objs->push_back(pulseLight);
     //UI needs to be last?
     all_objs->push_back(GUIObject);
     
@@ -160,8 +164,6 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
         /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
         lock_threads.notify_all();
-        //Wait for the last thread
-        //wall.wait(lck);
         //Render Objects     
         for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
             if((*it)->m_shader != nullptr){

@@ -6,7 +6,6 @@
 bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
 (bc,m_camera,initial_pos){
     m_deque_test = new std::deque<char*>();
-    fov = 45;
     didExit = false;
     /*===============GUI=====================*/
     IMGUI_CHECKVERSION();
@@ -112,46 +111,4 @@ void bObject::RenderGUI(){
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void bObject::CalculateCam(){
-    if(firstMouse && m_input->isMouseReady){
-        lastX = m_input->mouse_Xpos;
-        lastY = m_input->mouse_Ypos;
-        firstMouse = false;
-    }
-
-    if(!m_input->is_cursor_in){
-        didExit = true;
-    }
-
-    if(didExit && m_input->is_cursor_in){
-        lastX = m_input->mouse_Xpos;
-        lastY = m_input->mouse_Ypos;
-        didExit = false;
-    }
-
-    float xoffset = m_input->mouse_Xpos - lastX;
-    float yoffset = lastY - m_input->mouse_Ypos;
-    if(!firstMouse && !didExit && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
-        lastX = m_input->mouse_Xpos;
-        lastY = m_input->mouse_Ypos;
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;m_input;
-
-        yaw += xoffset;
-        pitch += yoffset;
-
-        pitch = pitch > 89.4f ? 89.4f : pitch < -89.4f ? -89.4f :  pitch; 
-    }
-    
-    camera_front.y = sin(glm::radians(pitch));
-    camera_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    camera_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    camera_front = glm::normalize(camera_front);
-    fov -= m_input->scroll_y * (sensitivity * 20);
-    fov = fov > 110 ? 110 : fov < 1 ? 1 : fov;
-    m_camera->MakeProjection(glm::radians(fov));
-
-
 }
