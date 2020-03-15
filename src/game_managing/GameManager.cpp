@@ -42,7 +42,8 @@ void GameManager::EngineInit(){
     Debugging::SetPointsSize(10);    
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);  
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_CULL_FACE);
     glfwSwapInterval(1);
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
