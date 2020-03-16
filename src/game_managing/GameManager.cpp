@@ -163,15 +163,20 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
+    Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
+    //Creates the quad to render scene
+    Model plane = Model("models/plane/Plane.obj");
+    //Model plane = Model("models/grass/grass.obj");
     //Creates a frame buffer
     unsigned int framebuffer;
     glGenFramebuffers(1,&framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER,framebuffer); 
     //Creates an "empty"  texture used by the frame buffer
-    Texture texColorBuffer = Texture();
+    Texture texColorBuffer =  Texture();
     texColorBuffer.CreateTexture(false,this->main_window->GetWidth(),this->main_window->GetHeight());
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texColorBuffer.GetTexture(),0);
-
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texColorBuffer.GetTexture(),0);  
+    texColorBuffer.tex_type = "texture_screen";
+    plane.meshes[0].textures.push_back(texColorBuffer);
     //Creates render buffer object
     unsigned int rbo;
     glGenRenderbuffers(1, &rbo);
@@ -185,7 +190,7 @@ void GameManager::EngnieStart(){
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << "\n";
     }
-
+    
     glBindFramebuffer(GL_FRAMEBUFFER,0);
 
     std::cout<<"Ready to start!\n";
@@ -200,15 +205,23 @@ void GameManager::EngnieStart(){
         }
         //Clear the screen
         glClearColor(0.02f,0.06f,0.05,1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
         /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
         lock_threads.notify_all();
-
+        glBindFramebuffer(GL_FRAMEBUFFER,framebuffer);
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         //Render all objects in scene
         this->RenderObjects();
+
+        glBindFramebuffer(GL_FRAMEBUFFER,0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        screen_shader.UseShader();
+        glDisable(GL_DEPTH_TEST);
+        plane.Draw(&screen_shader);
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();

@@ -31,36 +31,42 @@ void Mesh::SetUpMesh(){
 void Mesh::Draw(Shader* shader){
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
-    std::string name = "material.has_TexDiffuse";
-    if( textures.size() > 0){
-        shader->SetUniform1i(&name,1);
-        name = "material.has_TexSpecular";
-        shader->SetUniform1i(&name,1);
-    }else{
-        shader->SetUniform1i(&name,0);
-        name = "material.has_TexSpecular";
+    std::string name;
+    if(textures.size() == 1 && textures[0].tex_type == "texture_screen"){
+        name = "screenTex";
+        //std::cout<<"asd\n";
+        textures[0].UseTexture(0);
         shader->SetUniform1i(&name,0);
     }
-    for(unsigned int i = 0; i < textures.size() ; i++){
-        
-        glActiveTexture(GL_TEXTURE0+i);
-        std::string number;
-        name = textures[i].tex_type;
-        
-        if(name == "texture_diffuse")
-            number = std::to_string(diffuseNr++);
-        else if(name == "texture_specular")
-            number = std::to_string(specularNr++);
-        name = ("material." + name + number);
-        shader->SetUniform1i(&name,i);
-        textures[i].UseTexture(0,false);
-        
+    else{
+        name = "material.has_TexDiffuse";
+        if( textures.size() > 0){
+            shader->SetUniform1i(&name,1);
+            name = "material.has_TexSpecular";
+            shader->SetUniform1i(&name,1);
+        }else{
+            shader->SetUniform1i(&name,0);
+            name = "material.has_TexSpecular";
+            shader->SetUniform1i(&name,0);
+        }
+        for(unsigned int i = 0; i < textures.size() ; i++){
+            std::string number;
+            name = textures[i].tex_type;
+            
+            if(name == "texture_diffuse")
+                number = std::to_string(diffuseNr++);
+            else if(name == "texture_specular")
+                number = std::to_string(specularNr++);
+            name = ("material." + name + number);
+            shader->SetUniform1i(&name,i);
+            textures[i].UseTexture(i);
+            
+        }
+        name = "material.diffuse";
+        shader->SetUniformVec3f(&name, m_material.main_color);
+        name = "material.ambient";
+        shader->SetUniformVec3f(&name, m_material.ambient_color);
     }
-    name = "material.diffuse";
-    shader->SetUniformVec3f(&name, m_material.main_color);
-    name = "material.ambient";
-    shader->SetUniformVec3f(&name, m_material.ambient_color);
-
     vao->UseVAO();
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
