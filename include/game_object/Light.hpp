@@ -4,6 +4,9 @@
 
 class GameManager;
 
+/*It is a light object
+    It works with a default shader, it updates uniforms of each game object
+    it uses phong lighting*/
 class Light : public GameObject{
     public:
         friend GameManager;

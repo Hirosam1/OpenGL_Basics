@@ -44,6 +44,7 @@ void GameManager::EngineInit(){
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_CULL_FACE);
+    
     glfwSwapInterval(1);
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
@@ -65,12 +66,10 @@ void GameManager::SetUpObjects(){
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
     Shader* shader_window = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Window.frag");
-    std::string path_grass = std::string("models/grass/Grass.obj");
     std::string path_window = std::string("models/window/Window.obj");
     std::string path_box = std::string("models/box/Box.obj");
     std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy_2.obj");
     Model* box = new Model(path_box);
-    Model* grass = new Model(path_grass,false);
     Model* mushroom_model = new Model(path_mushroom);
     Model * window = new Model(path_window,false);
 
@@ -164,22 +163,44 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
-    
+    //Creates a frame buffer
+    unsigned int framebuffer;
+    glGenFramebuffers(1,&framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER,framebuffer); 
+    //Creates an "empty"  texture used by the frame buffer
+    Texture texColorBuffer = Texture();
+    texColorBuffer.CreateTexture(false,this->main_window->GetWidth(),this->main_window->GetHeight());
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texColorBuffer.GetTexture(),0);
+
+    //Creates render buffer object
+    unsigned int rbo;
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,this->main_window->GetWidth(),this->main_window->GetHeight());
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    //Attach render buffer to  frame buffer
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
+
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << "\n";
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
 
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
         (*it)->ReadyObject();
     }
+
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
             glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
         }
-        
         //Clear the screen
         glClearColor(0.02f,0.06f,0.05,1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-       
 
         this->main_time->UpdateDelta();
         glfwPollEvents();

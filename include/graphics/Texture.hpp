@@ -13,10 +13,13 @@ class Texture{
         Texture(std::string texture_path, GLenum img_type = GL_RGBA, bool repeat = false);
         Texture();
         void CreateTexture(std::string texture_path,bool repeat,GLenum img_type = GL_RGBA);
+        void CreateTexture(bool repeat,  unsigned int width, unsigned int height,GLenum img_type = GL_RGBA);
         void UseTexture(unsigned int texture_num = 0, bool activate_tex = true);
+        unsigned int GetTexture();
         std::string tex_type;
         std::string path;
         
     private:
+        void CreateTexture(std::string* texture_path,bool repeat,GLenum img_type, unsigned int width = 1, unsigned int height = 1);
         unsigned int m_texture;
 };

@@ -79,13 +79,6 @@ void GameObject::BufferData(){
     this->m_shader->UseShader();
  }
 
-void GameObject::AddTexture(std::string* tex_path, GLenum type, std::string* uniform_name){
-   if(this->m_shader != NULL){
-      uniform_name = uniform_name != nullptr ? uniform_name : &bb->Basic_tex;
-      /*this->shader->AddTexture(tex_path,uniform_name,type);*/
-   }
-}
-
  void GameObject::SetInitialMVP(){
    //This is the world space matrix
    this->model_mat = glm::mat4(1.0f);

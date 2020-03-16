@@ -25,6 +25,13 @@
 
 class GameManager;
 
+/*Basic game object
+    You need to inherit this class to use this class
+    You can create "empty" object, that has no Mesh or shaders, you can use this to only get input, or only manipulate other objects
+    If you want to render a object, you need to pass a Mesh and a Shader
+    It higly depends of a camera to make position calculations
+    You can use the same Mesh, Shader to render you ocject, in order to save resorces
+*/
 class GameObject{
     public:
         std::string object_name = "Game Object";
@@ -32,17 +39,11 @@ class GameObject{
         //Constructors
         GameObject(BasicsBlock* basic_block);
         GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
-        GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],
-        std::string vert_shader_path =  std::string("shaders/vertex_shaders/MVP_vertex.vert"),
-        std::string frag_shader_path =  std::string("shaders/fragment_shaders/basic_fragment.frag"));
+        GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3], std::string vert_shader_path, std::string frag_shader_path);
         GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader);
 
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
-        //Sets the texture to use
-        void AddTexture(std::string* tex_path, GLenum type = GL_RGB, std::string* uniform_name = nullptr);
-        void AddTexture(Texture* texture,std::string* uniform_name = nullptr);
-
         /*Shared attributes*/
         //The camera containing the view matrix
         Camera* m_camera;

@@ -11,6 +11,10 @@
 #include "graphics/Window.hpp"
 #include "game_object/Projection.hpp"
 
+/*It is a camera object
+    it has the view and projection matrix
+    it has a Look at function
+    it can change its projection (only perspective for now)*/
 class Camera{
     public:
         glm::vec3 camera_pos;

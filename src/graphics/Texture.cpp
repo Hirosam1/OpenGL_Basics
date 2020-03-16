@@ -12,6 +12,16 @@ Texture::Texture(std::string texture_path,GLenum img_type, bool repeat):tex_type
 }
 
 void Texture::CreateTexture(std::string texture_path,bool repeat,GLenum type){
+    std::cout<<"Loading texture ->" << texture_path << "\n";
+    this->CreateTexture(&texture_path,repeat,type);
+    
+ }
+
+void Texture:: CreateTexture(bool repeat,  unsigned int width, unsigned int height,GLenum img_type){
+    this->CreateTexture(nullptr,repeat,img_type,width,height);
+} 
+
+void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, unsigned int width, unsigned int height){
     GLenum warraping_method = 0;
     if(repeat){
         warraping_method = GL_REPEAT;
@@ -22,31 +32,41 @@ void Texture::CreateTexture(std::string texture_path,bool repeat,GLenum type){
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
 
     //Sets the parameters for warapping and filtering
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,warraping_method);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,warraping_method);
+    if(texture_path != nullptr){
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,warraping_method);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,warraping_method);
+    }
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
     //stbi_set_flip_vertically_on_load(true);  
-    int width, height, nrChannels;
-    //Loads image
-    unsigned char *data = stbi_load(texture_path.data(), &width, &height, &nrChannels, 0); 
-    if(data){
-    //Creats the texture image on the current bound texture object
-    glTexImage2D(GL_TEXTURE_2D,0,type,width,height,0,type,GL_UNSIGNED_BYTE,data);
-    //Genetates mip maps automaticaly
-    glGenerateMipmap(GL_TEXTURE_2D);
-    //Free loaded image
+
+    if(texture_path != nullptr){
+        int img_width, img_height, nrChannels;
+        //Loads image
+        unsigned char *data = stbi_load(texture_path->data(), &img_width, &img_height, &nrChannels, 0); 
+        if(data){
+        //Creats the texture image on the current bound texture object
+        glTexImage2D(GL_TEXTURE_2D,0,type,img_width,img_height,0,type,GL_UNSIGNED_BYTE,data);
+        //Genetates mip maps automaticaly
+        glGenerateMipmap(GL_TEXTURE_2D);
+        //Free loaded image
+        }else{
+            std::cout<<"Failed to load image texture\n";
+            exit(-1);
+        }
+        stbi_image_free(data);
     }else{
-        std::cout<<"Failed to load image texture\n";
-        exit(-1);
+        glTexImage2D(GL_TEXTURE_2D,0,type,width,height,0,type,GL_UNSIGNED_BYTE,NULL);
     }
-    stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D,0);
-    
- }
- 
+}
+
  void Texture::UseTexture(unsigned int texture_num,bool activate_tex){
      if(activate_tex)
         glActiveTexture(GL_TEXTURE0+texture_num); 
      glBindTexture(GL_TEXTURE_2D,this->m_texture);
+ }
+
+ unsigned int Texture::GetTexture(){
+     return this->m_texture;
  }
