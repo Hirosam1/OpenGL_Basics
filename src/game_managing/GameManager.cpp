@@ -66,10 +66,11 @@ void GameManager::SetUpObjects(){
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
     Shader* shader_window = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Window.frag");
+
     std::string path_window = std::string("models/window/Window.obj");
     std::string path_box = std::string("models/box/Box.obj");
     std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy_2.obj");
-    Model* box = new Model(path_box);
+    box = new Model(path_box);
     Model* mushroom_model = new Model(path_mushroom);
     Model * window = new Model(path_window,false);
 
@@ -163,12 +164,31 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
+    Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
+    std::string name;
+    //Shader for the post processing effects
     Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
+    //Shader for the skybox
+    Shader skybox_shader = Shader("shaders/vertex_shaders/SkyBox.vert","shaders/fragment_shaders/SkyBox.frag");
     //Creates the quad to render scene
     Model plane = Model("models/plane/Plane.obj");
+    Model TexCube = Model("models/box/TexCube.obj");
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
     plane.meshes[0].textures.push_back(frame_buffer.texture_color);
+
+    //SkyBox
+    std::vector<std::string> faces
+    {
+        "textures/skybox/right.jpg",
+        "textures/skybox/left.jpg",
+        "textures/skybox/top.jpg",
+        "textures/skybox/bottom.jpg",
+        "textures/skybox/front.jpg",
+        "textures/skybox/back.jpg"
+    };
+    CubeMap cubemap_tex = CubeMap(faces);
+    //=============
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
@@ -186,12 +206,25 @@ void GameManager::EngnieStart(){
         glfwPollEvents();
         /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
         lock_threads.notify_all(); 
-
-        
         frame_buffer.UseFrameBuffer();
         glEnable(GL_DEPTH_TEST);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        /*Draw SkyBox*/
+        glDepthMask(GL_FALSE);
+        skybox_shader.UseShader();
+        name = "view";
+        skybox_shader.SetUniformMat4f(&name,glm::mat4(glm::mat3(m_camera->GetView())));
+        name  = "projection";
+        skybox_shader.SetUniformMat4f(&name,m_camera->GetProjection());
+        name = "skybox";
+        skybox_shader.SetUniform1i(&name,0);
+        name = "model";
+        skybox_shader.SetUniformMat4f(&name,glm::mat4(1));
+        cubemap_tex.UseCubeTexture();
+        TexCube.Draw();
+        glDepthMask(GL_TRUE);
+        /*==================*/
         //Render all objects in scene
         this->RenderObjects();
         

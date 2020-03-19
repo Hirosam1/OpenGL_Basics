@@ -16,6 +16,7 @@ class Model{
             LoadModel(path);
         }
         void Draw(Shader* shader);
+        void Draw();
         bool repeat;
         std::vector<Texture> textures_loaded;
         std::vector<Mesh> meshes;

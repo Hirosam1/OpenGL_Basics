@@ -27,6 +27,8 @@ class Texture{
 };
 
 class CubeMap : public Texture{
-    CubeMap(std::vector<std::string> paths);
-    void CreateTexture(std::vector<std::string> paths);
+    public:
+        CubeMap(std::vector<std::string> paths);
+        void CreateTexture(std::vector<std::string> paths);
+        void UseCubeTexture(unsigned int texture_num = 0); 
 };

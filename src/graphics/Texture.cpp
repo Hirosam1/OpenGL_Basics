@@ -70,14 +70,15 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
  }
 
  CubeMap::CubeMap(std::vector<std::string> paths):Texture(){
-    std::cout<<"Loading cube map\n";
+     std::cout<<"Loading Cube Tex images...\n";
     CreateTexture(paths);
  }
 
  void CubeMap::CreateTexture(std::vector<std::string> paths){
     int width, height, nrChannels;
     glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
-    for (int i = 0; i < path.size(); i++){
+    
+    for (int i = 0; i < paths.size(); i++){
         unsigned char *data = stbi_load(paths[i].data(), &width, &height, &nrChannels,0);
         if (data){
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
@@ -92,4 +93,9 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+ }
+
+ void CubeMap::UseCubeTexture(unsigned int tex_num){
+    glActiveTexture(GL_TEXTURE0+tex_num); 
+    glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
  }

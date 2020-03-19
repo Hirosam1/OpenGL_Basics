@@ -7,6 +7,12 @@ void Model::Draw(Shader* shader){
     }
 }
 
+void Model::Draw(){
+    for(unsigned int i = 0; i < meshes.size() ; i++){
+        meshes[i].Draw();
+    }
+}
+
 void Model::LoadModel(std::string path){
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(path,aiProcess_Triangulate | aiProcess_FlipUVs);

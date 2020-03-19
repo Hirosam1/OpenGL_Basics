@@ -105,6 +105,7 @@ class GameManager{
         void RenderObjects();
 
     public:
+        Model* box;
         int MAX_FRAMERATE = 60;
         GameManager(std::string game_name,int width, int height);
         //Initiate the game engine, and become ready to start
