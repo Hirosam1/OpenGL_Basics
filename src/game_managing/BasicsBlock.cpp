@@ -38,3 +38,7 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
 
     this->n_point_lights_string = std::string("n_point_lights");
 }
+
+void BasicsBlock::WindowResized(){
+    was_resized = true;
+}

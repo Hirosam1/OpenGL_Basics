@@ -6,7 +6,7 @@
 #include<vector>
 #include<map>
 #include<thread>
-#include <chrono>
+#include<chrono>
 #include<mutex>
 #include<condition_variable>
 
@@ -28,6 +28,7 @@
 #include "game_managing/Time.hpp"
 #include "graphics/Window.hpp"
 #include "game_object/Light.hpp"
+#include "game_object/FrameBuffer.hpp"
 
 
 class GameManager{

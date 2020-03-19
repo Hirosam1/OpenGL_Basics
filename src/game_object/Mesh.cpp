@@ -34,7 +34,6 @@ void Mesh::Draw(Shader* shader){
     std::string name;
     if(textures.size() == 1 && textures[0].tex_type == "texture_screen"){
         name = "screenTex";
-        //std::cout<<"asd\n";
         textures[0].UseTexture(0);
         shader->SetUniform1i(&name,0);
     }

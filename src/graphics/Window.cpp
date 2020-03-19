@@ -36,4 +36,5 @@ void Window::FrameBufferSizeCallback(GLFWwindow* window, int width, int height){
     glViewport(0,0,width,height);
     BasicsBlock* here = static_cast<BasicsBlock*>(glfwGetWindowUserPointer(window));
     here->m_window->SetWidthHeight(width,height);
+    here->WindowResized();
 }

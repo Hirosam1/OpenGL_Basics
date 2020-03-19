@@ -32,10 +32,8 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
 
     //Sets the parameters for warapping and filtering
-    if(texture_path != nullptr){
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,warraping_method);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,warraping_method);
-    }
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,warraping_method);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,warraping_method);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); 
     //stbi_set_flip_vertically_on_load(true);  
@@ -69,4 +67,29 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
 
  unsigned int Texture::GetTexture(){
      return this->m_texture;
+ }
+
+ CubeMap::CubeMap(std::vector<std::string> paths):Texture(){
+    std::cout<<"Loading cube map\n";
+    CreateTexture(paths);
+ }
+
+ void CubeMap::CreateTexture(std::vector<std::string> paths){
+    int width, height, nrChannels;
+    glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
+    for (int i = 0; i < path.size(); i++){
+        unsigned char *data = stbi_load(paths[i].data(), &width, &height, &nrChannels,0);
+        if (data){
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
+            stbi_image_free(data);
+        }else{
+            std::cout<<"Failed to load cube image texture\n";
+            exit(-1);
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
  }

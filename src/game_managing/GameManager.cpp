@@ -166,33 +166,9 @@ void GameManager::EngnieStart(){
     Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
     //Creates the quad to render scene
     Model plane = Model("models/plane/Plane.obj");
-    //Model plane = Model("models/grass/grass.obj");
     //Creates a frame buffer
-    unsigned int framebuffer;
-    glGenFramebuffers(1,&framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER,framebuffer); 
-    //Creates an "empty"  texture used by the frame buffer
-    Texture texColorBuffer =  Texture();
-    texColorBuffer.CreateTexture(false,this->main_window->GetWidth(),this->main_window->GetHeight());
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texColorBuffer.GetTexture(),0);  
-    texColorBuffer.tex_type = "texture_screen";
-    plane.meshes[0].textures.push_back(texColorBuffer);
-    //Creates render buffer object
-    unsigned int rbo;
-    glGenRenderbuffers(1, &rbo);
-    glBindRenderbuffer(GL_RENDERBUFFER,rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,this->main_window->GetWidth(),this->main_window->GetHeight());
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-    //Attach render buffer to  frame buffer
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
-
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << "\n";
-    }
-    
-    glBindFramebuffer(GL_FRAMEBUFFER,0);
-
+    FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
+    plane.meshes[0].textures.push_back(frame_buffer.texture_color);
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
@@ -205,18 +181,20 @@ void GameManager::EngnieStart(){
         }
         //Clear the screen
         glClearColor(0.02f,0.06f,0.05,1.0f);
-        
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
         /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
-        lock_threads.notify_all();
-        glBindFramebuffer(GL_FRAMEBUFFER,framebuffer);
+        lock_threads.notify_all(); 
+
+        
+        frame_buffer.UseFrameBuffer();
         glEnable(GL_DEPTH_TEST);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         //Render all objects in scene
         this->RenderObjects();
-
+        
         glBindFramebuffer(GL_FRAMEBUFFER,0);
         glClear(GL_COLOR_BUFFER_BIT);
         screen_shader.UseShader();
@@ -225,6 +203,10 @@ void GameManager::EngnieStart(){
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();
+        if(this->basic_block->was_resized){
+            frame_buffer.ResetBuffers(this->main_window->GetWidth(),this->main_window->GetHeight());
+            this->basic_block->was_resized = false;
+        }
 
     }
     

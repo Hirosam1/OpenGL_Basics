@@ -5,6 +5,7 @@
 #include<GLFW/glfw3.h>
 #include<string.h>
 #include<string>
+#include<vector>
 #include "game_tools/stb_image.h"
 
 class Texture{
@@ -21,5 +22,11 @@ class Texture{
         
     private:
         void CreateTexture(std::string* texture_path,bool repeat,GLenum img_type, unsigned int width = 1, unsigned int height = 1);
+    protected:
         unsigned int m_texture;
+};
+
+class CubeMap : public Texture{
+    CubeMap(std::vector<std::string> paths);
+    void CreateTexture(std::vector<std::string> paths);
 };

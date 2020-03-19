@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <mutex>
+
 #include "graphics/Shader.hpp"
 
 class Window;
@@ -13,6 +14,8 @@ class GameObject;
 class BasicsBlock{
     public:
         BasicsBlock(Window* window, InputManager* input, Time* time,std::vector<GameObject*>* all_objs);
+        bool was_resized = false;
+        void WindowResized();
         Window* m_window;
         InputManager* m_input;
         Time* m_time;

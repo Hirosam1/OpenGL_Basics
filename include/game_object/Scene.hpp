@@ -6,5 +6,10 @@
     It will load from text files (It could load on a sperate thread?)
     */
 class Scene{
-
+    public:
+        Scene(std::string scene_path);
+    
+    private:
+        std::string scene_path;
+        void LoadSceneFromFile();
 };
