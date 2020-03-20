@@ -29,6 +29,7 @@
 #include "graphics/Window.hpp"
 #include "game_object/Light.hpp"
 #include "game_object/FrameBuffer.hpp"
+#include "graphics/CubeMap.hpp"
 
 
 class GameManager{

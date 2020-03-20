@@ -43,9 +43,12 @@ void GameManager::EngineInit(){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_CULL_FACE);
-    
+    glDepthFunc(GL_LEQUAL);
+   
+    //V-sync
     glfwSwapInterval(1);
+
+
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
     this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, 
@@ -173,22 +176,13 @@ void GameManager::EngnieStart(){
     //Creates the quad to render scene
     Model plane = Model("models/plane/Plane.obj");
     Model TexCube = Model("models/box/TexCube.obj");
+
+    CubeMap cube_map = CubeMap("textures/skybox",&TexCube,&skybox_shader);
+
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
     plane.meshes[0].textures.push_back(frame_buffer.texture_color);
 
-    //SkyBox
-    std::vector<std::string> faces
-    {
-        "textures/skybox/right.jpg",
-        "textures/skybox/left.jpg",
-        "textures/skybox/top.jpg",
-        "textures/skybox/bottom.jpg",
-        "textures/skybox/front.jpg",
-        "textures/skybox/back.jpg"
-    };
-    CubeMap cubemap_tex = CubeMap(faces);
-    //=============
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
@@ -210,24 +204,12 @@ void GameManager::EngnieStart(){
         glEnable(GL_DEPTH_TEST);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        /*Draw SkyBox*/
-        glDepthMask(GL_FALSE);
-        skybox_shader.UseShader();
-        name = "view";
-        skybox_shader.SetUniformMat4f(&name,glm::mat4(glm::mat3(m_camera->GetView())));
-        name  = "projection";
-        skybox_shader.SetUniformMat4f(&name,m_camera->GetProjection());
-        name = "skybox";
-        skybox_shader.SetUniform1i(&name,0);
-        name = "model";
-        skybox_shader.SetUniformMat4f(&name,glm::mat4(1));
-        cubemap_tex.UseCubeTexture();
-        TexCube.Draw();
-        glDepthMask(GL_TRUE);
-        /*==================*/
+
         //Render all objects in scene
         this->RenderObjects();
         
+        cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
+
         glBindFramebuffer(GL_FRAMEBUFFER,0);
         glClear(GL_COLOR_BUFFER_BIT);
         screen_shader.UseShader();
@@ -248,6 +230,7 @@ void GameManager::EngnieStart(){
 }
 
 void GameManager::RenderObjects(){
+    glEnable(GL_CULL_FACE);
      //Render non opaque Objects     
     for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
         if((*it)->m_shader != nullptr){
@@ -266,6 +249,7 @@ void GameManager::RenderObjects(){
             glUseProgram(0);
         }
     }
+    glDisable(GL_CULL_FACE);
     //renders opaque objects
     std::map<float,GameObject*> sorted;
     for(unsigned int i = 0; i < all_opaque_objs.size(); i++){
