@@ -105,6 +105,9 @@ class GameManager{
 
         void RenderObjects();
 
+        //Mkaes sure opaques are last
+        void RenderOpaques();
+
     public:
         Model* box;
         int MAX_FRAMERATE = 60;

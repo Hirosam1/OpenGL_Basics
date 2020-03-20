@@ -207,8 +207,9 @@ void GameManager::EngnieStart(){
 
         //Render all objects in scene
         this->RenderObjects();
-        
         cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
+        this->RenderOpaques();
+        //============================
 
         glBindFramebuffer(GL_FRAMEBUFFER,0);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -249,6 +250,10 @@ void GameManager::RenderObjects(){
             glUseProgram(0);
         }
     }
+
+}
+
+void GameManager::RenderOpaques(){
     glDisable(GL_CULL_FACE);
     //renders opaque objects
     std::map<float,GameObject*> sorted;
