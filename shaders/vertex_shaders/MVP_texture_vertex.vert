@@ -11,17 +11,10 @@ out vec2 TexCoord;
 out vec3 aNormal;
 out vec3 FragPos;
 
-
 void main()
 {
-   
-    
     aNormal = mat3(transpose(inverse(View * Model))) * normal; 
-    
     FragPos = vec3(View * Model * vec4(aPos,1.0));
     gl_Position = Projection * vec4(FragPos,1.0);
     TexCoord = aTexCoord;
-    /*
-    LightPos = vec3(View * vec4(light.position,1.0));
-    LightDir = vec3(View * vec4(light.direction,0));*/
 }

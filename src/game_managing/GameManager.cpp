@@ -69,10 +69,12 @@ void GameManager::SetUpObjects(){
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
     Shader* shader_window = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Window.frag");
+    Shader* shader_chrome = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Chrome.frag");
+    Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
 
     std::string path_window = std::string("models/window/Window.obj");
     std::string path_box = std::string("models/box/Box.obj");
-    std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy_2.obj");
+    std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy2.obj");
     box = new Model(path_box);
     Model* mushroom_model = new Model(path_mushroom);
     Model * window = new Model(path_window,false);
@@ -96,18 +98,20 @@ void GameManager::SetUpObjects(){
     GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
     CameraMov->object_name = "Camera Movement Game Object";
 
-    GameObject* mushroom = new NoBahaviorObject(basic_block,m_camera, mushroom_model, new float[3]{0,-2,1},shader);
+    GameObject* mushroom = new NoBahaviorObject(basic_block,m_camera, mushroom_model, new float[3]{0,-0.4,1},shader_chrome);
     mushroom->object_name = "Mushroom";
 
-    GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{2,-1,1},shader);
+    GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{2,-1,1},shader_refrag);
     Box->object_name = "Box";
-    Box->model_mat = glm::scale(Box->model_mat,glm::vec3(0.5,0.5,0.5));
 
-    GameObject* Window = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{2,-1,1.51},shader_window);
+    GameObject* Box2 = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{-4,-1,1},shader);
+    Box2->object_name = "Box2";
+
+    GameObject* Window = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{2,-1,2.01},shader_window);
     Window->object_name = "Window";
     Window->isOpaque = true;
 
-    GameObject* Window2 = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{-2,-1,1.51},shader_window);
+    GameObject* Window2 = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{-2,-1,2.01},shader_window);
     Window2->object_name = "Window2";
     Window2->isOpaque = true;
 
@@ -119,6 +123,7 @@ void GameManager::SetUpObjects(){
     all_objs->push_back(CameraMov);
     all_objs->push_back(mushroom);
     all_objs->push_back(Box);
+    all_objs->push_back(Box2);
     all_objs->push_back(pointLight);
     all_objs->push_back(dirLight);
     all_objs->push_back(spotLight);
@@ -177,8 +182,9 @@ void GameManager::EngnieStart(){
     Model plane = Model("models/plane/Plane.obj");
     Model TexCube = Model("models/box/TexCube.obj");
 
-    CubeMap cube_map = CubeMap("textures/skybox",&TexCube,&skybox_shader);
-
+    //CubeMap cube_map = CubeMap("textures/skybox2",&TexCube,&skybox_shader);
+    CubeMap cube_map = CubeMap("textures/skybox1",&TexCube,&skybox_shader);
+    
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
     plane.meshes[0].textures.push_back(frame_buffer.texture_color);
@@ -199,7 +205,8 @@ void GameManager::EngnieStart(){
         this->main_time->UpdateDelta();
         glfwPollEvents();
         /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
-        lock_threads.notify_all(); 
+        lock_threads.notify_all();
+
         frame_buffer.UseFrameBuffer();
         glEnable(GL_DEPTH_TEST);
 

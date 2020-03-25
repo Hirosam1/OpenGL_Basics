@@ -70,7 +70,8 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
  }
 
  CubeMapTexture::CubeMapTexture(std::vector<std::string> paths):Texture(){
-     std::cout<<"Loading Cube Tex images...\n";
+    std::cout<<"Loading Cube Tex images...\n";
+    tex_type = "skybox";
     CreateTexture(paths);
  }
 
@@ -95,7 +96,7 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
  }
 
- void CubeMapTexture::UseCubeTexture(unsigned int tex_num){
+ void CubeMapTexture::UseTexture(unsigned int tex_num){
     glActiveTexture(GL_TEXTURE0+tex_num); 
     glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
  }

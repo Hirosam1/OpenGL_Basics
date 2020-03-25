@@ -59,6 +59,11 @@ void Mesh::Draw(Shader* shader){
             name = ("material." + name + number);
             shader->SetUniform1i(&name,i);
             textures[i].UseTexture(i);
+            if(name == "skybox"){
+                name = "skybox";
+                shader->SetUniform1i(&name,i);
+                textures[i].UseTexture(i);
+            }
             
         }
         name = "material.diffuse";

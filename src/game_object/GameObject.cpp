@@ -60,11 +60,8 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
       }
 
       glBindTexture(GL_TEXTURE_2D,0);
-      glBindVertexArray(0);
-
-      
+      glBindVertexArray(0);  
    }
-
  }
 
 void GameObject::BufferData(){
