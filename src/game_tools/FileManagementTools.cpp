@@ -28,3 +28,16 @@ char* FileManagementTools::GetFilesContents(const char *filename,int* lenght)
   }
   throw(errno);
 }
+
+std::vector<std::string> FileManagementTools::ParseLine(std::string line, std::string delimeter){
+  int pos = 0;
+  std::string token;
+  std::vector<std::string> tokens;
+  while((pos = line.find(delimeter)) != std::string::npos){
+    token = line.substr(0,pos);
+    tokens.push_back(token);
+    line.erase(0,pos+delimeter.length());
+  }
+  tokens.push_back(line);
+  return tokens;
+}

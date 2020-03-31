@@ -12,7 +12,8 @@
 //Temporaly class that controlls the camera
 class bObject : public GameObject{
     public:
-     bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]);
+    const unsigned int go_id = 2;
+    bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]);
     bool didExit;
     bool firstMouse = true;
     long long CurrentPhysMem;
@@ -24,6 +25,7 @@ class bObject : public GameObject{
     void Update() override;
     void Ready() override;
     private:
+        
         std::vector<GameObject*>::iterator obj_iterator;
         std::deque<char*> *m_deque_test;
 

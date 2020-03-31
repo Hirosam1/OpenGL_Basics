@@ -66,7 +66,8 @@ class GameObject{
 
         bool isOpaque = false;
 
-    private: 
+    private:
+        const unsigned int go_id = 0;
         void UseShader();
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO

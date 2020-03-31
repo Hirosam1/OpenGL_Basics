@@ -4,6 +4,7 @@
 
 class PulsingLight : public GameObject{
     public:
+        const unsigned int go_id = 5;
         PulsingLight(BasicsBlock* bb, Camera* m_camera, float initial_pos[3]);
 
         void Update() override;

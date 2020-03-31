@@ -3,10 +3,10 @@
 #include <cstdio>
 #include <cstring>
 #include<iostream>
+#include<vector> 
+#include<string>
 
-
-class FileManagementTools{
-    public:
-        FileManagementTools();
-        static char* GetFilesContents(const char *filename,int* lenght);
+namespace FileManagementTools{
+    char* GetFilesContents(const char *filename,int* lenght);
+    std::vector<std::string> ParseLine(std::string line, std::string delimiter);
 };

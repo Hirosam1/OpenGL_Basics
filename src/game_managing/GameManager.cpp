@@ -1,5 +1,5 @@
 #include "game_managing/GameManager.hpp"
-
+#include "game_managing/SceneLoader.hpp"
 GameManager::GameManager(std::string game_name,int width, int height)
 :game_name(game_name),width(width),height(height),current_width(width),current_height(height),ready_to_start(false){
 }
@@ -75,6 +75,9 @@ void GameManager::SetUpObjects(){
     std::string path_window = std::string("models/window/Window.obj");
     std::string path_box = std::string("models/box/Box.obj");
     std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy2.obj");
+
+    SceneLoader::LoadSceneFromFile("scenes/scene_test.snsc",nullptr);
+
     box = new Model(path_box);
     Model* mushroom_model = new Model(path_mushroom);
     Model * window = new Model(path_window,false);
