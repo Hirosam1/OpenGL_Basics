@@ -15,7 +15,7 @@ class Texture{
         Texture();
         void CreateTexture(std::string texture_path,bool repeat,GLenum img_type = GL_RGBA);
         void CreateTexture(bool repeat,  unsigned int width, unsigned int height,GLenum img_type = GL_RGBA);
-        void UseTexture(unsigned int texture_num = 0, bool activate_tex = true);
+        virtual void UseTexture(unsigned int texture_num = 0, GLenum texture_type = GL_TEXTURE_2D);
         unsigned int GetTexture();
         std::string tex_type;
         std::string path;
@@ -29,6 +29,7 @@ class Texture{
 class CubeMapTexture : public Texture{
     public:
         CubeMapTexture(std::vector<std::string> paths);
+        CubeMapTexture(std::string path);
         void CreateTexture(std::vector<std::string> paths);
-        void UseTexture(unsigned int texture_num = 0); 
+        void UseTexture(unsigned int texture_num = 0, GLenum texture_type = GL_TEXTURE_CUBE_MAP) override; 
 };

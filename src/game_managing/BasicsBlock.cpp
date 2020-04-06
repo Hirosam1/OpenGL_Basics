@@ -8,11 +8,11 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     this->View_string = std::string("View");
     this->Projection_string = std::string("Projection");
 
-
     this->Mat_ambient = std::string("material.ambient");
     this->Mat_diffuse = std::string("material.diffuse");
     this->Mat_specular = std::string("material.specular");
     this->Mat_shininess = std::string("material.shininess");
+
 
     this->Basic_tex = std::string("material.texture1");
 
@@ -37,6 +37,7 @@ m_window(window),m_input(input),m_time(time), all_objs(all_objs){
     this->LampColor = std::string("LampColor");
 
     this->n_point_lights_string = std::string("n_point_lights");
+    
 }
 
 void BasicsBlock::WindowResized(){

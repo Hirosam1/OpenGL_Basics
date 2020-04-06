@@ -12,6 +12,7 @@ class CubeMap {
     public:
         CubeMap(std::string path_to_cubemap_folder, Model* m_model);
         CubeMap(std::string path_to_cubemap_folder, Model* m_model, Shader* m_shader);
+        CubeMap(CubeMapTexture* texture, Model* m_model,Shader* m_shader);
         std::string cube_map_path = "textures/skybox/";
         std::vector<std::string> faces
         {

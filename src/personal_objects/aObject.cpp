@@ -1,9 +1,8 @@
 #include "personal_objects/aObject.hpp"
 
 //That is not supposed to be a game engine class
-aObject::aObject(BasicsBlock* bc, 
-Camera* m_camera,float initial_pos[3]):GameObject
-(bc,m_camera,initial_pos){
+aObject::aObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader):GameObject
+(basic_block,m_camera,model,initial_pos,m_shader){
     m_camera->camera_pos = glm::vec3(-3.0f,0.0f,10.0f);
     yaw = -75.0f;
     pitch = -15.0f;

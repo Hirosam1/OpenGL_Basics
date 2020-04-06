@@ -4,11 +4,16 @@ CubeMap::CubeMap(std::string path_to_cubemap_folder, Model* m_model, Shader* m_s
     this->LoadTextures();
 }
 
+CubeMap::CubeMap(CubeMapTexture* texture, Model* m_model,Shader* m_shader) : m_model(m_model), m_shader(m_shader),cube_map_texture(texture){
+    
+}
+
 void CubeMap::LoadTextures(){
     for(int i = 0; i < this->faces.size() ; i++){
         faces[i] = cube_map_path + "/" + faces[i];
     }
     this->cube_map_texture = new CubeMapTexture(faces);
+
 }
 
 void CubeMap::UseCubeTexture(Shader* a_shader,Camera* a_camera){
@@ -21,8 +26,8 @@ void CubeMap::UseCubeTexture(Shader* a_shader,Camera* a_camera){
         name  = "projection";
         a_shader->SetUniformMat4f(&name,a_camera->GetProjection());
         name = "skybox";
-        a_shader->SetUniform1i(&name,0);
-        cube_map_texture->UseTexture();
+        a_shader->SetUniform1i(&name,5);
+        cube_map_texture->UseTexture(5);
         m_model->Draw();
     }
 }

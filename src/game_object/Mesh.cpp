@@ -38,32 +38,33 @@ void Mesh::Draw(Shader* shader){
         shader->SetUniform1i(&name,0);
     }
     else{
-        name = "material.has_TexDiffuse";
-        if( textures.size() > 0){
-            shader->SetUniform1i(&name,1);
-            name = "material.has_TexSpecular";
-            shader->SetUniform1i(&name,1);
-        }else{
-            shader->SetUniform1i(&name,0);
-            name = "material.has_TexSpecular";
-            shader->SetUniform1i(&name,0);
-        }
+        std::string hastype = "material.has_TexDiffuse";
+        shader->SetUniform1i(&hastype,0);
+        hastype = "material.has_TexSpecular";
+        shader->SetUniform1i(&hastype,0);
+
         for(unsigned int i = 0; i < textures.size() ; i++){
             std::string number;
             name = textures[i].tex_type;
             
-            if(name == "texture_diffuse")
+            if(name == "texture_diffuse"){
+                hastype = "material.has_TexDiffuse";
+                shader->SetUniform1i(&hastype,1);
                 number = std::to_string(diffuseNr++);
-            else if(name == "texture_specular")
+            }
+            else if(name == "texture_specular"){
+                hastype = "material.has_TexSpecular";
+                shader->SetUniform1i(&hastype,1);
                 number = std::to_string(specularNr++);
+            }else if(name == "skybox"){
+                name = "skybox";
+                shader->SetUniform1i(&name,3);
+                textures[i].UseTexture(3, GL_TEXTURE_CUBE_MAP);
+            }
             name = ("material." + name + number);
             shader->SetUniform1i(&name,i);
             textures[i].UseTexture(i);
-            if(name == "skybox"){
-                name = "skybox";
-                shader->SetUniform1i(&name,i);
-                textures[i].UseTexture(i);
-            }
+            
             
         }
         name = "material.diffuse";
@@ -75,6 +76,7 @@ void Mesh::Draw(Shader* shader){
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
     glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,0);
 }
 
 void Mesh::Draw(){

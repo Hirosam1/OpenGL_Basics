@@ -1,5 +1,6 @@
-> one, two,three #this is a comment
-
-#more comment
-
-> four, five
++ GO 1 #Creating the forst object
+    >camera main
+    > model "box"
+    >position 0 1.2 -2
+    > shader "shader name"
+| "object1"

@@ -1,26 +1,5 @@
 #include "game_object/GameObject.hpp"
 
-GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera, Model* model,float initial_pos[3], 
-std::string vert_shader_path,std::string frag_shader_path):
-m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
-m_model(model) ,vertex_shader_path(vert_shader_path), fragment_shader_path(frag_shader_path){
-   this->m_shader = nullptr;
-   this->SetInitialMVP();
-   model_mat = glm::translate(model_mat,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-   this->m_material = nullptr;
-   this->bb = basic_block;
-   this->m_shader = new Shader(vert_shader_path,frag_shader_path);
-}
-
-GameObject::GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]): 
-                        m_window(basic_block->m_window) ,m_input(basic_block->m_input),
-                        m_time(basic_block->m_time), m_camera(m_camera),bb(basic_block){
-   this->m_material = nullptr; this->m_model = nullptr;
-   this->SetInitialMVP();
-   this->model_mat = glm::translate(this->model_mat,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
-
-}
-
 GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader):
                         m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
                         m_model(model),m_shader(m_shader){
@@ -47,7 +26,7 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
          glm::mat4 original_mat = this->model_mat;
          this->model_mat = glm::scale(this->model_mat,glm::vec3(1.03));
          bb->outline_shader.UseShader();
-         glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel taht wasnt draw
+         glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel that wasnt draw
          glStencilMask(0x00);//Disable stencil write
          this->BufferData();
          this->m_model->Draw(this->m_shader);

@@ -3,8 +3,8 @@
 #include <type_traits>
 #include <typeinfo>
 
-bObject::bObject(BasicsBlock* bc, Camera* m_camera ,float initial_pos[3]):GameObject
-(bc,m_camera,initial_pos){
+bObject::bObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader):GameObject
+(basic_block,m_camera,model,initial_pos,m_shader){
     m_deque_test = new std::deque<char*>();
     didExit = false;
     /*===============GUI=====================*/
@@ -47,9 +47,9 @@ void bObject::Update(){
     }
 
     if(m_input->ProcessInput(GLFW_KEY_1)){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        bb->global_data.fill_type = GL_FILL;
     }else if(m_input->ProcessInput(GLFW_KEY_2)){
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+        bb->global_data.fill_type = GL_LINE;
     }
 
 }

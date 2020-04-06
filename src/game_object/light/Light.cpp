@@ -21,7 +21,7 @@ Light::Light(BasicsBlock* bb, Camera* m_camera,Model* model, float initial_pos[3
 }
 
 Light::Light(BasicsBlock* bb, Camera* m_camera, float initial_pos[3], float light_intensity) : 
-                GameObject(bb,m_camera,initial_pos), light_intensity(light_intensity),
+                GameObject(bb,m_camera,nullptr,initial_pos,nullptr), light_intensity(light_intensity),
                 light_color(glm::vec3(1,1,1)),light_ambient(glm::vec3(0)), 
                 light_specular(glm::vec3(1.0)){
 

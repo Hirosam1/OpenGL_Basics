@@ -1,2 +1,2 @@
-MyOpenGLTest.exe
+SNAIL.exe
 pause

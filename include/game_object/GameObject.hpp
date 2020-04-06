@@ -25,6 +25,14 @@
 
 class GameManager;
 
+struct GameObjectElements{
+    BasicsBlock* basic_block = nullptr;
+    Camera* m_camera = nullptr;
+    Model* model = nullptr;
+    float* initial_pos;
+    Shader* m_shader = nullptr;
+};
+
 /*Basic game object
     You need to inherit this class to use this class
     You can create "empty" object, that has no Mesh or shaders, you can use this to only get input, or only manipulate other objects
@@ -37,9 +45,9 @@ class GameObject{
         std::string object_name = "Game Object";
         friend class GameManager;
         //Constructors
-        GameObject(BasicsBlock* basic_block);
+        /*GameObject(BasicsBlock* basic_block);
         GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
-        GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3], std::string vert_shader_path, std::string frag_shader_path);
+        GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3], std::string vert_shader_path, std::string frag_shader_path);*/
         GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader);
 
         //Creates the shader object, ready to use
@@ -67,7 +75,7 @@ class GameObject{
         bool isOpaque = false;
 
     private:
-        const unsigned int go_id = 0;
+        static constexpr unsigned int go_id = 0;
         void UseShader();
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO

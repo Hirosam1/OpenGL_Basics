@@ -34,10 +34,20 @@ std::vector<std::string> FileManagementTools::ParseLine(std::string line, std::s
   std::string token;
   std::vector<std::string> tokens;
   while((pos = line.find(delimeter)) != std::string::npos){
+    
     token = line.substr(0,pos);
-    tokens.push_back(token);
+    if(token.length()>0)
+      tokens.push_back(token);
+
+    
     line.erase(0,pos+delimeter.length());
   }
   tokens.push_back(line);
   return tokens;
+}
+
+void FileManagementTools::RemoveFromString(std::string &line, char* to_remove){
+  for ( unsigned int i = 0; i < strlen(to_remove); ++i ) {
+    line.erase( std::remove(line.begin(), line.end(), to_remove[i]), line.end() );
+  }
 }

@@ -31,7 +31,7 @@
 class GameManager{
     private:
         //------------------------------------- Variables ---------------------------------------------------------------
-
+        CubeMapTexture* cubemap_tex;
         //The main window of the application
         Window* main_window;
         //default width and height of game window

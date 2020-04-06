@@ -9,7 +9,7 @@ uniform samplerCube skybox;
 uniform mat4 View;
 
 const vec3 color = vec3(0.7,0.2,0.9);
-const float ref_factor = 0.1;
+const float ref_factor = 0.4;
 
 void main() {
 

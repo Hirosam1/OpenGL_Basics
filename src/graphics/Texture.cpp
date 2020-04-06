@@ -51,6 +51,7 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
         }else{
             std::cout<<"Failed to load image texture\n";
             exit(-1);
+
         }
         stbi_image_free(data);
     }else{
@@ -59,14 +60,31 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glBindTexture(GL_TEXTURE_2D,0);
 }
 
- void Texture::UseTexture(unsigned int texture_num,bool activate_tex){
-     if(activate_tex)
-        glActiveTexture(GL_TEXTURE0+texture_num); 
-     glBindTexture(GL_TEXTURE_2D,this->m_texture);
+ void Texture::UseTexture(unsigned int texture_num, GLenum texture_type){
+    glActiveTexture(GL_TEXTURE0+texture_num); 
+    glBindTexture(texture_type,this->m_texture);
  }
 
  unsigned int Texture::GetTexture(){
      return this->m_texture;
+ }
+
+ CubeMapTexture::CubeMapTexture (std::string path) : Texture(){
+    std::vector<std::string> faces
+    {
+    "right.jpg",
+    "left.jpg",
+    "top.jpg",
+    "bottom.jpg",
+    "front.jpg",
+    "back.jpg"
+    };
+    for(int i = 0; i < faces.size() ; i++){
+    faces[i] = path + "/" + faces[i];
+    }
+    std::cout<<"Loading Cube Tex images...\n";
+    tex_type = "skybox";
+    CreateTexture(faces);
  }
 
  CubeMapTexture::CubeMapTexture(std::vector<std::string> paths):Texture(){
@@ -94,9 +112,10 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,0);
  }
 
- void CubeMapTexture::UseTexture(unsigned int tex_num){
+ void CubeMapTexture::UseTexture(unsigned int tex_num, GLenum texture_type){
     glActiveTexture(GL_TEXTURE0+tex_num); 
     glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
  }

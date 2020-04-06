@@ -69,18 +69,21 @@ void GameManager::SetUpObjects(){
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
     Shader* shader_window = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Window.frag");
-    Shader* shader_chrome = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Chrome.frag");
+    Shader* shader_chrome = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight_wReflections.frag");
     Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
 
     std::string path_window = std::string("models/window/Window.obj");
     std::string path_box = std::string("models/box/Box.obj");
     std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy2.obj");
 
-    SceneLoader::LoadSceneFromFile("scenes/scene_test.snsc",nullptr);
+    cubemap_tex = new CubeMapTexture("textures/skybox1");
+    SceneData scene_data;
+    SceneLoader::LoadSceneFromFile("scenes/scene_test.snsc",basic_block,&scene_data);
 
     box = new Model(path_box);
     Model* mushroom_model = new Model(path_mushroom);
     Model * window = new Model(path_window,false);
+    mushroom_model->meshes[0].textures.push_back(*cubemap_tex);
 
     GameObject* pointLight = new PointLight(basic_block,m_camera,box,new float[3]{-1,-2,3},shader_lamp,basic_block->n_point_lights++);
     pointLight->model_mat = glm::scale(pointLight->model_mat,glm::vec3(0.2,0.2,0.2));
@@ -90,22 +93,23 @@ void GameManager::SetUpObjects(){
 
     GameObject* dirLight = new DirLight(basic_block,m_camera,new float[3]{0,-0.7,-0.2});
     dirLight->object_name = "Directional Light";
-    dynamic_cast<Light*>(dirLight)->light_color = glm::vec3(0.95,0.91,0.54);
+    dynamic_cast<Light*>(dirLight)->light_color = glm::vec3(0.85,1.0,1.0);
 
     GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
     spotLight->object_name = "Spot Light";
-    GameObject* GUIObject = new bObject(this->basic_block ,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    GameObject* GUIObject = new bObject(this->basic_block ,m_camera,nullptr,new float[3]{0.0f,0.0f,0.0f},nullptr);
     GUIObject->object_name = "GUI gameObject";
     dynamic_cast<Light*>(spotLight)->light_intensity = 0;
 
-    GameObject* CameraMov = new aObject(this->basic_block,m_camera,new float[3]{0.0f,0.0f,0.0f});
+    GameObject* CameraMov = new aObject(this->basic_block,m_camera,nullptr,new float[3]{0.0f,0.0f,0.0f},nullptr);
     CameraMov->object_name = "Camera Movement Game Object";
 
     GameObject* mushroom = new NoBahaviorObject(basic_block,m_camera, mushroom_model, new float[3]{0,-0.4,1},shader_chrome);
     mushroom->object_name = "Mushroom";
 
-    GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{2,-1,1},shader_refrag);
+    GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{3,2,1},shader_refrag);
     Box->object_name = "Box";
+    box->meshes[0].textures.push_back(*cubemap_tex);
 
     GameObject* Box2 = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{-4,-1,1},shader);
     Box2->object_name = "Box2";
@@ -118,7 +122,7 @@ void GameManager::SetUpObjects(){
     Window2->object_name = "Window2";
     Window2->isOpaque = true;
 
-    GameObject* pulseLight = new PulsingLight(basic_block,m_camera,new float[3]{0,0,2});
+    GameObject* pulseLight = new PulsingLight(basic_block,m_camera,nullptr,new float[3]{0,0,2},nullptr);
     pulseLight->object_name = "Pulsing Light";
 
     all_objs->push_back(Window);
@@ -186,7 +190,7 @@ void GameManager::EngnieStart(){
     Model TexCube = Model("models/box/TexCube.obj");
 
     //CubeMap cube_map = CubeMap("textures/skybox2",&TexCube,&skybox_shader);
-    CubeMap cube_map = CubeMap("textures/skybox1",&TexCube,&skybox_shader);
+    CubeMap cube_map = CubeMap(cubemap_tex,&TexCube,&skybox_shader);
     
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
@@ -216,6 +220,7 @@ void GameManager::EngnieStart(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         //Render all objects in scene
+        glPolygonMode(GL_FRONT_AND_BACK, basic_block->global_data.fill_type);
         this->RenderObjects();
         cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
         this->RenderOpaques();
@@ -223,6 +228,7 @@ void GameManager::EngnieStart(){
 
         glBindFramebuffer(GL_FRAMEBUFFER,0);
         glClear(GL_COLOR_BUFFER_BIT);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         screen_shader.UseShader();
         glDisable(GL_DEPTH_TEST);
         plane.Draw(&screen_shader);
