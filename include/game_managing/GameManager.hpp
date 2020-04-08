@@ -26,11 +26,13 @@
 #include "game_object/Light.hpp"
 #include "game_object/FrameBuffer.hpp"
 #include "graphics/CubeMap.hpp"
-
+#include "game_managing/SceneLoader.hpp"
 
 class GameManager{
     private:
         //------------------------------------- Variables ---------------------------------------------------------------
+        //Use threads
+        bool use_threads = true;
         CubeMapTexture* cubemap_tex;
         //The main window of the application
         Window* main_window;
@@ -59,10 +61,12 @@ class GameManager{
         //name of the game
         std::string game_name;
 
+        //The current scene data
+        SceneData scene_data;
         //All objects to be rendered/prossessed on the scene
-        std::vector<GameObject*>* all_objs;
-        std::vector<Light*> all_lights;
-        std::vector<GameObject*> all_opaque_objs;
+        //std::vector<GameObject*>* all_objs;
+        //std::vector<Light*> all_lights;
+        //std::vector<GameObject*> all_opaque_objs;
         //std::map<float, GameObject*> all_opaque_objs;
 
         //Global time manager

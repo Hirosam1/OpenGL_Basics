@@ -24,10 +24,10 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_window);
     this->main_time = new Time();
 
-    this->all_objs = new std::vector<GameObject*>();
-    this->all_lights = std::vector<Light*>();
+    //this->all_objs = new std::vector<GameObject*>();
+    //this->all_lights = std::vector<Light*>();
 
-    this->basic_block = new BasicsBlock(main_window,main_input,main_time, this->all_objs);
+    this->basic_block = new BasicsBlock(main_window,main_input,main_time, &this->scene_data.AllObjects);
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
@@ -44,6 +44,7 @@ void GameManager::EngineInit(){
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LEQUAL);
+    use_threads = false;
    
     //V-sync
     glfwSwapInterval(1);
@@ -51,7 +52,7 @@ void GameManager::EngineInit(){
 
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
-    this->threads[i] = std::thread(UpdateObjects,i,this->all_objs,supported_concurrency,main_window, 
+    this->threads[i] = std::thread(UpdateObjects,i,&this->scene_data.AllObjects,supported_concurrency,main_window, 
                                         &basic_block->global_mutex,&lock_threads);
     }
 
@@ -63,7 +64,8 @@ void GameManager::SetUpObjects(){
     m_camera = new Camera(this->main_window);
     m_camera->camera_pos = glm::vec3(-3.0f,2.0f,20.0f);
     m_camera->camera_front = glm::vec3(0,0,-1);
-     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
+    m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
+    basic_block->global_data.main_camera = m_camera;
     std::cout<<"creating game objects...\n";
 
     Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
@@ -72,80 +74,15 @@ void GameManager::SetUpObjects(){
     Shader* shader_chrome = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight_wReflections.frag");
     Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
 
-    std::string path_window = std::string("models/window/Window.obj");
-    std::string path_box = std::string("models/box/Box.obj");
-    std::string path_mushroom = std::string("models/mushroom_boy/mushroom_boy2.obj");
+    Model* box = new Model("models/box/Box.obj");
 
     cubemap_tex = new CubeMapTexture("textures/skybox1");
-    SceneData scene_data;
     SceneLoader::LoadSceneFromFile("scenes/scene_test.snsc",basic_block,&scene_data);
 
-    box = new Model(path_box);
-    Model* mushroom_model = new Model(path_mushroom);
-    Model * window = new Model(path_window,false);
-    mushroom_model->meshes[0].textures.push_back(*cubemap_tex);
+    //std::cout<<scene_data.AllObjects.size() <<"\n";
 
-    GameObject* pointLight = new PointLight(basic_block,m_camera,box,new float[3]{-1,-2,3},shader_lamp,basic_block->n_point_lights++);
-    pointLight->model_mat = glm::scale(pointLight->model_mat,glm::vec3(0.2,0.2,0.2));
-    dynamic_cast<Light*>(pointLight)->light_color = glm::vec3(0.53,0.80,0.86);
-    dynamic_cast<Light*>(pointLight)->light_intensity = 0.4;
-    pointLight->object_name = "Point Light";
-
-    GameObject* dirLight = new DirLight(basic_block,m_camera,new float[3]{0,-0.7,-0.2});
-    dirLight->object_name = "Directional Light";
-    dynamic_cast<Light*>(dirLight)->light_color = glm::vec3(0.85,1.0,1.0);
-
-    GameObject* spotLight = new SpotLight(basic_block,m_camera,glm::value_ptr(m_camera->camera_pos),glm::value_ptr(m_camera->camera_front));
-    spotLight->object_name = "Spot Light";
-    GameObject* GUIObject = new bObject(this->basic_block ,m_camera,nullptr,new float[3]{0.0f,0.0f,0.0f},nullptr);
-    GUIObject->object_name = "GUI gameObject";
-    dynamic_cast<Light*>(spotLight)->light_intensity = 0;
-
-    GameObject* CameraMov = new aObject(this->basic_block,m_camera,nullptr,new float[3]{0.0f,0.0f,0.0f},nullptr);
-    CameraMov->object_name = "Camera Movement Game Object";
-
-    GameObject* mushroom = new NoBahaviorObject(basic_block,m_camera, mushroom_model, new float[3]{0,-0.4,1},shader_chrome);
-    mushroom->object_name = "Mushroom";
-
-    GameObject* Box = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{3,2,1},shader_refrag);
-    Box->object_name = "Box";
-    box->meshes[0].textures.push_back(*cubemap_tex);
-
-    GameObject* Box2 = new NoBahaviorObject(basic_block,m_camera,box,new float[3]{-4,-1,1},shader);
-    Box2->object_name = "Box2";
-
-    GameObject* Window = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{2,-1,2.01},shader_window);
-    Window->object_name = "Window";
-    Window->isOpaque = true;
-
-    GameObject* Window2 = new NoBahaviorObject(basic_block,m_camera,window,new float[3]{-2,-1,2.01},shader_window);
-    Window2->object_name = "Window2";
-    Window2->isOpaque = true;
-
-    GameObject* pulseLight = new PulsingLight(basic_block,m_camera,nullptr,new float[3]{0,0,2},nullptr);
-    pulseLight->object_name = "Pulsing Light";
-
-    all_objs->push_back(Window);
-    all_objs->push_back(Window2);
-    all_objs->push_back(CameraMov);
-    all_objs->push_back(mushroom);
-    all_objs->push_back(Box);
-    all_objs->push_back(Box2);
-    all_objs->push_back(pointLight);
-    all_objs->push_back(dirLight);
-    all_objs->push_back(spotLight);
-    all_objs->push_back(pulseLight);  
     //UI needs to be last?
-    all_objs->push_back(GUIObject);
-    //Sets the lights objs
-    all_lights.push_back(dynamic_cast<Light*>(pointLight));
-    all_lights.push_back(dynamic_cast<Light*>(dirLight));
-    all_lights.push_back(dynamic_cast<Light*>(spotLight));
-
-    all_opaque_objs.push_back(Window);
-    all_opaque_objs.push_back(Window2);
-
-
+    //all_objs->push_back(GUIObject);
 
 }
 
@@ -198,7 +135,7 @@ void GameManager::EngnieStart(){
 
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
-    for(auto it = this->all_objs->begin(); it != this->all_objs->end();it++){
+    for(auto it = this->scene_data.AllObjects.begin(); it != this->scene_data.AllObjects.end();it++){
         (*it)->ReadyObject();
     }
 
@@ -211,9 +148,10 @@ void GameManager::EngnieStart(){
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
-        /*Weird lag into position of gameobject, I belive that making a barrier after notify_all will do*/
-        lock_threads.notify_all();
-
+        if(use_threads){
+            // this when giving that weird lag bug VVV
+            lock_threads.notify_all();
+        }
         frame_buffer.UseFrameBuffer();
         glEnable(GL_DEPTH_TEST);
 
@@ -224,6 +162,7 @@ void GameManager::EngnieStart(){
         this->RenderObjects();
         cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
         this->RenderOpaques();
+        
         //============================
 
         glBindFramebuffer(GL_FRAMEBUFFER,0);
@@ -232,6 +171,10 @@ void GameManager::EngnieStart(){
         screen_shader.UseShader();
         glDisable(GL_DEPTH_TEST);
         plane.Draw(&screen_shader);
+        //Last object, the GUI, needs to be Updated on main thread
+        if(this->scene_data.AllObjects.size() > 0){
+            this->scene_data.AllObjects.at(this->scene_data.AllObjects.size()-1)->Update();
+        }
 
         glfwSwapBuffers(this->main_window->GetWindow());
         this->main_input->ResetValues();
@@ -248,22 +191,28 @@ void GameManager::EngnieStart(){
 
 void GameManager::RenderObjects(){
     glEnable(GL_CULL_FACE);
-     //Render non opaque Objects     
-    for(auto it = this->all_objs->begin(); it != this->all_objs->end() - 1;it++){
-        if((*it)->m_shader != nullptr){
-            (*it)->UseShader();
-            Light* is_light = dynamic_cast<Light*>(*it);
-            if(is_light == NULL){
-                for(auto lit = this->all_lights.begin(); lit != this->all_lights.end(); lit++){
-                    (*lit)->LightBuffering((*it));
+     //Render non opaque Objects
+    if(this->scene_data.AllObjects.size() > 0){
+        for(auto it = this->scene_data.AllObjects.begin(); it != this->scene_data.AllObjects.end() - 1;it++){
+            if(!use_threads){
+                //Use this when giving that weird lag bug VVV
+                (*it)->Update();
+            }
+            if((*it)->m_shader != nullptr){
+                (*it)->UseShader();
+                Light* is_light = dynamic_cast<Light*>(*it);
+                if(is_light == NULL){
+                    for(auto lit = this->scene_data.AllLights.begin(); lit != this->scene_data.AllLights.end(); lit++){
+                        (*lit)->LightBuffering((*it));
+                    }
+                }else{
+                    is_light->LampColorBuffering();
                 }
-            }else{
-                is_light->LampColorBuffering();
+                if(!(*it)->isOpaque){
+                    (*it)->BufferAndDraw();
+                }
+                glUseProgram(0);
             }
-            if(!(*it)->isOpaque){
-                (*it)->BufferAndDraw();
-            }
-            glUseProgram(0);
         }
     }
 
@@ -273,11 +222,12 @@ void GameManager::RenderOpaques(){
     glDisable(GL_CULL_FACE);
     //renders opaque objects
     std::map<float,GameObject*> sorted;
-    for(unsigned int i = 0; i < all_opaque_objs.size(); i++){
-        float distance = glm::length(m_camera->camera_pos - glm::vec3(all_opaque_objs[i]->model_mat[3][0],
-                                                                        all_opaque_objs[i]->model_mat[3][1],
-                                                                        all_opaque_objs[i]->model_mat[3][2]));
-        sorted[distance] = all_opaque_objs[i];
+    
+    for(unsigned int i = 0; i < this->scene_data.AllOpaques.size(); i++){
+        float distance = glm::length(m_camera->camera_pos - glm::vec3(this->scene_data.AllOpaques[i]->model_mat[3][0],
+                                                                        this->scene_data.AllOpaques[i]->model_mat[3][1],
+                                                                        this->scene_data.AllOpaques[i]->model_mat[3][2]));
+        sorted[distance] = this->scene_data.AllOpaques[i];
     }       
 
     for(std::map<float,GameObject*>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it){
@@ -286,8 +236,6 @@ void GameManager::RenderOpaques(){
     }
     glUseProgram(0);
     sorted.clear();
-    //Last object, the GUI, needs to be Updated on main thread
-    all_objs->at(all_objs->size()-1)->Update();
 }
 
 void GameManager::TerminateEngine(){

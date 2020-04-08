@@ -4,7 +4,7 @@ GameObject* GameObjectFactory::GetObjectFromID(unsigned int id, BasicsBlock* bas
     GameObject* go = nullptr;
     switch(id){
         default:
-            std::cout<<"Can't find object with this id!\n";
+            std::cout<<"Can't find object with this id! -->" << id<< "\n";
             break;
         case 0:
             std::cout<<"Can't load game object with id 0, that is the default id\n";
@@ -19,6 +19,7 @@ GameObject* GameObjectFactory::GetObjectFromID(unsigned int id, BasicsBlock* bas
             break;
         case NoBahaviorObject::go_id:
             go = new NoBahaviorObject(basic_block,m_camera,m_model,initial_pos,m_shader);
+            break;
         case PulsingLight::go_id:
             go = new PulsingLight(basic_block,m_camera,m_model,initial_pos,m_shader);
             break;

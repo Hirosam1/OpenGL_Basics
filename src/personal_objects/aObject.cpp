@@ -24,7 +24,6 @@ void aObject::Ready(){
 }
 
 void aObject::Update(){
-   
     if (m_input->ProcessInput(GLFW_KEY_TAB,GLFW_PRESS)){
         yaw = -75;
         pitch = -15;
