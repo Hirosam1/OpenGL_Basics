@@ -32,8 +32,10 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
     GameObject* go;
     //This is only for test ============================
     Shader* lamp_shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
+     Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
     Model* box = new Model("models/box/Box.obj");
     basic_block->global_data.all_shaders["lamp shader"] = lamp_shader;
+    basic_block->global_data.all_shaders["refraction"] = shader_refrag;
     scene_data->loaded_models["box"] = box;
     //End test =========================================
 
