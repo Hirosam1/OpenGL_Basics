@@ -31,11 +31,13 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
     std::string output;
     GameObject* go;
     //This is only for test ============================
+    Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     Shader* lamp_shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-     Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
+    Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
     Model* box = new Model("models/box/Box.obj");
     basic_block->global_data.all_shaders["lamp shader"] = lamp_shader;
     basic_block->global_data.all_shaders["refraction"] = shader_refrag;
+    basic_block->global_data.all_shaders["basic light"] = shader;
     scene_data->loaded_models["box"] = box;
     //End test =========================================
 
@@ -80,6 +82,11 @@ char waitingState(char current_state, std::string line, std::string* output){
                     return SceneReaderState::addingGO;
                 }else{
                     return current_state;
+                }
+            }else if(tokens[1] == "light"){
+                if(tokens[2] == "directional"){
+                    *output = "directional";
+                    return SceneReaderState::addingLight;
                 }
             }
         }
@@ -134,6 +141,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                    position[2] = std::stof(tokens[3]);
                    goElements.initial_pos = position;
                }
+               
             //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
            }else if(tokens[0] == "shader"){
                std::regex_search(parameters,matches,reg);

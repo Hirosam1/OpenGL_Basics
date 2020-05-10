@@ -20,7 +20,6 @@ struct SceneData{
     std::map<std::string, Model*> loaded_models;
 };
 
-
 namespace SceneLoader {
     void LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data);
     void Testetemplates(BasicsBlock* bb ,Camera* main_camera);

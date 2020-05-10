@@ -1,23 +1,23 @@
-+ GO 4 #Black box
++ GO 4
     >camera main_camera
     > model "box"
     >position 0 1.2 -2
     > shader "lamp shader"
 | "black box"
 
-+ GO 4 #Black box
++ GO 4
     >camera main_camera
     > model "box"
     >position 3 1.2 -2
-    > shader "refraction"
-| "refraction box"
+    > shader "lamp shader"
+| "black box 2"
 
 + GO 1 #Camera movment
     >camera main_camera
     >position 0 0 0
 | "camera movment"
 
-+ GO 2 #Creates the GUI object
++ GO 2
     > camera main_camera
     > position 0.0 0.0 0.0
 | "GUI gameObject"

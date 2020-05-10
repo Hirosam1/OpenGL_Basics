@@ -67,16 +67,9 @@ void GameManager::SetUpObjects(){
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     basic_block->global_data.main_camera = m_camera;
     std::cout<<"creating game objects...\n";
+    //Model* box = new Model("models/box/Box.obj");
 
-    Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
-    Shader* shader_lamp = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-    Shader* shader_window = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Window.frag");
-    Shader* shader_chrome = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight_wReflections.frag");
-    Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
-
-    Model* box = new Model("models/box/Box.obj");
-
-    cubemap_tex = new CubeMapTexture("textures/skybox1");
+    //cubemap_tex = new CubeMapTexture("textures/skybox1");
     SceneLoader::LoadSceneFromFile("scenes/scene_test.snsc",basic_block,&scene_data);
 
     //std::cout<<scene_data.AllObjects.size() <<"\n";
@@ -124,10 +117,10 @@ void GameManager::EngnieStart(){
     Shader skybox_shader = Shader("shaders/vertex_shaders/SkyBox.vert","shaders/fragment_shaders/SkyBox.frag");
     //Creates the quad to render scene
     Model plane = Model("models/plane/Plane.obj");
-    Model TexCube = Model("models/box/TexCube.obj");
+    //Model TexCube = Model("models/box/TexCube.obj");
 
     //CubeMap cube_map = CubeMap("textures/skybox2",&TexCube,&skybox_shader);
-    CubeMap cube_map = CubeMap(cubemap_tex,&TexCube,&skybox_shader);
+    //CubeMap cube_map = CubeMap(cubemap_tex,&TexCube,&skybox_shader);
     
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
@@ -144,7 +137,7 @@ void GameManager::EngnieStart(){
             glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
         }
         //Clear the screen
-        glClearColor(0.02f,0.06f,0.05,1.0f);
+        glClearColor(0.03f,0.07f,0.07,1.0f);
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
@@ -160,7 +153,7 @@ void GameManager::EngnieStart(){
         //Render all objects in scene
         glPolygonMode(GL_FRONT_AND_BACK, basic_block->global_data.fill_type);
         this->RenderObjects();
-        cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
+        //cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
         this->RenderOpaques();
         
         //============================
