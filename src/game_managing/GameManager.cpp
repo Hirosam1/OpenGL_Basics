@@ -53,7 +53,7 @@ void GameManager::EngineInit(){
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
     this->threads[i] = std::thread(UpdateObjects,i,&this->scene_data.AllObjects,supported_concurrency,main_window, 
-                                        &basic_block->global_mutex,&lock_threads);
+                                       &basic_block->global_mutex,&lock_threads);
     }
 
 }

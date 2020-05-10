@@ -39,6 +39,7 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
     basic_block->global_data.all_shaders["refraction"] = shader_refrag;
     basic_block->global_data.all_shaders["basic light"] = shader;
     scene_data->loaded_models["box"] = box;
+    scene_data->AllLights.push_back(new PointLight(basic_block,basic_block->global_data.main_camera,box,new float[3]{-1,-2,3},lamp_shader,basic_block->n_point_lights++));
     //End test =========================================
 
     while(std::getline(infile,line)){
