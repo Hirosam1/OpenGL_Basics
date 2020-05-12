@@ -15,12 +15,11 @@ void main(){
     FragColor = texture(screenTex,TexCoord);
     float average =  0.2126 * FragColor.r + 0.7152 * FragColor.g + 0.0722 * FragColor.b;
     FragColor = vec4(average,average,average,1.0);*/
-    //FragColor = texture(screenTex,TexCoord);
     //FragColor =  vec4(vec3(1.0 - texture(screenTex,TexCoord)),1.0);
     //FragColor = vec4(0.3,1,1,1);
 
 
-    /*
+    
     vec2 offsets[9] = vec2[](
         vec2(-offset,  offset), // top-left
         vec2( 0.0f,    offset), // top-center
@@ -31,7 +30,7 @@ void main(){
         vec2(-offset, -offset), // bottom-left
         vec2( 0.0f,   -offset), // bottom-center
         vec2( offset, -offset)  // bottom-right    
-    );*/
+    );
     /*
     float kernel[9] = float[](
         -1, -1, -1,

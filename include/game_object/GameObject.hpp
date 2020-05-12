@@ -81,7 +81,7 @@ class GameObject{
             -> Handles the binding and unbing of VAO, EBO and VBO
             -> Buffer MVP
             -> Draw model */
-        void BufferAndDraw();
+        
 
         void ReadyObject();
         //Sets the MVP to its initial position
@@ -95,6 +95,7 @@ class GameObject{
         std::string fragment_shader_path;
 
     protected:
+        void BufferAndDraw();
         BasicsBlock* bb;
         //Window where the object will get inputs
         Window* m_window;

@@ -1,23 +1,31 @@
-+ GO 4
-    >camera main_camera
++ light point # Creates a point light
+    > camera main_camera
     > model "box"
-    >position 0 1.2 -2
-    > shader "lamp shader"
-| "black box"
+    > position 0 -0.25 2
+    >shader "lamp shader"
+| "point light"
 
-+ GO 4
++ light directional #creates a directional light
+    > camera main_camera
+    > position -0.5 -1 -0.1
+    #sets the direction the same as the position, so when you change the position you change the direction, usefull here since the position does not matter
+    > direction this_position
+| "directional light"
+
++ GO 4 #Creates a box, with texture
     >camera main_camera
     > model "box"
-    >position 3 1.2 -2
-    > shader "lamp shader"
+    >position 3 1 1
+    > shader "basic light"
 | "black box 2"
 
-+ GO 1 #Camera movment
++ GO 1 #Camera movment #Program responsible with the movment of the camera
     >camera main_camera
     >position 0 0 0
 | "camera movment"
 
-+ GO 2
+
++ GO 2 #Program responsible to rendering the UI.  HAS to be the last
     > camera main_camera
     > position 0.0 0.0 0.0
 | "GUI gameObject"

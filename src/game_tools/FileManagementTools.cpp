@@ -46,7 +46,7 @@ std::vector<std::string> FileManagementTools::ParseLine(std::string line, std::s
   return tokens;
 }
 
-void FileManagementTools::RemoveFromString(std::string &line, char* to_remove){
+void FileManagementTools::RemoveFromString(std::string &line,const char* to_remove){
   for ( unsigned int i = 0; i < strlen(to_remove); ++i ) {
     line.erase( std::remove(line.begin(), line.end(), to_remove[i]), line.end() );
   }

@@ -11,5 +11,5 @@
 namespace FileManagementTools{
     char* GetFilesContents(const char *filename,int* lenght);
     std::vector<std::string> ParseLine(std::string line, std::string delimiter);
-    void RemoveFromString(std::string &line, char* to_remove);
+    void RemoveFromString(std::string &line, const char* to_remove);
 };

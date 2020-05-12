@@ -18,6 +18,7 @@ struct SceneData{
     std::vector<Light*> AllLights;
     std::vector<GameObject*> AllOpaques;
     std::map<std::string, Model*> loaded_models;
+    int n_point_lights = 0;
 };
 
 namespace SceneLoader {

@@ -5,8 +5,10 @@
 class GameManager;
 
 struct LightElements{
-
+   float* light_direction;
+    bool light_direction_is_position = false;
 };
+
 
 /*It is a light object
     It works with a default shader, it updates uniforms of each game object
@@ -33,7 +35,8 @@ class Light : public GameObject{
 
 class PointLight : public Light{
     public:
-        PointLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader, int index,float linear = 0.12f, float quadratic = 0.04f, float constant = 1.0f);
+        PointLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], Shader* m_shader, float direction[3] = nullptr);
+        PointLight(BasicsBlock* bb, Camera* m_camera, Model* model,float initial_pos[3], Shader* m_shader, int index,float linear = 0.12f, float quadratic = 0.04f, float constant = 1.0f);
         float constant;
         float linear;
         float quadratic;
@@ -47,7 +50,7 @@ class PointLight : public Light{
 
 class DirLight : public Light{
     public:
-        DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float initial_pos[3], Shader* m_shader, float direction[3]);
+        DirLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], Shader* m_shader, float direction[3]);
         DirLight(BasicsBlock* bb, Camera* m_camera,Model* model,float direction[3], Shader* m_shader);
         DirLight(BasicsBlock* bb, Camera* m_camera, float direction[3]);
         float* direction;
@@ -63,4 +66,9 @@ class SpotLight : public Light{
         float* direction;
     private:
         void LightBuffering(GameObject* go) override;
+};
+
+namespace LightFactory{
+    
+    template<class T> Light* GetLightByType(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], Shader* m_shader, float direction[3]);
 };

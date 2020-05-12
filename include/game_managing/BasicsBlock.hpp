@@ -34,7 +34,7 @@ class BasicsBlock{
 
         //Temporary VVV
         std::vector<GameObject*>* all_objs;
-        int n_point_lights = 0;
+        //int n_point_lights = 0;
         //Threading
         std::mutex global_mutex;
         //Global information

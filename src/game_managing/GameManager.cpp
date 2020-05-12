@@ -114,7 +114,7 @@ void GameManager::EngnieStart(){
     //Shader for the post processing effects
     Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
     //Shader for the skybox
-    Shader skybox_shader = Shader("shaders/vertex_shaders/SkyBox.vert","shaders/fragment_shaders/SkyBox.frag");
+    //Shader skybox_shader = Shader("shaders/vertex_shaders/SkyBox.vert","shaders/fragment_shaders/SkyBox.frag");
     //Creates the quad to render scene
     Model plane = Model("models/plane/Plane.obj");
     //Model TexCube = Model("models/box/TexCube.obj");
@@ -125,7 +125,7 @@ void GameManager::EngnieStart(){
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
     plane.meshes[0].textures.push_back(frame_buffer.texture_color);
-
+    
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
     for(auto it = this->scene_data.AllObjects.begin(); it != this->scene_data.AllObjects.end();it++){
