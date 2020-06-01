@@ -125,7 +125,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
            if(tokens[0] == "camera"){
                // sets the camera as the main one, setted on global settings (maybe should be scene NOT global)
                if(parameters == "main_camera"){
-                   goElements.m_camera = basic_block->global_data.main_camera;
+                   goElements.m_camera = scene_data->main_camera;
                }
                //defines the model to be used
            }else if(tokens[0] == "model"){
@@ -169,7 +169,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
             parameters = line.substr(e,line.length());
             if(goElements.initial_pos != nullptr){
                 if(goElements.m_camera == nullptr){
-                    goElements.m_camera =  basic_block->global_data.main_camera;
+                    goElements.m_camera =  scene_data->main_camera;
                 }
                 gameObject_output = GameObjectFactory::GetObjectFromID(object_id,basic_block,goElements.m_camera,goElements.model,goElements.initial_pos,goElements.m_shader);
                 //ClearGoELemetns();
@@ -207,7 +207,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
            if(tokens[0] == "camera"){
                // sets the camera as the main one, setted on global settings (maybe should be scene NOT global)
                if(parameters == "main_camera"){
-                   goElements.m_camera = basic_block->global_data.main_camera;
+                   goElements.m_camera = scene_data->main_camera;
                }
                //defines the model to be used
            }else if(tokens[0] == "model"){
@@ -261,7 +261,10 @@ char addingLightState(char current_state, std::string line, std::string light_ty
         }
     }else if( (e = line.find("|")) != std::string::npos){
             parameters = line.substr(e,line.length());
-            if(goElements.m_camera != nullptr && goElements.initial_pos != nullptr){
+            if(goElements.initial_pos != nullptr){
+                if(goElements.m_camera == nullptr){
+                    goElements.m_camera =  scene_data->main_camera;
+                }
                 if(light_type == "directional"){
                     if(light_elemtents.light_direction != nullptr || light_elemtents.light_direction_is_position){
                         if(light_elemtents.light_direction_is_position){

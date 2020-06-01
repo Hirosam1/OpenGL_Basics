@@ -57,12 +57,6 @@ void GameManager::EngineInit(){
 
 
 void GameManager::SetUpObjects(){
-
-    m_camera = new Camera(this->main_window);
-    m_camera->camera_pos = glm::vec3(-3.0f,2.0f,20.0f);
-    m_camera->camera_front = glm::vec3(0,0,-1);
-    m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
-    basic_block->global_data.main_camera = m_camera;
     
     std::cout<<"creating game objects...\n";
     //Model* box = new Model("models/box/Box.obj");

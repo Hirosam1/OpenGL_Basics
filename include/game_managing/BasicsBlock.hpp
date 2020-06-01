@@ -21,6 +21,8 @@ struct SceneData{
     std::vector<Light*> AllLights;
     std::vector<GameObject*> AllOpaques;
     std::map<std::string, Model*> loaded_models;
+    std::map<std::string, Camera*> all_cameras;
+    Camera* main_camera;
     int n_point_lights = 0;
 };
 
@@ -29,8 +31,7 @@ struct GlobalData{
    std::map<std::string,std::string> models_path;
    std::map<std::string, Shader*> all_shaders;
    std::map<std::string, Texture*> all_textures;
-   std::map<std::string, Camera*> all_cameras;
-   Camera* main_camera;
+   
    Scene *active_scene;
 };
 
