@@ -1,8 +1,9 @@
 #pragma once
 #include<iostream>
 #include "game_object/GameObject.hpp"
+
 #include "personal_objects/bObject.hpp"
-#include "game_object/GameObject.hpp"
+#include "game_object/Scene.hpp"
 
 class aObject : public GameObject{
     public:   

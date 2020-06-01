@@ -12,19 +12,31 @@ class Time;
 class GameObject;
 class Texture;
 class Camera;
+class Scene;
+class Light;
+class Model;
 
+struct SceneData{
+    std::vector<GameObject*> AllObjects;
+    std::vector<Light*> AllLights;
+    std::vector<GameObject*> AllOpaques;
+    std::map<std::string, Model*> loaded_models;
+    int n_point_lights = 0;
+};
 
 struct GlobalData{
    GLenum fill_type = GL_FILL;
    std::map<std::string,std::string> models_path;
    std::map<std::string, Shader*> all_shaders;
    std::map<std::string, Texture*> all_textures;
+   std::map<std::string, Camera*> all_cameras;
    Camera* main_camera;
+   Scene *active_scene;
 };
 
 class BasicsBlock{
     public:
-        BasicsBlock(Window* window, InputManager* input, Time* time,std::vector<GameObject*>* all_objs);
+        BasicsBlock(Window* window, InputManager* input, Time* time);
         bool was_resized = false;
         void WindowResized();
         
@@ -32,9 +44,6 @@ class BasicsBlock{
         InputManager* m_input;
         Time* m_time;
 
-        //Temporary VVV
-        std::vector<GameObject*>* all_objs;
-        //int n_point_lights = 0;
         //Threading
         std::mutex global_mutex;
         //Global information
@@ -50,7 +59,6 @@ class BasicsBlock{
         std::string Mat_diffuse;
         std::string Mat_specular;
         std::string Mat_shininess;
-
 
         std::string DirLight_prefix;
         std::string PointLights_prefix;

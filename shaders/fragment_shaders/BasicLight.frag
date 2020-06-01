@@ -69,7 +69,6 @@ vec3 CalcDirLight(DirLight light,vec3 normal, vec3 texDiffColor, vec3 texSpecCol
     vec3 reflectDir = reflect(-lightDir,normal);
     float spec = pow(max(dot(viewDir,reflectDir),0), material.shininess);
     vec3 specular = light.specular * (spec * texSpecColor);
-
     return (ambient + diffuse + specular);
 }
 
@@ -124,7 +123,6 @@ uniform DirLight dirLight;
 uniform SpotLight spotLight;
 
 uniform int hasSpotLight;
-
 void main()
 {
     vec4 texDiffColor = vec4(1);
@@ -135,7 +133,7 @@ void main()
     if(material.has_TexSpecular){
         texSpecColor = texture(material.texture_specular1,TexCoord);
     }
-
+    
     vec3 norm = normalize(aNormal);
     vec3 result = CalcDirLight(dirLight, norm,vec3(texDiffColor),vec3(texSpecColor));
 

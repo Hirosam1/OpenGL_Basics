@@ -17,7 +17,7 @@ bObject::bObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float in
 }
 
 void bObject::Ready(){
-    obj_iterator = bb->all_objs->begin();
+    obj_iterator = bb->global_data.active_scene->scene_data.AllObjects.begin();
 }
 
 void bObject::Update(){
@@ -55,6 +55,7 @@ void bObject::Update(){
 }
 
 void bObject::RenderGUI(){
+    
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -64,13 +65,13 @@ void bObject::RenderGUI(){
         ImGui::Begin("Game Object Manipulator");
         ImGui::Text("Select Object Name: %s", (*obj_iterator)->object_name.c_str());
         if(ImGui::Button("<<")){
-            if(obj_iterator != bb->all_objs->begin()){
+            if(obj_iterator != bb->global_data.active_scene->scene_data.AllObjects.begin()){
                 obj_iterator--;
             }
         }
         ImGui::SameLine();
         if (ImGui::Button(">>")){
-            if(obj_iterator != --bb->all_objs->end()){
+            if(obj_iterator != --bb->global_data.active_scene->scene_data.AllObjects.end()){
                 obj_iterator++;
             }
         }

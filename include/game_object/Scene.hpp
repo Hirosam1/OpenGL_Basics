@@ -2,6 +2,9 @@
 #include<iostream>
 #include<vector>
 #include"game_object/GameObject.hpp"
+#include "game_managing/BasicsBlock.hpp"
+#include "game_managing/SceneLoader.hpp"
+#include "game_object/Camera.hpp"
 
 /*Have all objects of a scene separated on ALL, LiGHT and OPAQUE
     You can tell it to create any object
@@ -9,7 +12,8 @@
 */
 class Scene{
     public:
-        Scene(std::string scene_path);
+        Scene(std::string scene_path, BasicsBlock* basic_block);
+        SceneData scene_data;
         void AddGameObject();
         void AddLightObject();
     private:

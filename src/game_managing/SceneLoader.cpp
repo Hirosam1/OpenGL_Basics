@@ -167,7 +167,10 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
         //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
     }else if( (e = line.find("|")) != std::string::npos){
             parameters = line.substr(e,line.length());
-            if(goElements.m_camera != nullptr && goElements.initial_pos != nullptr){
+            if(goElements.initial_pos != nullptr){
+                if(goElements.m_camera == nullptr){
+                    goElements.m_camera =  basic_block->global_data.main_camera;
+                }
                 gameObject_output = GameObjectFactory::GetObjectFromID(object_id,basic_block,goElements.m_camera,goElements.model,goElements.initial_pos,goElements.m_shader);
                 //ClearGoELemetns();
                 if(gameObject_output != nullptr){
@@ -242,7 +245,6 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                     std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
                 }
            }else if(tokens[0] == "direction"){
-               std::cout<<parameters<<"\n";
                if(tokens.size() > 3){
                    std::string to_remove = " ";
                    FileManagementTools::RemoveFromString(parameters,to_remove.data());

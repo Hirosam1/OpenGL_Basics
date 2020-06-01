@@ -2,6 +2,8 @@
 #include "game_object/GameObject.hpp"
 #include "game_object/Light.hpp"
 
+#include "game_object/Scene.hpp"
+
 class PulsingLight : public GameObject{
     public:
         static constexpr unsigned int go_id = 5;

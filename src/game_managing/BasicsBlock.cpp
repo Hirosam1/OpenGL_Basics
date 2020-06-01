@@ -1,6 +1,6 @@
 #include "game_managing/BasicsBlock.hpp"
-BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time,std::vector<GameObject*>* all_objs):
-m_window(window),m_input(input),m_time(time), all_objs(all_objs){
+BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time):
+m_window(window),m_input(input),m_time(time){
     
     this->outline_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Outline.frag");
 

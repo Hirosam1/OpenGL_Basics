@@ -24,7 +24,6 @@
     >position 0 0 0
 | "camera movment"
 
-
 + GO 2 #Program responsible to rendering the UI.  HAS to be the last
     > camera main_camera
     > position 0.0 0.0 0.0

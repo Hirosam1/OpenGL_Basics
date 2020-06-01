@@ -13,13 +13,7 @@
 #include "game_object/Model.hpp"
 #include "game_managing/BasicsBlock.hpp"
 
-struct SceneData{
-    std::vector<GameObject*> AllObjects;
-    std::vector<Light*> AllLights;
-    std::vector<GameObject*> AllOpaques;
-    std::map<std::string, Model*> loaded_models;
-    int n_point_lights = 0;
-};
+
 
 namespace SceneLoader {
     void LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data);

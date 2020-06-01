@@ -24,10 +24,7 @@ void GameManager::EngineInit(){
     this->main_input = new InputManager(this->main_window);
     this->main_time = new Time();
 
-    //this->all_objs = new std::vector<GameObject*>();
-    //this->all_lights = std::vector<Light*>();
-
-    this->basic_block = new BasicsBlock(main_window,main_input,main_time, &this->scene_data.AllObjects);
+    this->basic_block = new BasicsBlock(main_window,main_input,main_time);
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
@@ -44,7 +41,7 @@ void GameManager::EngineInit(){
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LEQUAL);
-    use_threads = false;
+    use_threads = true;
    
     //V-sync
     glfwSwapInterval(1);
@@ -52,7 +49,7 @@ void GameManager::EngineInit(){
 
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
-    this->threads[i] = std::thread(UpdateObjects,i,&this->scene_data.AllObjects,supported_concurrency,main_window, 
+    this->threads[i] = std::thread(UpdateObjects,i,&this->current_scene_data.AllObjects,supported_concurrency,main_window, 
                                        &basic_block->global_mutex,&lock_threads);
     }
 
@@ -66,13 +63,13 @@ void GameManager::SetUpObjects(){
     m_camera->camera_front = glm::vec3(0,0,-1);
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     basic_block->global_data.main_camera = m_camera;
+    
     std::cout<<"creating game objects...\n";
     //Model* box = new Model("models/box/Box.obj");
-
     //cubemap_tex = new CubeMapTexture("textures/skybox1");
-    SceneLoader::LoadSceneFromFile("scenes/scene_test.snsc",basic_block,&scene_data);
 
-    //std::cout<<scene_data.AllObjects.size() <<"\n";
+    basic_block->global_data.active_scene = new Scene("scenes/scene_test.snsc",basic_block);
+    current_scene_data = basic_block->global_data.active_scene->scene_data;
 
     //UI needs to be last?
     //all_objs->push_back(GUIObject);
@@ -128,7 +125,7 @@ void GameManager::EngnieStart(){
     
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
-    for(auto it = this->scene_data.AllObjects.begin(); it != this->scene_data.AllObjects.end();it++){
+    for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end();it++){
         (*it)->ReadyObject();
     }
 
@@ -165,8 +162,8 @@ void GameManager::EngnieStart(){
         glDisable(GL_DEPTH_TEST);
         plane.Draw(&screen_shader);
         //Last object, the GUI, needs to be Updated on main thread
-        if(this->scene_data.AllObjects.size() > 0){
-            this->scene_data.AllObjects.at(this->scene_data.AllObjects.size()-1)->Update();
+        if(this->current_scene_data.AllObjects.size() > 0){
+            this->current_scene_data.AllObjects.at(this->current_scene_data.AllObjects.size()-1)->Update();
         }
 
         glfwSwapBuffers(this->main_window->GetWindow());
@@ -185,8 +182,8 @@ void GameManager::EngnieStart(){
 void GameManager::RenderObjects(){
     glEnable(GL_CULL_FACE);
      //Render non opaque Objects
-    if(this->scene_data.AllObjects.size() > 0){
-        for(auto it = this->scene_data.AllObjects.begin(); it != this->scene_data.AllObjects.end() - 1;it++){
+    if(this->current_scene_data.AllObjects.size() > 0){
+        for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end() - 1;it++){
             if(!use_threads){
                 //Use this when giving that weird lag bug VVV
                 (*it)->Update();
@@ -195,7 +192,7 @@ void GameManager::RenderObjects(){
                 (*it)->UseShader();
                 Light* is_light = dynamic_cast<Light*>(*it);
                 if(is_light == NULL){
-                    for(auto lit = this->scene_data.AllLights.begin(); lit != this->scene_data.AllLights.end(); lit++){
+                    for(auto lit = this->current_scene_data.AllLights.begin(); lit != this->current_scene_data.AllLights.end(); lit++){
                         (*lit)->LightBuffering((*it));
                     }
                 }else{
@@ -216,11 +213,11 @@ void GameManager::RenderOpaques(){
     //renders opaque objects
     std::map<float,GameObject*> sorted;
     
-    for(unsigned int i = 0; i < this->scene_data.AllOpaques.size(); i++){
-        float distance = glm::length(m_camera->camera_pos - glm::vec3(this->scene_data.AllOpaques[i]->model_mat[3][0],
-                                                                        this->scene_data.AllOpaques[i]->model_mat[3][1],
-                                                                        this->scene_data.AllOpaques[i]->model_mat[3][2]));
-        sorted[distance] = this->scene_data.AllOpaques[i];
+    for(unsigned int i = 0; i < this->current_scene_data.AllOpaques.size(); i++){
+        float distance = glm::length(m_camera->camera_pos - glm::vec3(this->current_scene_data.AllOpaques[i]->model_mat[3][0],
+                                                                        this->current_scene_data.AllOpaques[i]->model_mat[3][1],
+                                                                        this->current_scene_data.AllOpaques[i]->model_mat[3][2]));
+        sorted[distance] = this->current_scene_data.AllOpaques[i];
     }       
 
     for(std::map<float,GameObject*>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it){

@@ -6,8 +6,8 @@ PulsingLight::PulsingLight(BasicsBlock* basic_block,Camera* m_camera,Model* mode
 
 void PulsingLight::Ready(){
     pointLight = nullptr;
-    for(int i = 0; i < bb->all_objs->size(); i++){
-        if(PointLight* light = dynamic_cast<PointLight*>(bb->all_objs->at(i))){
+    for(int i = 0; i < bb->global_data.active_scene->scene_data.AllObjects.size(); i++){
+        if(PointLight* light = dynamic_cast<PointLight*>(bb->global_data.active_scene->scene_data.AllObjects.at(i))){
             pointLight = light;
             break;
         }
