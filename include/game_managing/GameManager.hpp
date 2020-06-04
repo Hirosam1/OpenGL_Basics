@@ -27,6 +27,7 @@
 #include "game_object/FrameBuffer.hpp"
 #include "graphics/CubeMap.hpp"
 #include "game_managing/SceneLoader.hpp"
+#include "game_managing/ResourceLoader.hpp"
 
 #include "game_object/Scene.hpp"
 

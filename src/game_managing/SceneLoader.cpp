@@ -6,10 +6,6 @@ enum SceneReaderState : char{
     addingLight,
     addingOpaque,
     addingCamera,
-    addingShader,
-    addingModel,
-    addingTexture,
-    addingCubeMap
 };
 
 
@@ -162,6 +158,18 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                 }else{
                     std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
                 }
+           }else if(tokens[0] == "size"){
+                if(tokens.size() > 3){
+                   float* size = new float[3];
+                   size[0] = std::stof(tokens[1]);
+                   size[1] = std::stof(tokens[2]);
+                   size[2] = std::stof(tokens[3]);
+                   goElements.size = glm::vec3(glm::make_vec3(size));
+               }else if (tokens.size() > 1){
+                    float size;
+                    size = std::stof(tokens[1]);
+                    goElements.size = glm::vec3(size);
+               }
            }
         }
         //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
@@ -175,6 +183,8 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                 //ClearGoELemetns();
                 if(gameObject_output != nullptr){
                     std::regex_search(parameters,matches,reg);
+                    //Apply scaling operation
+                    gameObject_output->model_mat = glm::scale(gameObject_output->model_mat,goElements.size);
                     if(matches.ready()){
                     gameObject_output->object_name = matches.str(1);
                     }
@@ -182,7 +192,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                 }
                 return SceneReaderState::waiting;
             }else{
-                std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did select a camera and a initial position? \n";
+                std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did select a initial position? \n";
             }
         }
     return current_state;
@@ -237,6 +247,18 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                }
                
             //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
+           }else if(tokens[0] == "size"){
+                if(tokens.size() > 3){
+                   float* size = new float[3];
+                   size[0] = std::stof(tokens[1]);
+                   size[1] = std::stof(tokens[2]);
+                   size[2] = std::stof(tokens[3]);
+                   goElements.size = glm::vec3(glm::make_vec3(size));
+               }else if (tokens.size() > 1){
+                    float size;
+                    size = std::stof(tokens[1]);
+                    goElements.size = glm::vec3(size);
+               }
            }else if(tokens[0] == "shader"){
                std::regex_search(parameters,matches,reg);
                 if(basic_block->global_data.all_shaders.count(matches.str(1))){
@@ -257,13 +279,27 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                 light_elemtents.light_direction_is_position = true;
             }
         //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
+        }else if(tokens[0] == "color"){
+            if(tokens.size() > 3){
+                float* color = new float[3];
+                color[0] = std::stof(tokens[1]);
+                color[1] = std::stof(tokens[2]);
+                color[2] = std::stof(tokens[3]);
+                light_elemtents.light_color = glm::vec3(glm::make_vec3(color));
+            }
+        }else if(tokens[0] == "intensity"){
+            if(tokens.size() > 1){
+                float intensity;
+                intensity = std::stof(tokens[1]);
+                light_elemtents.light_intensity = intensity;
+            }
         }
         }
     }else if( (e = line.find("|")) != std::string::npos){
             parameters = line.substr(e,line.length());
             if(goElements.initial_pos != nullptr){
                 if(goElements.m_camera == nullptr){
-                    goElements.m_camera =  scene_data->main_camera;
+                    goElements.m_camera =  scene_data->main_camera; 
                 }
                 if(light_type == "directional"){
                     if(light_elemtents.light_direction != nullptr || light_elemtents.light_direction_is_position){
@@ -290,13 +326,17 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                 }
                 if(gameObject_output == nullptr){
                      std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Light Argument, did you select direction? \n";
+                }else{
+                    gameObject_output->model_mat = glm::scale(gameObject_output->model_mat,goElements.size);
+                    dynamic_cast<Light*>(gameObject_output)->light_color = light_elemtents.light_color;
+                    dynamic_cast<Light*>(gameObject_output)->light_intensity = light_elemtents.light_intensity;
+                    std::regex_search(parameters,matches,reg);
+                    if(matches.ready()){
+                        gameObject_output->object_name = matches.str(1);
+                    }
+                    scene_data->AllObjects.push_back(gameObject_output);
+                    scene_data->AllLights.push_back(dynamic_cast<Light*>(gameObject_output));
                 }
-                std::regex_search(parameters,matches,reg);
-                if(matches.ready()){
-                    gameObject_output->object_name = matches.str(1);
-                }
-                scene_data->AllObjects.push_back(gameObject_output);
-                scene_data->AllLights.push_back(dynamic_cast<Light*>(gameObject_output));
             }else{
                 std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did you select a camera, initial position? \n";
             }
@@ -314,6 +354,10 @@ void ClearGoELemetns(){
     goElements.m_camera = nullptr;
     goElements.m_shader = nullptr;
     goElements.model = nullptr;
+    goElements.size = glm::vec3(1.0);
+
     light_elemtents.light_direction = nullptr;
     light_elemtents.light_direction_is_position = false;
+    light_elemtents.light_color = glm::vec3(1.0);
+    light_elemtents.light_intensity = 1.0;
 }

@@ -28,13 +28,23 @@ struct SceneData{
 
 struct GlobalData{
    GLenum fill_type = GL_FILL;
+   std::string game_name;
    std::map<std::string,std::string> models_path;
    std::map<std::string, Shader*> all_shaders;
    std::map<std::string, Texture*> all_textures;
    
    Scene *active_scene;
 };
-
+/*
+This class contain critical and default information of the engine, such as:
+> Scene information
+> Global Data
+> Window Data
+> Input Data
+> Time data
+> Strings for the basic shaders
+> Window resize behaviour
+*/
 class BasicsBlock{
     public:
         BasicsBlock(Window* window, InputManager* input, Time* time);

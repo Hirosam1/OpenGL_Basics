@@ -31,6 +31,7 @@ struct GameObjectElements{
     Model* model = nullptr;
     float* initial_pos;
     Shader* m_shader = nullptr;
+    glm::vec3 size = glm::vec3(1.0);
 };
 
 /*Basic game object

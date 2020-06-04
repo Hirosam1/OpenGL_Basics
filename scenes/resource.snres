@@ -1,0 +1,8 @@
+Game_Name: "Game name"
+
+Add_Model: "box" "models/box/Box.obj"
+
+Add_Shader: "basic light" "shaders/vertex_shaders/MVP_texture_vertex.vert" "shaders/fragment_shaders/BasicLight.frag"
+
+#Coment this
+Add_Texture: "texture name" "texture path"

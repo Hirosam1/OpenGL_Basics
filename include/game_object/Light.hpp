@@ -5,8 +5,10 @@
 class GameManager;
 
 struct LightElements{
-   float* light_direction;
+    float* light_direction;
     bool light_direction_is_position = false;
+    glm::vec3 light_color;
+    float light_intensity = 1.0;
 };
 
 

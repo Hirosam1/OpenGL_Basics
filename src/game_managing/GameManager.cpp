@@ -61,7 +61,7 @@ void GameManager::SetUpObjects(){
     std::cout<<"creating game objects...\n";
     //Model* box = new Model("models/box/Box.obj");
     //cubemap_tex = new CubeMapTexture("textures/skybox1");
-
+    ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
     basic_block->global_data.active_scene = new Scene("scenes/scene_test.snsc",basic_block);
     current_scene_data = basic_block->global_data.active_scene->scene_data;
 
@@ -168,7 +168,6 @@ void GameManager::EngnieStart(){
         }
 
     }
-    
     this->TerminateEngine();
     
 }
