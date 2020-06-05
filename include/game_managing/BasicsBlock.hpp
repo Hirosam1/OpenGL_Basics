@@ -29,6 +29,7 @@ struct SceneData{
 struct GlobalData{
    GLenum fill_type = GL_FILL;
    std::string game_name;
+   
    std::map<std::string,std::string> models_path;
    std::map<std::string, Shader*> all_shaders;
    std::map<std::string, Texture*> all_textures;

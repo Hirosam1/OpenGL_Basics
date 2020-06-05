@@ -30,13 +30,13 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
     std::string output;
     GameObject* go;
     //This is only for test ============================
-    Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
-    Shader* lamp_shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
+    //Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
+    //Shader* lamp_shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
     Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
     Model* box = new Model("models/box/Box.obj");
-    basic_block->global_data.all_shaders["lamp shader"] = lamp_shader;
+    //basic_block->global_data.all_shaders["lamp shader"] = lamp_shader;
     basic_block->global_data.all_shaders["refraction"] = shader_refrag;
-    basic_block->global_data.all_shaders["basic light"] = shader;
+    //basic_block->global_data.all_shaders["basic light"] = shader;
     scene_data->loaded_models["box"] = box;
     //End test =========================================
 
@@ -94,7 +94,7 @@ char waitingState(char current_state, std::string line, std::string* output){
                     *output = "spot";
                     return SceneReaderState::addingLight;
                 }else{
-                     std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cant match \""<< tokens[2] <<"\"\n";
+                     std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \""<< tokens[2] <<"\"\n";
                 }
             }
         }
@@ -133,12 +133,12 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                         //If it is give it to goElements
                         goElements.model = scene_data->loaded_models[matches.str(1)];
                     }else{
-                        std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
                     }
                     
                 }
                 else{
-                    std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cant match \"name of model\"\n";
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
                 }
             //NECESSARY (Should it be?) sets the initial position
            }else if(tokens[0] == "position"){
@@ -156,7 +156,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                 if(basic_block->global_data.all_shaders.count(matches.str(1))){
                     goElements.m_shader = basic_block->global_data.all_shaders[matches.str(1)];
                 }else{
-                    std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
                 }
            }else if(tokens[0] == "size"){
                 if(tokens.size() > 3){
@@ -192,7 +192,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                 }
                 return SceneReaderState::waiting;
             }else{
-                std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did select a initial position? \n";
+                std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did select a initial position? \n";
             }
         }
     return current_state;
@@ -229,12 +229,12 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                         //If it is give it to goElements
                         goElements.model = scene_data->loaded_models[matches.str(1)];
                     }else{
-                        std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
                     }
                     
                 }
                 else{
-                    std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cant match \"name of model\"\n";
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
                 }
             //NECESSARY (Should it be?) sets the initial position
            }else if(tokens[0] == "position"){
@@ -264,7 +264,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                 if(basic_block->global_data.all_shaders.count(matches.str(1))){
                     goElements.m_shader = basic_block->global_data.all_shaders[matches.str(1)];
                 }else{
-                    std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<" -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
                 }
            }else if(tokens[0] == "direction"){
                if(tokens.size() > 3){
@@ -325,7 +325,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                     }
                 }
                 if(gameObject_output == nullptr){
-                     std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Light Argument, did you select direction? \n";
+                     std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Light Argument, did you select direction? \n";
                 }else{
                     gameObject_output->model_mat = glm::scale(gameObject_output->model_mat,goElements.size);
                     dynamic_cast<Light*>(gameObject_output)->light_color = light_elemtents.light_color;
@@ -338,7 +338,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                     scene_data->AllLights.push_back(dynamic_cast<Light*>(gameObject_output));
                 }
             }else{
-                std::cout<<"FILE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did you select a camera, initial position? \n";
+                std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did you select a camera, initial position? \n";
             }
                 return SceneReaderState::waiting;
             }

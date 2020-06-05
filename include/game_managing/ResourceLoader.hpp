@@ -9,6 +9,7 @@
 #include "graphics/Shader.hpp"
 #include "graphics/Texture.hpp"
 #include "game_managing/BasicsBlock.hpp"
+#include "game_tools/FileManagementTools.hpp"
 
 namespace ResourceLoader{
     void LoadResourceFromFile(std::string file_path,BasicsBlock* basic_block);
