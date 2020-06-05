@@ -36,6 +36,13 @@
     > shader "basic light"
 | "box 3"
 
++ GO 4
+    > model "mushroom boi"
+    > position -1 2 -2
+    > shader "basic light"
+    >size 0.5
+|"mushroom boi" 
+
 + GO 1 #Camera movment #Program responsible with the movment of the camera
     >position 0 0 0
 | "camera movment"

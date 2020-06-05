@@ -32,12 +32,10 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
     //This is only for test ============================
     //Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     //Shader* lamp_shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-    Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
-    Model* box = new Model("models/box/Box.obj");
+    //Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
     //basic_block->global_data.all_shaders["lamp shader"] = lamp_shader;
-    basic_block->global_data.all_shaders["refraction"] = shader_refrag;
+    //basic_block->global_data.all_shaders["refraction"] = shader_refrag;
     //basic_block->global_data.all_shaders["basic light"] = shader;
-    scene_data->loaded_models["box"] = box;
     //End test =========================================
 
     while(std::getline(infile,line)){
@@ -133,7 +131,13 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                         //If it is give it to goElements
                         goElements.model = scene_data->loaded_models[matches.str(1)];
                     }else{
-                        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        if(basic_block->global_data.models_path.count(matches.str(1))){
+                            Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
+                            scene_data->loaded_models[matches.str(1)] = loaded_model;
+                            goElements.model = loaded_model;
+                        }else{
+                            std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        }
                     }
                     
                 }
@@ -229,7 +233,13 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                         //If it is give it to goElements
                         goElements.model = scene_data->loaded_models[matches.str(1)];
                     }else{
-                        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        if(basic_block->global_data.models_path.count(matches.str(1))){
+                            Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
+                            scene_data->loaded_models[matches.str(1)] = loaded_model;
+                            goElements.model = loaded_model;
+                        }else{
+                            std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        }
                     }
                     
                 }

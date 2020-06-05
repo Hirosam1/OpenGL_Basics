@@ -43,9 +43,9 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                 std::vector<std::string> tokens = FileManagementTools::ParseLine(parameters, ",");
                 if(tokens.size() == 2){
                     int check = 0;
-                    find_match(tokens[0],reg,&check);
+                    output = find_match(tokens[0],reg,&check).str(1);
                     int success = check;
-                    find_match(tokens[0],reg,&check);
+                    model_path = find_match(tokens[1],reg,&check).str(1);
                     success += check;
                     if(success == 2){
                         //Sets a path to the list of path referenced by a name
@@ -72,7 +72,6 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                     success += check;
                     
                     if(success == 3){
-                        std::cout<<"lol\n";
                         Shader* a_shader = new Shader(vertex_shader,fragment_shader);
                         basic_block->global_data.all_shaders[output] = a_shader;
                     }
