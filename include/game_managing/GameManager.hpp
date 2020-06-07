@@ -30,6 +30,7 @@
 #include "game_managing/ResourceLoader.hpp"
 
 #include "game_object/Scene.hpp"
+#include "personal_objects/bObject.hpp"
 
 class GameManager{
     private:

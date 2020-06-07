@@ -56,8 +56,12 @@ class BasicsBlock{
         InputManager* m_input;
         Time* m_time;
 
+        //GUI game object
+        GameObject* GUI_gameObject;
+
         //Threading
         std::mutex global_mutex;
+        std::mutex scene_mutex;
         //Global information
         GlobalData global_data;
         //Shader responsible for drawing the outline of objects

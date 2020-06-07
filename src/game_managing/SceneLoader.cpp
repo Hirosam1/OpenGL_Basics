@@ -217,7 +217,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
         //It also gets the parameters as one string, in case we need string handling
         parameters = line.substr(line.find(tokens[1]),line.length());
         if(tokens.size() >1){
-            //NECESSARY sets what camera to use
+            //sets what camera to use
            if(tokens[0] == "camera"){
                // sets the camera as the main one, setted on global settings (maybe should be scene NOT global)
                if(parameters == "main_camera"){
@@ -256,7 +256,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                    goElements.initial_pos = position;
                }
                
-            //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
+            
            }else if(tokens[0] == "size"){
                 if(tokens.size() > 3){
                    float* size = new float[3];
@@ -269,6 +269,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                     size = std::stof(tokens[1]);
                     goElements.size = glm::vec3(size);
                }
+               //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
            }else if(tokens[0] == "shader"){
                std::regex_search(parameters,matches,reg);
                 if(basic_block->global_data.all_shaders.count(matches.str(1))){
@@ -276,6 +277,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                 }else{
                     std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
                 }
+           //Sets the direction of the light, unessessary if it is a point light
            }else if(tokens[0] == "direction"){
                if(tokens.size() > 3){
                    std::string to_remove = " ";
@@ -285,10 +287,11 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                    direction[1] = std::stof(tokens[2]);
                    direction[2] = std::stof(tokens[3]);
                    light_elemtents.light_direction = direction;
+            //This  sets the direction equal to the objet position
             }else if(parameters == "this_position"){
                 light_elemtents.light_direction_is_position = true;
             }
-        //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
+        //Sets the color of the light
         }else if(tokens[0] == "color"){
             if(tokens.size() > 3){
                 float* color = new float[3];
@@ -297,6 +300,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                 color[2] = std::stof(tokens[3]);
                 light_elemtents.light_color = glm::vec3(glm::make_vec3(color));
             }
+         //Sets the intensity of the light
         }else if(tokens[0] == "intensity"){
             if(tokens.size() > 1){
                 float intensity;
@@ -305,6 +309,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
             }
         }
         }
+    //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
     }else if( (e = line.find("|")) != std::string::npos){
             parameters = line.substr(e,line.length());
             if(goElements.initial_pos != nullptr){
@@ -348,7 +353,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                     scene_data->AllLights.push_back(dynamic_cast<Light*>(gameObject_output));
                 }
             }else{
-                std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did you select a camera, initial position? \n";
+                std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Missing Game Object Argumetns, did you select a initial position? \n";
             }
                 return SceneReaderState::waiting;
             }

@@ -13,6 +13,10 @@ void Model::Draw(){
     }
 }
 
+Model::~Model(){
+
+}
+
 void Model::LoadModel(std::string path){
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(path,aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -20,7 +24,7 @@ void Model::LoadModel(std::string path){
         std::cout<<"ERROR::ASSIMP::" << import.GetErrorString() << "\n";
         return;
     }
-    std::cout<<"Loading model = " << path <<"\n";
+    std::cout<<"Loading model -> " << path <<"\n";
     directory = path.substr(0, path.find_last_of("/"));
     ProcessNode(scene->mRootNode, scene);
 }

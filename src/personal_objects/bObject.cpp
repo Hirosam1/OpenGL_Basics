@@ -34,7 +34,6 @@ void bObject::Update(){
         m_deque_test->clear();
     }
     #endif
-    
     if(show_cursor == GLFW_CURSOR_NORMAL) RenderGUI();
     if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
         
@@ -55,15 +54,17 @@ void bObject::Update(){
 }
 
 void bObject::RenderGUI(){
-    
+   
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     {
         static float vec_pos[3];
         static float *vec_color;
-        ImGui::Begin("Game Object Manipulator");
-        ImGui::Text("Select Object Name: %s", (*obj_iterator)->object_name.c_str());
+        ImGui::Begin("Game Object Manipulator"); 
+        ImGui::Text("Select Object Name: %s", (*obj_iterator)->object_name.c_str());   
+        
         if(ImGui::Button("<<")){
             if(obj_iterator != bb->global_data.active_scene->scene_data.AllObjects.begin()){
                 obj_iterator--;
@@ -106,10 +107,18 @@ void bObject::RenderGUI(){
             ImGui::NewLine();
         }
         ImGui::Text("FPS: %f", 1/m_time->delta_time);
+        ImGui::Checkbox("Change scene", &show_another_window);
+        ImGui::End();
+    }
+        if(show_another_window){
+        ImGui::Begin("Scene handler");
 
+        if(ImGui::Button("Change Scene")){
+            //Scene::ChangeScene("scenes/scene_mushroom.snsc", bb);
+        }
         ImGui::End();
     }
 
     ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); 
 }

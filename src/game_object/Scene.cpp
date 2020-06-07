@@ -9,3 +9,25 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
     //basic_block->global_data.main_camera = m_camera;
     SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data);
 }
+
+Scene::~Scene(){
+    std::cout<<"deleting main scene\n";
+    /*Delete loaded models, loaded shaders and cameras*/
+    for(unsigned int i =0; i < this->scene_data.AllObjects.size(); i++){
+        delete this->scene_data.AllObjects.at(i);
+    }
+    this->scene_data.AllObjects.clear();
+    this->scene_data.AllLights.clear();
+    this->scene_data.AllOpaques.clear();
+    //Delete the camera list when I have one
+    //for(unsigned int i =0; i <)
+    delete this->scene_data.main_camera;
+}
+
+void Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
+    //std::unique_lock<std::mutex>lck (basic_block->scene_mutex);
+    //delete basic_block->global_data.active_scene;
+    //Scene* new_scene = new Scene(scene_path,  basic_block);
+    //basic_block->global_data.active_scene = new_scene;
+    //lck.unlock();
+}

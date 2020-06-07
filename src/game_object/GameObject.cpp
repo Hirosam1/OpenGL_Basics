@@ -9,6 +9,10 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
    this->bb = basic_block;
 }
 
+GameObject::~GameObject(){
+   std::cout<<object_name<<" -> deleted\n";
+}
+
 //Updates the data and send it to GPU
  void GameObject::BufferAndDraw(){
    if(this->m_shader != nullptr && m_model != nullptr){

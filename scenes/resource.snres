@@ -1,8 +1,11 @@
+# Sets the game name
 Game_Name: "This is the game name"
 
+#Add the path to all used models
 Add_Model: "box", "models/box/Box.obj"
 Add_Model: "mushroom boi", "models/mushroom_boy/mushroom_boy2.obj"
 
+#Sets the shaders programs
 Add_Shader: "basic light", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight.frag"
 Add_Shader: "lamp shader", "shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag"
 

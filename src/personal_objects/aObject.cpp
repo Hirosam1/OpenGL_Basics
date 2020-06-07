@@ -15,11 +15,10 @@ aObject::aObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float in
 }
 
 void aObject::Ready(){
-    for(auto e = bb->global_data.active_scene->scene_data.AllObjects.begin(); e != bb->global_data.active_scene->scene_data.AllObjects.end(); e++){
-        if((*e)->object_name == "GUI gameObject"){
-            GUIObject = dynamic_cast<bObject*>(*e);
+        if(bb->GUI_gameObject != nullptr){
+            GUIObject = dynamic_cast<bObject*>(bb->GUI_gameObject);
         }
-    }
+    
 }
 
 void aObject::Update(){

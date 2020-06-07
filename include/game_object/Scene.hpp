@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<vector>
+#include<mutex>
 #include"game_object/GameObject.hpp"
 #include "game_managing/BasicsBlock.hpp"
 #include "game_managing/SceneLoader.hpp"
@@ -13,10 +14,12 @@
 class Scene{
     public:
         Scene(std::string scene_path, BasicsBlock* basic_block);
+        ~Scene();
         SceneData scene_data;
         void AddGameObject();
         void AddLightObject();
+        static void ChangeScene(std::string scene_path, BasicsBlock* basic_block);
     private:
         std::string scene_path;
-        void LoadSceneFromFile();
+        //void LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block);
 };

@@ -15,11 +15,13 @@ class Model{
         Model(std::string path, bool texture_repeat = true):repeat(texture_repeat){
             LoadModel(path);
         }
+        ~Model();
         void Draw(Shader* shader);
         void Draw();
         bool repeat;
         std::vector<Texture> textures_loaded;
         std::vector<Mesh> meshes;
+        aiScene m_scene;
     private:
         /*Model data*/
         //std::vector<Mesh> meshes;

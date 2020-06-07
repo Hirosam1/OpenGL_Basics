@@ -62,10 +62,11 @@ void GameManager::SetUpObjects(){
     //Model* box = new Model("models/box/Box.obj");
     //cubemap_tex = new CubeMapTexture("textures/skybox1");
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
-    basic_block->global_data.active_scene = new Scene("scenes/scene_test.snsc",basic_block);
+    basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
     current_scene_data = basic_block->global_data.active_scene->scene_data;
 
     //UI needs to be last?
+    basic_block->GUI_gameObject = new bObject(basic_block,basic_block->global_data.active_scene->scene_data.main_camera,nullptr,new float[3]{0,0,0},nullptr);
     //all_objs->push_back(GUIObject);
 
 }
@@ -83,9 +84,9 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         wait_main->wait(lck);
         lck.unlock();
         //Update all minus the last one
-        while(all_objs->size() > 0 && pos < all_objs->size()-1){
+        while(all_objs->size() > 0 && pos < all_objs->size()){
             pos = id + supported_concurrency * i++;
-            if (pos < all_objs->size()-1){
+            if (pos < all_objs->size()){
                 all_objs->at(pos)->Update();
             }
         }
@@ -122,6 +123,7 @@ void GameManager::EngnieStart(){
     for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end();it++){
         (*it)->ReadyObject();
     }
+    basic_block->GUI_gameObject->ReadyObject();
 
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
@@ -132,6 +134,8 @@ void GameManager::EngnieStart(){
 
         this->main_time->UpdateDelta();
         glfwPollEvents();
+        //Lock here
+        //lck.lock();
         if(use_threads){
             // this when giving that weird lag bug VVV
             lock_threads.notify_all();
@@ -156,11 +160,15 @@ void GameManager::EngnieStart(){
         glDisable(GL_DEPTH_TEST);
         plane.Draw(&screen_shader);
         //Last object, the GUI, needs to be Updated on main thread
+        /*
         if(this->current_scene_data.AllObjects.size() > 0){
             this->current_scene_data.AllObjects.at(this->current_scene_data.AllObjects.size()-1)->Update();
-        }
+        }*/
 
+        //lck.unlock();
+        basic_block->GUI_gameObject->Update();
         glfwSwapBuffers(this->main_window->GetWindow());
+         
         this->main_input->ResetValues();
         if(this->basic_block->was_resized){
             frame_buffer.ResetBuffers(this->main_window->GetWidth(),this->main_window->GetHeight());
@@ -176,7 +184,7 @@ void GameManager::RenderObjects(){
     glEnable(GL_CULL_FACE);
      //Render non opaque Objects
     if(this->current_scene_data.AllObjects.size() > 0){
-        for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end() - 1;it++){
+        for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end();it++){
             if(!use_threads){
                 //Use this when giving that weird lag bug VVV
                 (*it)->Update();

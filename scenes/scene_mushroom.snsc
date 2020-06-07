@@ -1,0 +1,32 @@
++ light point # Creates a point light
+    > camera main_camera
+    > model "box"
+    > size 0.25
+    > position 0 -0.25 3
+    > color 0.54 0.29 1.0
+    >shader "lamp shader"
+| "point light"
+
++ light directional #creates a directional light
+    > camera main_camera
+    > position -0.5 -1 -0.1
+    #sets the direction the same as the position, so when you change the position you change the direction, usefull here since the position does not matter
+    > direction this_position
+    > color 0.65 0.93 1.0
+    > intensity 0.6
+| "directional light"
+
++ GO 4
+    > model "mushroom boi"
+    > position -1 2 -2
+    > shader "basic light"
+    >size 0.5
+|"mushroom boi" 
+
++ GO 1 #Camera movment #Program responsible with the movment of the camera
+    >position 0 0 0
+| "camera movment"
+
++ GO 2 #Program responsible to rendering the UI.  HAS to be the last
+    > position 0.0 0.0 0.0
+| "GUI gameObject"
