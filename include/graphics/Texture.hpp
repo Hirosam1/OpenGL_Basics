@@ -19,7 +19,7 @@ class Texture{
         unsigned int GetTexture();
         std::string tex_type;
         std::string path;
-        
+        void UnloadTexture();
     private:
         void CreateTexture(std::string* texture_path,bool repeat,GLenum img_type, unsigned int width = 1, unsigned int height = 1);
     protected:

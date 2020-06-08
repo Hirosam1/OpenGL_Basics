@@ -5,6 +5,10 @@ Texture::Texture(){
     glGenTextures(1,&this->m_texture);
 }
 
+void Texture::UnloadTexture(){
+    glDeleteTextures(1, &this->m_texture);
+}
+
 Texture::Texture(std::string texture_path,GLenum img_type, bool repeat):tex_type(tex_type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);

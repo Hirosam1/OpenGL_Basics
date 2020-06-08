@@ -5,6 +5,10 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
     this->SetUpMesh();
 }
 
+void Mesh::UnloadMeshData(){
+    this->vao->UnloadVAO();
+}
+
 void Mesh::SetUpMesh(){
     vao = new VAO();
     glBindVertexArray(vao->m_VAO);

@@ -16,6 +16,9 @@ Scene::~Scene(){
     for(unsigned int i =0; i < this->scene_data.AllObjects.size(); i++){
         delete this->scene_data.AllObjects.at(i);
     }
+    for(auto it = this->scene_data.loaded_models.begin(); it != this->scene_data.loaded_models.end(); it++){
+        delete it->second;
+    }
     this->scene_data.AllObjects.clear();
     this->scene_data.AllLights.clear();
     this->scene_data.AllOpaques.clear();

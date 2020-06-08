@@ -16,6 +16,13 @@ VAO::VAO(GLenum vertex_type):vertex_type(vertex_type = GL_FLOAT){
 
 }
 
+void VAO::UnloadVAO(){
+    glDeleteBuffers(1, &this->m_VBO);
+    glDeleteBuffers(1, &this->m_EBO);
+
+    glDeleteVertexArrays(1, &this->m_VAO);
+}
+
 void VAO::SetAttribPoint(unsigned int index,unsigned int vertex_att_num, GLenum type){
     stride = this->elements_stride->at(index) < 1 ?this->GetStride() : this->elements_stride->at(index) * sizeof(this->vertex_type);
     glVertexAttribPointer(index,vertex_att_num,type,GL_FALSE, stride, (void *)(uintptr_t)this->SumSizesToAtt(index));

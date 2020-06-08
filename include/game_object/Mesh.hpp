@@ -23,6 +23,7 @@ class Mesh{
         std::vector<Texture> textures;
         /* Methods */
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material, bool has_texDiff = false, bool has_texSpec = false);
+        void UnloadMeshData();
         //Draw object using given shader
         void Draw(Shader* shader);
         //Draw object not using any shader you have to set ip up yourself

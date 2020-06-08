@@ -14,7 +14,15 @@ void Model::Draw(){
 }
 
 Model::~Model(){
+    for(unsigned int i = 0 ; i < this->textures_loaded.size(); i++){
+        this->textures_loaded[i].UnloadTexture();
+    }
+    for(unsigned int i = 0; i < this->meshes.size(); i++){
+        this->meshes[i].UnloadMeshData();
+    }
 
+    this->textures_loaded.clear();
+    this->meshes.clear();
 }
 
 void Model::LoadModel(std::string path){
@@ -100,7 +108,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene){
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
         m_material = LoadMaterial(material);
     }
-
     return Mesh(vertices,indices,textures, m_material,has_texDiff,has_texSpec);
 
 }
