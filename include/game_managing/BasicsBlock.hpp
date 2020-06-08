@@ -17,6 +17,7 @@ class Light;
 class Model;
 
 struct SceneData{
+    std::string scene_name;
     std::vector<GameObject*> AllObjects;
     std::vector<Light*> AllLights;
     std::vector<GameObject*> AllOpaques;

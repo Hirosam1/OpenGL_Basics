@@ -62,7 +62,7 @@ void bObject::RenderGUI(){
     {
         static float vec_pos[3];
         static float *vec_color;
-        ImGui::Begin("Game Object Manipulator"); 
+        ImGui::Begin("Game Object Manipulator");
         ImGui::Text("Select Object Name: %s", (*obj_iterator)->object_name.c_str());   
         
         if(ImGui::Button("<<")){
@@ -109,12 +109,13 @@ void bObject::RenderGUI(){
         ImGui::Text("FPS: %f", 1/m_time->delta_time);
         ImGui::Checkbox("Change scene", &show_another_window);
         ImGui::End();
+        
     }
         if(show_another_window){
         ImGui::Begin("Scene handler");
 
         if(ImGui::Button("Change Scene")){
-            //Scene::ChangeScene("scenes/scene_mushroom.snsc", bb);
+            Scene::ChangeScene("scenes/scene_mushroom.snsc", bb);
         }
         ImGui::End();
     }

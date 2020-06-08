@@ -69,7 +69,7 @@ class GameManager{
         std::string game_name;
 
         //The current scene data
-        SceneData current_scene_data;
+        //SceneData current_scene_data;
 
         //Global time manager
         Time* main_time;
@@ -83,8 +83,6 @@ class GameManager{
         //Keep track of threads
         unsigned int count = 0;
         
-        /*TEST*/
-        Camera* m_camera;
 
         //------------------------------------- Methods ----------------------------------------------------------------
         

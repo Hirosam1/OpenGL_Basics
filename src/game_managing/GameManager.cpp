@@ -41,7 +41,7 @@ void GameManager::EngineInit(){
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LEQUAL);
-    use_threads = true;
+    use_threads = false;
    
     //V-sync
     glfwSwapInterval(1);
@@ -49,8 +49,9 @@ void GameManager::EngineInit(){
 
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
+        /*
     this->threads[i] = std::thread(UpdateObjects,i,&this->current_scene_data.AllObjects,supported_concurrency,main_window, 
-                                       &basic_block->global_mutex,&lock_threads);
+                                       &basic_block->global_mutex,&lock_threads);*/
     }
 
 }
@@ -63,7 +64,7 @@ void GameManager::SetUpObjects(){
     //cubemap_tex = new CubeMapTexture("textures/skybox1");
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
     basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
-    current_scene_data = basic_block->global_data.active_scene->scene_data;
+    //current_scene_data = basic_block->global_data.active_scene->scene_data;
 
     //UI needs to be last?
     basic_block->GUI_gameObject = new bObject(basic_block,basic_block->global_data.active_scene->scene_data.main_camera,nullptr,new float[3]{0,0,0},nullptr);
@@ -120,11 +121,10 @@ void GameManager::EngnieStart(){
     
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
-    for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end();it++){
+    for(auto it = this->basic_block->global_data.active_scene->scene_data.AllObjects.begin(); it != this->basic_block->global_data.active_scene->scene_data.AllObjects.end();it++){
         (*it)->ReadyObject();
     }
     basic_block->GUI_gameObject->ReadyObject();
-
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
         if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
             glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
@@ -135,7 +135,7 @@ void GameManager::EngnieStart(){
         this->main_time->UpdateDelta();
         glfwPollEvents();
         //Lock here
-        //lck.lock();
+        lck.lock();
         if(use_threads){
             // this when giving that weird lag bug VVV
             lock_threads.notify_all();
@@ -164,9 +164,9 @@ void GameManager::EngnieStart(){
         if(this->current_scene_data.AllObjects.size() > 0){
             this->current_scene_data.AllObjects.at(this->current_scene_data.AllObjects.size()-1)->Update();
         }*/
-
-        //lck.unlock();
         basic_block->GUI_gameObject->Update();
+        lck.unlock();
+        
         glfwSwapBuffers(this->main_window->GetWindow());
          
         this->main_input->ResetValues();
@@ -183,8 +183,8 @@ void GameManager::EngnieStart(){
 void GameManager::RenderObjects(){
     glEnable(GL_CULL_FACE);
      //Render non opaque Objects
-    if(this->current_scene_data.AllObjects.size() > 0){
-        for(auto it = this->current_scene_data.AllObjects.begin(); it != this->current_scene_data.AllObjects.end();it++){
+    if(this->basic_block->global_data.active_scene->scene_data.AllObjects.size() > 0){
+        for(auto it = this->basic_block->global_data.active_scene->scene_data.AllObjects.begin(); it != this->basic_block->global_data.active_scene->scene_data.AllObjects.end();it++){
             if(!use_threads){
                 //Use this when giving that weird lag bug VVV
                 (*it)->Update();
@@ -193,7 +193,7 @@ void GameManager::RenderObjects(){
                 (*it)->UseShader();
                 Light* is_light = dynamic_cast<Light*>(*it);
                 if(is_light == NULL){
-                    for(auto lit = this->current_scene_data.AllLights.begin(); lit != this->current_scene_data.AllLights.end(); lit++){
+                    for(auto lit = this->basic_block->global_data.active_scene->scene_data.AllLights.begin(); lit != this->basic_block->global_data.active_scene->scene_data.AllLights.end(); lit++){
                         (*lit)->LightBuffering((*it));
                     }
                 }else{
@@ -214,11 +214,11 @@ void GameManager::RenderOpaques(){
     //renders opaque objects
     std::map<float,GameObject*> sorted;
     
-    for(unsigned int i = 0; i < this->current_scene_data.AllOpaques.size(); i++){
-        float distance = glm::length(m_camera->camera_pos - glm::vec3(this->current_scene_data.AllOpaques[i]->model_mat[3][0],
-                                                                        this->current_scene_data.AllOpaques[i]->model_mat[3][1],
-                                                                        this->current_scene_data.AllOpaques[i]->model_mat[3][2]));
-        sorted[distance] = this->current_scene_data.AllOpaques[i];
+    for(unsigned int i = 0; i < this->basic_block->global_data.active_scene->scene_data.AllOpaques.size(); i++){
+        float distance = glm::length(basic_block->global_data.active_scene->scene_data.main_camera->camera_pos - glm::vec3(this->basic_block->global_data.active_scene->scene_data.AllOpaques[i]->model_mat[3][0],
+                                                                        this->basic_block->global_data.active_scene->scene_data.AllOpaques[i]->model_mat[3][1],
+                                                                        this->basic_block->global_data.active_scene->scene_data.AllOpaques[i]->model_mat[3][2]));
+        sorted[distance] = this->basic_block->global_data.active_scene->scene_data.AllOpaques[i];
     }       
 
     for(std::map<float,GameObject*>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it){

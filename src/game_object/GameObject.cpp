@@ -10,7 +10,7 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
 }
 
 GameObject::~GameObject(){
-   std::cout<<object_name<<" -> deleted\n";
+   std::cout<<object_name<<" -> Implement deletion of initial position\n";
 }
 
 //Updates the data and send it to GPU

@@ -26,7 +26,3 @@
 + GO 1 #Camera movment #Program responsible with the movment of the camera
     >position 0 0 0
 | "camera movment"
-
-+ GO 2 #Program responsible to rendering the UI.  HAS to be the last
-    > position 0.0 0.0 0.0
-| "GUI gameObject"

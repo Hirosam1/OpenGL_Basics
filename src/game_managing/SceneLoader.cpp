@@ -24,20 +24,12 @@ GameObjectElements goElements;
 LightElements light_elemtents;
 int line_number = 0;
 void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data){
+    scene_data->scene_name = scene_path.substr(scene_path.find_last_of("/")+1,scene_path.length());
     int current_state = SceneReaderState::waiting;
     std::ifstream infile(scene_path);
     std::string line;
     std::string output;
     GameObject* go;
-    //This is only for test ============================
-    //Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
-    //Shader* lamp_shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag");
-    //Shader* shader_refrag = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Refraction.frag");
-    //basic_block->global_data.all_shaders["lamp shader"] = lamp_shader;
-    //basic_block->global_data.all_shaders["refraction"] = shader_refrag;
-    //basic_block->global_data.all_shaders["basic light"] = shader;
-    //End test =========================================
-
     while(std::getline(infile,line)){
         line_number++;
         int e = line.find("#");

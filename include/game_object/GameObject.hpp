@@ -45,6 +45,7 @@ class GameObject{
     public:
         std::string object_name = "Game Object";
         friend class GameManager;
+        friend class Scene;
         //Constructors
         /*GameObject(BasicsBlock* basic_block);
         GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
