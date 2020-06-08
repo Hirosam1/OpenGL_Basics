@@ -98,7 +98,7 @@ class GameManager{
         //Terminate Engine
         void TerminateEngine();
 
-        static void UpdateObjects(int id, std::vector<GameObject*>* all_objs,
+        static void UpdateObjects(int id, BasicsBlock* basic_block,
             unsigned int supported_concurrency,Window* window,
             std::mutex *mtx,std::condition_variable *wait_main);
 

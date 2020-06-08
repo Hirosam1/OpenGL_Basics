@@ -25,12 +25,15 @@ Scene::~Scene(){
 }
 
 void Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
-    std::unique_lock<std::mutex>lck (basic_block->scene_mutex);
-    delete basic_block->global_data.active_scene;
+    //Load the scene out os sync with the main thread
     Scene* new_scene = new Scene(scene_path,  basic_block);
+    std::unique_lock<std::mutex>lck (basic_block->scene_mutex);
+    //Delete and reset scene in sync with the main thread
+    delete basic_block->global_data.active_scene;
     for(unsigned int i = 0; i < new_scene->scene_data.AllObjects.size(); i++){
         new_scene->scene_data.AllObjects[i]->ReadyObject();
     }
     basic_block->global_data.active_scene = new_scene;
+    basic_block->GUI_gameObject->ReadyObject();
     lck.unlock();
 }

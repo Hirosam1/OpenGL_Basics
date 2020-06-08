@@ -35,7 +35,7 @@ struct GlobalData{
    std::map<std::string, Shader*> all_shaders;
    std::map<std::string, Texture*> all_textures;
    
-   Scene *active_scene;
+   Scene *active_scene = nullptr;
 };
 /*
 This class contain critical and default information of the engine, such as:

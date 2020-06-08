@@ -49,9 +49,9 @@ void GameManager::EngineInit(){
 
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
-        /*
-    this->threads[i] = std::thread(UpdateObjects,i,&this->current_scene_data.AllObjects,supported_concurrency,main_window, 
-                                       &basic_block->global_mutex,&lock_threads);*/
+        
+    this->threads[i] = std::thread(UpdateObjects,i,basic_block,supported_concurrency,main_window, 
+                                       &basic_block->global_mutex,&lock_threads);
     }
 
 }
@@ -72,7 +72,7 @@ void GameManager::SetUpObjects(){
 
 }
 
-void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
+void GameManager::UpdateObjects(int id, BasicsBlock* basic_block,
         unsigned int supported_concurrency,Window* window,
         std::mutex *mtx, std::condition_variable *wait_main){
     //Create its lock based on shared mutex, don't need to lock at this point that is why defer_lock
@@ -85,13 +85,14 @@ void GameManager::UpdateObjects(int id, std::vector<GameObject*>* all_objs,
         wait_main->wait(lck);
         lck.unlock();
         //Update all minus the last one
-        while(all_objs->size() > 0 && pos < all_objs->size()){
-            pos = id + supported_concurrency * i++;
-            if (pos < all_objs->size()){
-                all_objs->at(pos)->Update();
+        if(basic_block->global_data.active_scene != nullptr){
+            while(basic_block->global_data.active_scene->scene_data.AllObjects.size() > 0 && pos < basic_block->global_data.active_scene->scene_data.AllObjects.size()){
+                pos = id + supported_concurrency * i++;
+                if (pos < basic_block->global_data.active_scene->scene_data.AllObjects.size()){
+                    basic_block->global_data.active_scene->scene_data.AllObjects.at(pos)->Update();
+                }
             }
         }
-    
     }
 
 }
