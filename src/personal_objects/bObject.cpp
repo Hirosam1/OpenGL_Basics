@@ -115,10 +115,9 @@ void bObject::RenderGUI(){
     }
         if(show_another_window){
         ImGui::Begin("Scene handler");
-        char* path;
-        ImGui::InputText("scene path", &scene_path[0],150);
+        ImGui::Text("Current scene -> %s", bb->global_data.active_scene->scene_data.scene_name.data());
+        ImGui::InputText("load scene path", &scene_path[0],150);
         if(ImGui::Button("Change Scene")){
-            
             Scene::ChangeScene(scene_path, bb);
         }
         ImGui::End();
