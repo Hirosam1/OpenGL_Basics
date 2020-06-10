@@ -32,6 +32,10 @@ void aObject::Update(){
          fov = 45;
          m_camera->MakeProjection(glm::radians(fov));
     }
+    if(!m_input->is_cursor_in){
+        lastX = m_input->mouse_Xpos;
+        lastY = m_input->mouse_Ypos;
+    }
 
     if(GUIObject->show_cursor == GLFW_CURSOR_DISABLED) CalculateCam();
 
@@ -64,10 +68,11 @@ void aObject::Update(){
 
         this->test_speed = 5;
 
-    if(m_input->ProcessInput(GLFW_KEY_F1) && GUIObject->f1KeyRealeased){
+    if(GUIObject->f1KeyRealeased){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
     }
+
 }
 
 void aObject::CalculateCam(){
@@ -76,20 +81,10 @@ void aObject::CalculateCam(){
         lastY = m_input->mouse_Ypos;
         firstMouse = false;
     }
-
-    if(!m_input->is_cursor_in){
-        didExit = true;
-    }
-
-    if(didExit && m_input->is_cursor_in){
-        lastX = m_input->mouse_Xpos;
-        lastY = m_input->mouse_Ypos;
-        didExit = false;
-    }
-
     float xoffset = m_input->mouse_Xpos - lastX;
     float yoffset = lastY - m_input->mouse_Ypos;
-    if(!firstMouse && !didExit && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
+
+    if(!firstMouse && m_input->is_cursor_in && (abs(xoffset) > 0.1f ||  abs(yoffset) > 0.1f)){
         lastX = m_input->mouse_Xpos;
         lastY = m_input->mouse_Ypos;
         xoffset *= sensitivity;

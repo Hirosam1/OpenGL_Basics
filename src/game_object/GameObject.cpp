@@ -2,7 +2,7 @@
 
 GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader):
                         m_window(basic_block->m_window) ,m_input(basic_block->m_input),m_time(basic_block->m_time), m_camera(m_camera),
-                        m_model(model),m_shader(m_shader){
+                        m_model(model),m_shader(m_shader),initial_pos(initial_pos){
    this->SetInitialMVP();
    model_mat = glm::translate(model_mat,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->m_material = nullptr;
@@ -10,7 +10,7 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
 }
 
 GameObject::~GameObject(){
-   std::cout<<object_name<<" -> Implement deletion of initial position\n";
+   delete initial_pos;
 }
 
 //Updates the data and send it to GPU

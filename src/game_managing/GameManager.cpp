@@ -41,7 +41,7 @@ void GameManager::EngineInit(){
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LEQUAL);
-    use_threads = false;
+    use_threads = true;
    
     //V-sync
     glfwSwapInterval(1);
@@ -161,10 +161,6 @@ void GameManager::EngnieStart(){
         glDisable(GL_DEPTH_TEST);
         plane.Draw(&screen_shader);
         //Last object, the GUI, needs to be Updated on main thread
-        /*
-        if(this->current_scene_data.AllObjects.size() > 0){
-            this->current_scene_data.AllObjects.at(this->current_scene_data.AllObjects.size()-1)->Update();
-        }*/
         basic_block->GUI_gameObject->Update();
         lck.unlock();
         
@@ -231,6 +227,7 @@ void GameManager::RenderOpaques(){
 }
 
 void GameManager::TerminateEngine(){
+    delete basic_block->global_data.active_scene;
     std::cout<<"\n==Shutiing down\n";
     //Makes sure all threads ends
     lock_threads.notify_all();

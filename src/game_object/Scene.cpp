@@ -6,6 +6,7 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
     m_camera->camera_front = glm::vec3(0,0,-1);
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     scene_data.main_camera = m_camera;
+    std::cout<<"Loading scene-> "<< scene_path.substr(scene_path.find_last_of("/"), scene_path.length()) <<"\n";
     SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data);
     
 }
@@ -33,10 +34,12 @@ void Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
     std::unique_lock<std::mutex>lck (basic_block->scene_mutex);
     //Delete and reset scene in sync with the main thread
     delete basic_block->global_data.active_scene;
+    //Resets the new scene as the actice scene
+    basic_block->global_data.active_scene = new_scene;
+    //Run all the readyObjects
     for(unsigned int i = 0; i < new_scene->scene_data.AllObjects.size(); i++){
         new_scene->scene_data.AllObjects[i]->ReadyObject();
     }
-    basic_block->global_data.active_scene = new_scene;
     basic_block->GUI_gameObject->ReadyObject();
     lck.unlock();
 }

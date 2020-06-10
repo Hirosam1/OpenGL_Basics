@@ -23,6 +23,7 @@
     >size 0.5
 |"mushroom boi" 
 
+
 + GO 1 #Camera movment #Program responsible with the movment of the camera
     >position 0 0 0
 | "camera movment"

@@ -5,6 +5,7 @@
 
 bObject::bObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader):GameObject
 (basic_block,m_camera,model,initial_pos,m_shader){
+    scene_path.resize(150);
     m_deque_test = new std::deque<char*>();
     didExit = false;
     /*===============GUI=====================*/
@@ -41,8 +42,9 @@ void bObject::Update(){
         glfwSetInputMode(m_window->GetWindow(),GLFW_CURSOR,show_cursor);
         f1KeyRealeased = false;
     
-    }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE)){
+    }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE) && f1KeyRealeased == false){
         f1KeyRealeased = true;
+        
     }
 
     if(m_input->ProcessInput(GLFW_KEY_1)){
@@ -113,9 +115,11 @@ void bObject::RenderGUI(){
     }
         if(show_another_window){
         ImGui::Begin("Scene handler");
-
+        char* path;
+        ImGui::InputText("scene path", &scene_path[0],150);
         if(ImGui::Button("Change Scene")){
-            Scene::ChangeScene("scenes/scene_mushroom.snsc", bb);
+            
+            Scene::ChangeScene(scene_path, bb);
         }
         ImGui::End();
     }

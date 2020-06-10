@@ -22,6 +22,7 @@ class bObject : public GameObject{
     bool f1KeyRealeased = true;
     GLenum show_cursor = GLFW_CURSOR_DISABLED;
     bool show_another_window = false;
+    std::string scene_path = "scenes/scene_boxes.snsc";
 
     void Update() override;
     void Ready() override;

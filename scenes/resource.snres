@@ -8,6 +8,7 @@ Add_Model: "mushroom boi", "models/mushroom_boy/mushroom_boy2.obj"
 #Sets the shaders programs
 Add_Shader: "basic light", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight.frag"
 Add_Shader: "lamp shader", "shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag"
+Add_Shader: "reflection", "shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight_wReflections.frag"
 
 #Coment this
 #Add_Texture: "texture name", "texture path"

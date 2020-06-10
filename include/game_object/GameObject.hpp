@@ -76,6 +76,8 @@ class GameObject{
 
         bool isOpaque = false;
 
+        float* initial_pos;
+
     private:
         static constexpr unsigned int go_id = 0;
         void UseShader();
