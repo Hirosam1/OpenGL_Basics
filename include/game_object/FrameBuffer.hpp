@@ -8,7 +8,7 @@ class FrameBuffer{
         FrameBuffer(unsigned int width, unsigned height);
         void ResetBuffers(unsigned int width, unsigned height);
         void UseFrameBuffer();
-        Texture texture_color;
+        Texture* texture_color;
     private:
         unsigned frame_buffer, render_buffer;
 };

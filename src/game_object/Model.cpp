@@ -129,12 +129,16 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType 
         }
         //If it wasn't loads it 
         if(!skip){
-            Texture texture = Texture();
-            texture.CreateTexture( directory + "/" + std::string(str.C_Str()),repeat);
-            texture.tex_type = type_name;
-            texture.path = str.C_Str();
-            textures.push_back(texture);
-            textures_loaded.push_back(texture); // Add the loaded texture to textures_loaded
+            Texture* new_texture = nullptr;
+            if(type_name == "texture_diffuse"){
+                 new_texture = new DiffuseTexture(1, directory + "/" + std::string(str.C_Str()),repeat);
+            }else if(type_name == "texture_specular"){
+                new_texture = new SpecularTexture(1, directory + "/" + std::string(str.C_Str()),repeat);
+            }
+            new_texture->tex_type = type_name;
+            new_texture->path = str.C_Str();
+            textures.push_back(*new_texture);
+            textures_loaded.push_back(*new_texture); // Add the loaded texture to textures_loaded
         }
     }
 

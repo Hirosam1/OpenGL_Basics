@@ -48,27 +48,7 @@ void Mesh::Draw(Shader* shader){
         shader->SetUniform1i(&hastype,0);
 
         for(unsigned int i = 0; i < textures.size() ; i++){
-            std::string number;
-            name = textures[i].tex_type;
-            
-            if(name == "texture_diffuse"){
-                hastype = "material.has_TexDiffuse";
-                shader->SetUniform1i(&hastype,1);
-                number = std::to_string(diffuseNr++);
-            }
-            else if(name == "texture_specular"){
-                hastype = "material.has_TexSpecular";
-                shader->SetUniform1i(&hastype,1);
-                number = std::to_string(specularNr++);
-            }else if(name == "skybox"){
-                name = "skybox";
-                shader->SetUniform1i(&name,3);
-                textures[i].UseTexture(3, GL_TEXTURE_CUBE_MAP);
-            }
-            name = ("material." + name + number);
-            shader->SetUniform1i(&name,i);
-            textures[i].UseTexture(i);
-            
+            textures[i].UseTexture(i, shader);
             
         }
         name = "material.diffuse";

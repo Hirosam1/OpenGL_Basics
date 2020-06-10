@@ -118,7 +118,7 @@ void GameManager::EngnieStart(){
     
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
-    plane.meshes[0].textures.push_back(frame_buffer.texture_color);
+    plane.meshes[0].textures.push_back(*frame_buffer.texture_color);
     
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
