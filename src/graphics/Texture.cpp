@@ -2,14 +2,14 @@
 #include "graphics/Shader.hpp"
 
 Texture::Texture(){
-    glGenTextures(1,&this->m_texture);
+    glGenTextures(1, &this->m_texture);
 }
 
 void Texture::UnloadTexture(){
     glDeleteTextures(1, &this->m_texture);
 }
-
-Texture::Texture(std::string texture_path, bool repeat, GLenum img_type):tex_type(tex_type){
+//texture_path,repeat,img_type
+Texture::Texture(std::string texture_path, bool repeat, GLenum img_type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
     CreateTexture(texture_path,repeat, img_type);
@@ -121,15 +121,14 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
 }
 
- DiffuseTexture::DiffuseTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(), m_uniform_num(uniform_num){
-     CreateTexture(texture_path,repeat,img_type);
+ DiffuseTexture::DiffuseTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(texture_path,repeat,img_type), m_uniform_num(uniform_num){
+     //CreateTexture(texture_path,repeat,img_type);
  }
 
  void DiffuseTexture::UseTexture(unsigned int texture_num, Shader* shader){
-    //std::cout<<"Diffuse " << texture_num << "\n";
     std::string hastype = "material.has_TexDiffuse";
     shader->SetUniform1i(&hastype,1);
-    std::string name = ("material.texture_diffuse"  + m_uniform_num);
+    std::string name = ("material.texture_diffuse"  + std::to_string(m_uniform_num));
     shader->SetUniform1i(&name,texture_num);
     glActiveTexture(GL_TEXTURE0+texture_num); 
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
@@ -137,15 +136,14 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
 
  }
 
- SpecularTexture::SpecularTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(), m_uniform_num(uniform_num){
-     CreateTexture(texture_path,repeat,img_type);
+ SpecularTexture::SpecularTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(texture_path,repeat,img_type), m_uniform_num(uniform_num){
+     //CreateTexture(texture_path,repeat,img_type);
  }
 
  void SpecularTexture::UseTexture(unsigned int texture_num, Shader* shader){
-    //std::cout<<"Specular " << texture_num << "\n";
     std::string hastype = "material.has_TexSpecular";
     shader->SetUniform1i(&hastype,1);
-    std::string name = ("material.texture_specular"  + m_uniform_num);
+    std::string name = ("material.texture_specular" + std::to_string(m_uniform_num));
     shader->SetUniform1i(&name,texture_num);
     glActiveTexture(GL_TEXTURE0+texture_num); 
     glBindTexture(GL_TEXTURE_2D,this->m_texture);
