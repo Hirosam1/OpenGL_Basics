@@ -27,7 +27,7 @@ void CubeMap::UseCubeTexture(Shader* a_shader,Camera* a_camera){
         a_shader->SetUniformMat4f(&name,a_camera->GetProjection());
         name = "skybox";
         a_shader->SetUniform1i(&name,5);
-        cube_map_texture->UseTexture(5);
+        cube_map_texture->UseTexture(5, a_shader);
         m_model->Draw();
     }
 }

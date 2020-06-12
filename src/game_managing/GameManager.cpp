@@ -118,7 +118,7 @@ void GameManager::EngnieStart(){
     
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
-    plane.meshes[0].textures.push_back(*frame_buffer.texture_color);
+    plane.meshes[0].textures.push_back(frame_buffer.texture_color);
     
     std::cout<<"Ready to start!\n";
     //Execute Ready for all objects
@@ -151,15 +151,15 @@ void GameManager::EngnieStart(){
         this->RenderObjects();
         //cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
         this->RenderOpaques();
+        //Frame buffer Begin
         
-        //============================
-
         glBindFramebuffer(GL_FRAMEBUFFER,0);
         glClear(GL_COLOR_BUFFER_BIT);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         screen_shader.UseShader();
         glDisable(GL_DEPTH_TEST);
         plane.Draw(&screen_shader);
+        //Frame buffer End
         //Last object, the GUI, needs to be Updated on main thread
         basic_block->GUI_gameObject->Update();
         lck.unlock();

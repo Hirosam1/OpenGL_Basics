@@ -7,6 +7,7 @@
 #include<string>
 #include<vector>
 #include "game_tools/stb_image.h"
+#include "graphics/Shader.hpp"
 
 class Texture{
     

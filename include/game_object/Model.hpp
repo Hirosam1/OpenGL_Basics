@@ -19,7 +19,7 @@ class Model{
         void Draw(Shader* shader);
         void Draw();
         bool repeat;
-        std::vector<Texture> textures_loaded;
+        std::vector<Texture*> textures_loaded;
         std::vector<Mesh> meshes;
         aiScene m_scene;
     private:
@@ -30,6 +30,6 @@ class Model{
         void LoadModel(std::string path);
         void ProcessNode(aiNode* node, const aiScene* scene);
         Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-        std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string type_name);
+        std::vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string type_name);
         Material LoadMaterial(aiMaterial* mat);
 };

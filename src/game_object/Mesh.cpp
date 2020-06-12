@@ -1,6 +1,6 @@
 #include "game_object/Mesh.hpp"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material m_material, bool has_texDiff, bool has_texSpec): 
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, Material m_material, bool has_texDiff, bool has_texSpec): 
     vertices(vertices), indices(indices), textures(textures), m_material(m_material), has_texDiff(has_texDiff), has_texSpec(has_texSpec){
     this->SetUpMesh();
 }
@@ -36,26 +36,15 @@ void Mesh::Draw(Shader* shader){
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
     std::string name;
-    if(textures.size() == 1 && textures[0].tex_type == "texture_screen"){
-        name = "screenTex";
-        textures[0].UseTexture(0);
-        shader->SetUniform1i(&name,0);
-    }
-    else{
-        std::string hastype = "material.has_TexDiffuse";
-        shader->SetUniform1i(&hastype,0);
-        hastype = "material.has_TexSpecular";
-        shader->SetUniform1i(&hastype,0);
 
-        for(unsigned int i = 0; i < textures.size() ; i++){
-            textures[i].UseTexture(i, shader);
-            
-        }
-        name = "material.diffuse";
-        shader->SetUniformVec3f(&name, m_material.main_color);
-        name = "material.ambient";
-        shader->SetUniformVec3f(&name, m_material.ambient_color);
+    for(unsigned int i = 0; i < textures.size() ; i++){
+        textures[i]->UseTexture(i, shader);
+        
     }
+    name = "material.diffuse";
+    shader->SetUniformVec3f(&name, m_material.main_color);
+    name = "material.ambient";
+    shader->SetUniformVec3f(&name, m_material.ambient_color);
     vao->UseVAO();
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);

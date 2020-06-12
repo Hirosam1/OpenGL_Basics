@@ -15,7 +15,8 @@ void Model::Draw(){
 
 Model::~Model(){
     for(unsigned int i = 0 ; i < this->textures_loaded.size(); i++){
-        this->textures_loaded[i].UnloadTexture();
+        this->textures_loaded[i]->UnloadTexture();
+        delete this->textures_loaded[i];
     }
     for(unsigned int i = 0; i < this->meshes.size(); i++){
         this->meshes[i].UnloadMeshData();
@@ -52,7 +53,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene){
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene){
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    std::vector<Texture*> textures;
 
     for(unsigned int i = 0; i < mesh->mNumVertices; i++){
         Vertex vertex;
@@ -95,13 +96,13 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene){
     bool has_texSpec = false;
     if(mesh->mMaterialIndex >= 0){
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        std::vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         if(diffuseMaps.size() > 0){
             has_texDiff = true;
         }
         textures.insert(textures.end(),diffuseMaps.begin(),diffuseMaps.end());
 
-        std::vector<Texture> specularMaps = LoadMaterialTextures(material,aiTextureType_SPECULAR, "texture_specular");
+        std::vector<Texture*> specularMaps = LoadMaterialTextures(material,aiTextureType_SPECULAR, "texture_specular");
         if(specularMaps.size() > 0){
             has_texSpec = true;
         }
@@ -112,8 +113,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene){
 
 }
 
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string type_name){
-    std::vector<Texture> textures;
+std::vector<Texture*> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string type_name){
+    std::vector<Texture*> textures;
 
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++){
         aiString str;
@@ -121,7 +122,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType 
         bool skip = false;
         //Checks if texture was already loaded
         for(unsigned int j = 0; j < textures_loaded.size(); j++){
-            if(std::strcmp(textures_loaded[j].path.data(), str.C_Str())== 0){
+            if(std::strcmp(textures_loaded[j]->path.data(), str.C_Str())== 0){
                 textures.push_back(textures_loaded[j]);
                 skip = true;
                 break;
@@ -137,8 +138,9 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType 
             }
             new_texture->tex_type = type_name;
             new_texture->path = str.C_Str();
-            textures.push_back(*new_texture);
-            textures_loaded.push_back(*new_texture); // Add the loaded texture to textures_loaded
+            textures.push_back(new_texture);
+            textures_loaded.push_back(new_texture); // Add the loaded texture to textures_loaded
+            
         }
     }
 

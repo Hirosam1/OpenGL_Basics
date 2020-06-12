@@ -9,10 +9,10 @@ void Texture::UnloadTexture(){
     glDeleteTextures(1, &this->m_texture);
 }
 
-Texture::Texture(std::string texture_path,GLenum img_type, bool repeat):tex_type(tex_type){
+Texture::Texture(std::string texture_path, bool repeat, GLenum img_type):tex_type(tex_type){
     //Creates and binds the Texture object
     glGenTextures(1, &this->m_texture);
-    CreateTexture(texture_path,img_type, repeat);
+    CreateTexture(texture_path,repeat, img_type);
 }
 
 void Texture::CreateTexture(std::string texture_path,bool repeat,GLenum type){
@@ -64,11 +64,6 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glBindTexture(GL_TEXTURE_2D,0);
 }
 
- void Texture::UseTexture(unsigned int texture_num, GLenum texture_type){
-    glActiveTexture(GL_TEXTURE0+texture_num); 
-    glBindTexture(texture_type,this->m_texture);
- }
-
  unsigned int Texture::GetTexture(){
      return this->m_texture;
  }
@@ -119,7 +114,53 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glBindTexture(GL_TEXTURE_CUBE_MAP,0);
  }
 
- void CubeMapTexture::UseTexture(unsigned int tex_num, GLenum texture_type){
+ void CubeMapTexture::UseTexture(unsigned int tex_num, Shader* shader){
+    std::string name = "skybox";
+    shader->SetUniform1i(&tex_type,tex_num);
     glActiveTexture(GL_TEXTURE0+tex_num); 
     glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
+}
+
+ DiffuseTexture::DiffuseTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(), m_uniform_num(uniform_num){
+     CreateTexture(texture_path,repeat,img_type);
+ }
+
+ void DiffuseTexture::UseTexture(unsigned int texture_num, Shader* shader){
+    //std::cout<<"Diffuse " << texture_num << "\n";
+    std::string hastype = "material.has_TexDiffuse";
+    shader->SetUniform1i(&hastype,1);
+    std::string name = ("material.texture_diffuse"  + m_uniform_num);
+    shader->SetUniform1i(&name,texture_num);
+    glActiveTexture(GL_TEXTURE0+texture_num); 
+    glBindTexture(GL_TEXTURE_2D,this->m_texture);
+
+
+ }
+
+ SpecularTexture::SpecularTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(), m_uniform_num(uniform_num){
+     CreateTexture(texture_path,repeat,img_type);
+ }
+
+ void SpecularTexture::UseTexture(unsigned int texture_num, Shader* shader){
+    //std::cout<<"Specular " << texture_num << "\n";
+    std::string hastype = "material.has_TexSpecular";
+    shader->SetUniform1i(&hastype,1);
+    std::string name = ("material.texture_specular"  + m_uniform_num);
+    shader->SetUniform1i(&name,texture_num);
+    glActiveTexture(GL_TEXTURE0+texture_num); 
+    glBindTexture(GL_TEXTURE_2D,this->m_texture);
+
+
+ }
+
+ ScreenTexture::ScreenTexture() : Texture(){
+
+ }
+
+ void ScreenTexture::UseTexture(unsigned int texture_num, Shader* shader){
+    std::string name = "screenTex";
+    shader->SetUniform1i(&name,0);
+    glActiveTexture(GL_TEXTURE0+texture_num); 
+    glBindTexture(GL_TEXTURE_2D,this->m_texture);
+
  }
