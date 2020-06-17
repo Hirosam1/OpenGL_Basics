@@ -15,8 +15,8 @@ aObject::aObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float in
 }
 
 void aObject::Ready(){
-        if(bb->GUI_gameObject != nullptr){
-            GUIObject = dynamic_cast<bObject*>(bb->GUI_gameObject);
+        if(basic_block->GUI_gameObject != nullptr){
+            GUIObject = dynamic_cast<bObject*>(basic_block->GUI_gameObject);
         }
     
 }

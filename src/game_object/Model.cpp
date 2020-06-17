@@ -94,7 +94,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene){
     Material m_material;
     bool has_texDiff = false;
     bool has_texSpec = false;
-    if(mesh->mMaterialIndex >= 0){
+    if(use_texture && mesh->mMaterialIndex >= 0){
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         if(diffuseMaps.size() > 0){

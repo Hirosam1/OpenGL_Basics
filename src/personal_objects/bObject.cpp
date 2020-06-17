@@ -18,7 +18,7 @@ bObject::bObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float in
 }
 
 void bObject::Ready(){
-    obj_iterator = bb->global_data.active_scene->scene_data.AllObjects.begin();
+    obj_iterator = basic_block->global_data.active_scene->scene_data.AllObjects.begin();
 }
 
 void bObject::Update(){
@@ -48,9 +48,9 @@ void bObject::Update(){
     }
 
     if(m_input->ProcessInput(GLFW_KEY_1)){
-        bb->global_data.fill_type = GL_FILL;
+        basic_block->global_data.fill_type = GL_FILL;
     }else if(m_input->ProcessInput(GLFW_KEY_2)){
-        bb->global_data.fill_type = GL_LINE;
+         basic_block->global_data.fill_type = GL_LINE;
     }
 
 }
@@ -68,13 +68,13 @@ void bObject::RenderGUI(){
         ImGui::Text("Select Object Name: %s", (*obj_iterator)->object_name.c_str());   
         
         if(ImGui::Button("<<")){
-            if(obj_iterator != bb->global_data.active_scene->scene_data.AllObjects.begin()){
+            if(obj_iterator !=  basic_block->global_data.active_scene->scene_data.AllObjects.begin()){
                 obj_iterator--;
             }
         }
         ImGui::SameLine();
         if (ImGui::Button(">>")){
-            if(obj_iterator != --bb->global_data.active_scene->scene_data.AllObjects.end()){
+            if(obj_iterator != -- basic_block->global_data.active_scene->scene_data.AllObjects.end()){
                 obj_iterator++;
             }
         }
@@ -108,17 +108,20 @@ void bObject::RenderGUI(){
             ImGui::SliderFloat("Light Intensity", &light->light_intensity,0.0f,1.0f);
             ImGui::NewLine();
         }
-        ImGui::Text("FPS: %f", 1/m_time->delta_time);
+        ImGui::Text("FPS: %.2f", 1/m_time->delta_time);
         ImGui::Checkbox("Change scene", &show_another_window);
+        if(ImGui::Button("Close Application")){
+            basic_block->should_close = true;
+        }
         ImGui::End();
         
     }
         if(show_another_window){
         ImGui::Begin("Scene handler");
-        ImGui::Text("Current scene -> %s", bb->global_data.active_scene->scene_data.scene_name.data());
+        ImGui::Text("Current scene -> %s",  basic_block->global_data.active_scene->scene_data.scene_name.data());
         ImGui::InputText("load scene path", &scene_path[0],150);
-        if(ImGui::Button("Change Scene")){
-            Scene::ChangeScene(scene_path, bb);
+        if(ImGui::Button("Load Scene")){
+            Scene::ChangeScene(scene_path, basic_block);
         }
         ImGui::End();
     }

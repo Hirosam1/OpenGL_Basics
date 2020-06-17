@@ -12,7 +12,7 @@
 #include "game_object/Camera.hpp"
 #include "game_object/Model.hpp"
 #include "game_managing/BasicsBlock.hpp"
-
+#include "graphics/CubeMap.hpp"
 
 
 namespace SceneLoader {

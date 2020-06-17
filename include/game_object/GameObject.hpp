@@ -79,6 +79,7 @@ class GameObject{
         float* initial_pos;
 
     private:
+        bool use_main_camera = false;
         static constexpr unsigned int go_id = 0;
         void UseShader();
         /*Updates entearly the game object
@@ -99,8 +100,9 @@ class GameObject{
         std::string fragment_shader_path;
 
     protected:
+        BasicsBlock* basic_block;
         void BufferAndDraw();
-        BasicsBlock* bb;
+        
         //Window where the object will get inputs
         Window* m_window;
         InputManager* m_input;

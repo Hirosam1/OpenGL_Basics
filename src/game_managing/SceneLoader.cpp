@@ -6,6 +6,7 @@ enum SceneReaderState : char{
     addingLight,
     addingOpaque,
     addingCamera,
+    addingCubeMap
 };
 
 
@@ -16,14 +17,16 @@ char addingOpaqueState(char current_state, std::string line);
 char addingCameraState(char current_state, std::string line);
 char addingShaderState(char current_state, std::string line);
 char addingModelState(char current_state, std::string line);
+char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_block, SceneData* scene_data);
 
 void ClearGoELemetns();
 
 //Elements to be used on the game Object creation
 GameObjectElements goElements;
 LightElements light_elemtents;
-int line_number = 0;
+int line_number;
 void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data){
+    line_number = 0;
     scene_data->scene_name = scene_path.substr(scene_path.find_last_of("/")+1,scene_path.length());
     int current_state = SceneReaderState::waiting;
     std::ifstream infile(scene_path);
@@ -48,6 +51,9 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
                 break;
             case SceneReaderState::addingLight:
                 current_state = addingLightState(current_state,line,output,go,basic_block,scene_data);
+                break;
+            case SceneReaderState::addingCubeMap:
+                current_state = addingCubeMapState(current_state, line, basic_block, scene_data);
                 break;
         }
 
@@ -86,6 +92,8 @@ char waitingState(char current_state, std::string line, std::string* output){
                 }else{
                      std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \""<< tokens[2] <<"\"\n";
                 }
+            }else if(tokens[1] == "CubeMap"){
+                return SceneReaderState::addingCubeMap;
             }
         }
     return current_state;
@@ -352,7 +360,76 @@ char addingLightState(char current_state, std::string line, std::string light_ty
     return current_state;
 }
 
-    
+char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_block, SceneData* scene_data){
+    std::string parameters= "";
+    //Regex to catch elements in between ""
+    std::regex reg ("\"(.*)\"");
+    std::smatch matches;
+    int e;
+    //Searches for > element, that is a addition of a game object propirty, that wil be added to goElements
+    if((e = line.find(">")) != std::string::npos){
+        line.erase(0,e+1);
+        //Parse the line by the whitespace char
+        std::vector<std::string> tokens = FileManagementTools::ParseLine(line," ");
+        //It also gets the parameters as one string, in case we need string handling
+        parameters = line.substr(line.find(tokens[1]),line.length());
+        if(tokens.size() >1){
+            if(tokens[0] == "model"){
+               //Apply the regex rule
+                std::regex_search(parameters,matches,reg);
+                if (matches.ready()){
+                    //Searches if it is in loaded models
+                    if(scene_data->loaded_models.count(matches.str(1))){
+                        //If it is give it to goElements
+                        goElements.model = scene_data->loaded_models[matches.str(1)];
+                    }else{
+                        if(basic_block->global_data.models_path.count(matches.str(1))){
+                            Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
+                            scene_data->loaded_models[matches.str(1)] = loaded_model;
+                            goElements.model = loaded_model;
+                        }else{
+                            std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                        }
+                    }
+                    
+                }
+                else{
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
+                }
+            //NECESSARY (Should it be?) sets the initial position
+           }else if(tokens[0] == "shader"){
+                std::regex_search(parameters,matches,reg);
+                if(basic_block->global_data.all_shaders.count(matches.str(1))){
+                    goElements.m_shader = basic_block->global_data.all_shaders[matches.str(1)];
+                }else{
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
+                }
+            }
+        }
+    }else if((e = line.find("|")) != std::string::npos){
+        CubeMap* cube_map = nullptr;
+        parameters = line.substr(e,line.length());
+         std::regex_search(parameters,matches,reg);
+        if(goElements.model != nullptr && goElements.m_shader != nullptr && matches.ready()){
+            if(scene_data->loaded_textures.count(matches.str(1))){
+                CubeMapTexture* cubeMapTex = dynamic_cast<CubeMapTexture*>(scene_data->loaded_textures[matches.str(1)]);
+                cube_map = new CubeMap(cubeMapTex,goElements.model,goElements.m_shader);
+            }else{
+                if(basic_block->global_data.textures_path.count(matches.str(1))){
+                    CubeMapTexture* cubeMapTex = new CubeMapTexture(basic_block->global_data.textures_path[matches.str(1)]);
+                    scene_data->loaded_textures[matches.str(1)] = cubeMapTex;
+                    cube_map = new CubeMap(cubeMapTex,goElements.model,goElements.m_shader);
+                }else{
+                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find texture name \""<<matches.str(1)<<"\"\n"; 
+                }
+            }
+            scene_data->cube_map = cube_map;
+            return SceneReaderState::waiting;
+        }
+    }
+
+    return current_state;
+}
 
 
 void ClearGoELemetns(){

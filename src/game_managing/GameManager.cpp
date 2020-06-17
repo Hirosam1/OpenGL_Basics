@@ -127,9 +127,7 @@ void GameManager::EngnieStart(){
     }
     basic_block->GUI_gameObject->ReadyObject();
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
-        if(this->main_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_PRESS)){
-            glfwSetWindowShouldClose(this->main_window->GetWindow(),true);
-        }
+        glfwSetWindowShouldClose(this->main_window->GetWindow(),basic_block->should_close);
         //Clear the screen
         glClearColor(0.03f,0.07f,0.07,1.0f);
 
@@ -149,7 +147,10 @@ void GameManager::EngnieStart(){
         //Render all objects in scene
         glPolygonMode(GL_FRONT_AND_BACK, basic_block->global_data.fill_type);
         this->RenderObjects();
-        //cube_map.UseCubeTexture(cube_map.m_shader,m_camera);
+        if(basic_block->global_data.active_scene->scene_data.cube_map != nullptr){
+            basic_block->global_data.active_scene->scene_data.cube_map->UseCubeTexture(basic_block->global_data.active_scene->scene_data.cube_map->m_shader,
+                                                                                    basic_block->global_data.active_scene->scene_data.main_camera);
+        }
         this->RenderOpaques();
         //Frame buffer Begin
         

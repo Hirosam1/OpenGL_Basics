@@ -15,6 +15,7 @@ class Camera;
 class Scene;
 class Light;
 class Model;
+class CubeMap;
 
 struct SceneData{
     std::string scene_name;
@@ -22,8 +23,10 @@ struct SceneData{
     std::vector<Light*> AllLights;
     std::vector<GameObject*> AllOpaques;
     std::map<std::string, Model*> loaded_models;
+    std::map<std::string, Texture*> loaded_textures;
     std::map<std::string, Camera*> all_cameras;
     Camera* main_camera;
+    CubeMap* cube_map = nullptr;
     int n_point_lights = 0;
 };
 
@@ -33,7 +36,7 @@ struct GlobalData{
    
    std::map<std::string,std::string> models_path;
    std::map<std::string, Shader*> all_shaders;
-   std::map<std::string, Texture*> all_textures;
+   std::map<std::string, std::string> textures_path;
    
    Scene *active_scene = nullptr;
 };
@@ -53,6 +56,7 @@ class BasicsBlock{
         bool was_resized = false;
         void WindowResized();
         
+        bool should_close = false;
         Window* m_window;
         InputManager* m_input;
         Time* m_time;

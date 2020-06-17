@@ -77,6 +77,24 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                     }
                 }
             }
+        }else if(line.find("Add_Texture") != std::string::npos){
+            e = line.find(":");
+            if (e != std::string::npos){
+                std::string tex_name, tex_path;
+                parameters = line.substr(e+1,line.length());
+                std::vector<std::string> tokens = FileManagementTools::ParseLine(parameters, ",");
+                if(tokens.size() == 2){
+                    int succcess = 0;
+                    int check = 0;
+                    tex_name =  find_match(tokens[0],reg,&check).str(1);
+                    succcess += check;
+                    tex_path =  find_match(tokens[1],reg,&check).str(1);
+                    succcess += check;
+                    if(succcess == 2){
+                        basic_block->global_data.textures_path[tex_name] = tex_path;
+                    }
+                }
+            } 
         }
 
     }

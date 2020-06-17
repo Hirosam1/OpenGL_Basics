@@ -20,9 +20,14 @@ Scene::~Scene(){
     for(auto it = this->scene_data.loaded_models.begin(); it != this->scene_data.loaded_models.end(); it++){
         delete it->second;
     }
+    for(auto it = this->scene_data.loaded_textures.begin(); it != this->scene_data.loaded_textures.end(); it++){
+        it->second->UnloadTexture();
+        delete it->second;
+    }
     this->scene_data.AllObjects.clear();
-    this->scene_data.AllLights.clear();
+    this->scene_data.AllLights.clear(); 
     this->scene_data.AllOpaques.clear();
+    delete this->scene_data.cube_map;
     //Delete the camera list when I have one
     //for(unsigned int i =0; i <)
     delete this->scene_data.main_camera;

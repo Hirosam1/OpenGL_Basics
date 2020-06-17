@@ -12,13 +12,14 @@
 
 class Model{
     public:
-        Model(std::string path, bool texture_repeat = true):repeat(texture_repeat){
+        Model(std::string path, bool use_texture = true,bool texture_repeat = true):repeat(texture_repeat), use_texture(use_texture){
             LoadModel(path);
         }
         ~Model();
         void Draw(Shader* shader);
         void Draw();
         bool repeat;
+        bool use_texture;
         std::vector<Texture*> textures_loaded;
         std::vector<Mesh> meshes;
         aiScene m_scene;

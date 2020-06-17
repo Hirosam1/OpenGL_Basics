@@ -6,7 +6,7 @@ GameObject::GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,fl
    this->SetInitialMVP();
    model_mat = glm::translate(model_mat,glm::vec3(initial_pos[0],initial_pos[1],initial_pos[2]));
    this->m_material = nullptr;
-   this->bb = basic_block;
+   this->basic_block = basic_block;
 }
 
 GameObject::~GameObject(){
@@ -29,7 +29,7 @@ GameObject::~GameObject(){
       if(isSelected){
          glm::mat4 original_mat = this->model_mat;
          this->model_mat = glm::scale(this->model_mat,glm::vec3(1.03));
-         bb->outline_shader.UseShader();
+         basic_block->outline_shader.UseShader();
          glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel that wasnt draw
          glStencilMask(0x00);//Disable stencil write
          this->BufferData();
@@ -48,11 +48,11 @@ GameObject::~GameObject(){
  }
 
 void GameObject::BufferData(){
-   this->m_shader->SetUniformMat4f(&bb->View_string,m_camera->GetView());
-   this->m_shader->SetUniformMat4f(&bb->Projection_string, m_camera->GetProjection());
-   this->m_shader->SetUniformMat4f(&bb->Model_string,model_mat);
-   this->m_shader->SetUniformVec3f(&bb->Mat_specular,glm::vec3(1.0,1.0,1.0));
-   this->m_shader->SetUniform1f(&bb->Mat_shininess,64);
+   this->m_shader->SetUniformMat4f(&basic_block->View_string,m_camera->GetView());
+   this->m_shader->SetUniformMat4f(&basic_block->Projection_string, m_camera->GetProjection());
+   this->m_shader->SetUniformMat4f(&basic_block->Model_string,model_mat);
+   this->m_shader->SetUniformVec3f(&basic_block->Mat_specular,glm::vec3(1.0,1.0,1.0));
+   this->m_shader->SetUniform1f(&basic_block->Mat_shininess,64);
 }
 
  void GameObject::UseShader(){
