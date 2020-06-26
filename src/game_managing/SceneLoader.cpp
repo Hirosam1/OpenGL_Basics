@@ -174,6 +174,23 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                     size = std::stof(tokens[1]);
                     goElements.size = glm::vec3(size);
                }
+           }else if(tokens[0] == "add_texture" && goElements.model != nullptr){
+               std::regex_search(parameters,matches,reg);
+                if(scene_data->loaded_textures.count(matches.str(1))){
+                    //Sets texture if loaded
+                    goElements.model->textures_loaded.push_back(scene_data->loaded_textures[matches.str(1)]);
+                }else{
+                        std::string id = parameters.substr(parameters.find_last_of("\"") + 1, parameters.length());
+                        if(basic_block->global_data.textures_path.count(matches.str(1))){
+                            std::cout<<std::stoi(id)<<"\n";
+                            Texture* tex = TextureFactory::GetObjectFromID(std::stoi(id), basic_block->global_data.textures_path[matches.str(1)]);
+                            scene_data->loaded_textures[matches.str(1)] = tex;
+                            goElements.model->textures_loaded.push_back(tex);
+                            goElements.model->meshes[0].textures.push_back(tex);
+                        }else{
+                        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find texture name \""<<matches.str(1)<<"\"\n"; 
+                    }
+                }
            }
         }
         //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
@@ -412,13 +429,16 @@ char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_
          std::regex_search(parameters,matches,reg);
         if(goElements.model != nullptr && goElements.m_shader != nullptr && matches.ready()){
             if(scene_data->loaded_textures.count(matches.str(1))){
+                std::cout<<"I don't need to load tex again\n";
                 CubeMapTexture* cubeMapTex = dynamic_cast<CubeMapTexture*>(scene_data->loaded_textures[matches.str(1)]);
                 cube_map = new CubeMap(cubeMapTex,goElements.model,goElements.m_shader);
             }else{
                 if(basic_block->global_data.textures_path.count(matches.str(1))){
-                    CubeMapTexture* cubeMapTex = new CubeMapTexture(basic_block->global_data.textures_path[matches.str(1)]);
+                    std::cout<<"I don't need to load tex again NOT\n";
+                    //CubeMapTexture* cubeMapTex = new CubeMapTexture(basic_block->global_data.textures_path[matches.str(1)]);
+                    Texture* cubeMapTex = TextureFactory::GetObjectFromID(4,(basic_block->global_data.textures_path[matches.str(1)]));
                     scene_data->loaded_textures[matches.str(1)] = cubeMapTex;
-                    cube_map = new CubeMap(cubeMapTex,goElements.model,goElements.m_shader);
+                    cube_map = new CubeMap(dynamic_cast<CubeMapTexture*>(cubeMapTex),goElements.model,goElements.m_shader);
                 }else{
                     std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find texture name \""<<matches.str(1)<<"\"\n"; 
                 }

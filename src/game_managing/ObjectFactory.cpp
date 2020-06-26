@@ -13,6 +13,12 @@ enum GameObjectsID : unsigned int{
     PulsingLightID
 };
 
+enum TextureID : unsigned int{
+    DiffuseID = 1,
+    SpecularID,
+    ScreenID,
+    CubeMapID
+};
 
 void ObjectsManager::InitializeAllObjects(){
 
@@ -47,5 +53,28 @@ GameObject* GameObjectFactory::GetObjectFromID(unsigned int id, BasicsBlock* bas
 }
 
 Texture* TextureFactory::GetObjectFromID(unsigned id, std::string texture_path){
-    return nullptr;
+    Texture* tex = nullptr;
+    switch (id)    {
+        default:
+            std::cout<<"Can't load texture object with this id! -->" << id<< "\n";
+            break;
+        case 0:
+            std::cout<<"Can't load texture object with ID 0, that is the default ID\n";
+            break;
+        case TextureID::DiffuseID:
+            tex = new DiffuseTexture(texture_path);
+            break;
+        case TextureID::SpecularID:
+            tex = new SpecularTexture(texture_path);
+            break;
+        case TextureID::ScreenID:
+            tex = new ScreenTexture();
+            break;
+        case TextureID::CubeMapID:
+            tex = new CubeMapTexture(texture_path);
+            break;
+
+    }
+
+    return tex;
 }

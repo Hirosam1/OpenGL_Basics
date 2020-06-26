@@ -21,7 +21,8 @@ Scene::~Scene(){
         delete it->second;
     }
     for(auto it = this->scene_data.loaded_textures.begin(); it != this->scene_data.loaded_textures.end(); it++){
-        it->second->UnloadTexture();
+        if(it->second != nullptr)
+            it->second->UnloadTexture();
         delete it->second;
     }
     this->scene_data.AllObjects.clear();

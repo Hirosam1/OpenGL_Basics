@@ -19,8 +19,9 @@
 + GO 4
     > model "mushroom boi"
     > position -1 2 -2
-    > shader "basic light"
+    > shader "reflections"
     >size 0.5
+    > add_texture "cube map2" 4
 |"mushroom boi" 
 
 + CubeMap
