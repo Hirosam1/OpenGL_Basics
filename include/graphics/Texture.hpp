@@ -31,7 +31,7 @@ class Texture{
 
 class DiffuseTexture : public Texture{
     public:
-        DiffuseTexture(unsigned int uniform_num, std::string texture_path, bool repeat = false,  GLenum img_type = GL_RGBA);
+        DiffuseTexture(std::string texture_path, bool repeat = false,  GLenum img_type = GL_RGBA);
         unsigned int m_uniform_num;
         void UseTexture(unsigned int texture_num, Shader* shader) override;
         //void FinishTexture() override;
@@ -39,7 +39,7 @@ class DiffuseTexture : public Texture{
 
 class SpecularTexture : public Texture{
     public:
-        SpecularTexture(unsigned int uniform_num, std::string texture_path, bool repeat = false,  GLenum img_type = GL_RGBA);
+        SpecularTexture(std::string texture_path, bool repeat = false,  GLenum img_type = GL_RGBA);
         unsigned int m_uniform_num;
         void UseTexture(unsigned int texture_num, Shader* shader) override;
         //void FinishTexture() override;

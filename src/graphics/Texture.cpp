@@ -121,7 +121,7 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
     glBindTexture(GL_TEXTURE_CUBE_MAP,this->m_texture);
 }
 
- DiffuseTexture::DiffuseTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(texture_path,repeat,img_type), m_uniform_num(uniform_num){
+ DiffuseTexture::DiffuseTexture(std::string texture_path, bool repeat, GLenum img_type) : Texture(texture_path,repeat,img_type), m_uniform_num(1){
      //CreateTexture(texture_path,repeat,img_type);
  }
 
@@ -136,7 +136,7 @@ void Texture::CreateTexture(std::string* texture_path,bool repeat,GLenum type, u
 
  }
 
- SpecularTexture::SpecularTexture(unsigned int uniform_num, std::string texture_path, bool repeat, GLenum img_type) : Texture(texture_path,repeat,img_type), m_uniform_num(uniform_num){
+ SpecularTexture::SpecularTexture(std::string texture_path, bool repeat, GLenum img_type) : Texture(texture_path,repeat,img_type), m_uniform_num(1){
      //CreateTexture(texture_path,repeat,img_type);
  }
 

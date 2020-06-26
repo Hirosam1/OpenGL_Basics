@@ -6,7 +6,7 @@
 #include <regex>
 
 #include "game_tools/FileManagementTools.hpp"
-#include "personal_objects/all_personal.hpp"
+#include "game_managing/ObjectFactory.hpp"
 #include "game_object/GameObject.hpp"
 #include "game_object/Light.hpp"
 #include "game_object/Camera.hpp"

@@ -12,9 +12,6 @@
 
 
 #include "game_object/Model.hpp"
-
-#include "personal_objects/all_personal.hpp"
-
 #include "game_managing/BasicsBlock.hpp"
 #include"game_object/GameObject.hpp"
 #include "game_object/Camera.hpp"

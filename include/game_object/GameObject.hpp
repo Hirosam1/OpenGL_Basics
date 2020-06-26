@@ -77,10 +77,10 @@ class GameObject{
         bool isOpaque = false;
 
         float* initial_pos;
-
     private:
         bool use_main_camera = false;
-        static constexpr unsigned int go_id = 0;
+        //static constexpr unsigned int go_id = 0;
+        
         void UseShader();
         /*Updates entearly the game object
             -> Handles the binding and unbing of VAO, EBO and VBO
@@ -100,6 +100,7 @@ class GameObject{
         std::string fragment_shader_path;
 
     protected:
+        
         BasicsBlock* basic_block;
         void BufferAndDraw();
         
