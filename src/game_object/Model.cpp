@@ -15,8 +15,10 @@ void Model::Draw(){
 
 Model::~Model(){
     for(unsigned int i = 0 ; i < this->textures_loaded.size(); i++){
-        this->textures_loaded[i]->UnloadTexture();
-        delete this->textures_loaded[i];
+        if(this->textures_loaded[i] != nullptr){
+            this->textures_loaded[i]->UnloadTexture();
+            delete this->textures_loaded[i];
+        }
     }
     for(unsigned int i = 0; i < this->meshes.size(); i++){
         this->meshes[i].UnloadMeshData();

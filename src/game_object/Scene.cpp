@@ -17,13 +17,16 @@ Scene::~Scene(){
     for(unsigned int i =0; i < this->scene_data.AllObjects.size(); i++){
         delete this->scene_data.AllObjects.at(i);
     }
+    
     for(auto it = this->scene_data.loaded_models.begin(); it != this->scene_data.loaded_models.end(); it++){
         delete it->second;
     }
     for(auto it = this->scene_data.loaded_textures.begin(); it != this->scene_data.loaded_textures.end(); it++){
-        if(it->second != nullptr)
+        if(it->second != nullptr){
             it->second->UnloadTexture();
-        delete it->second;
+            //delete it->second;
+            it->second = nullptr;
+        }
     }
     this->scene_data.AllObjects.clear();
     this->scene_data.AllLights.clear(); 
@@ -31,6 +34,8 @@ Scene::~Scene(){
     delete this->scene_data.cube_map;
     //Delete the camera list when I have one
     //for(unsigned int i =0; i <)
+    this->scene_data.loaded_textures.clear();
+    this->scene_data.loaded_models.clear();
     delete this->scene_data.main_camera;
 }
 
