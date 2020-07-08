@@ -15,6 +15,7 @@ bObject::bObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float in
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(m_window->GetWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
+    enterReleased = true;
 }
 
 void bObject::Ready(){
@@ -36,23 +37,24 @@ void bObject::Update(){
     }
     #endif
     if(show_cursor == GLFW_CURSOR_NORMAL) RenderGUI();
-    if(m_input->ProcessInput(GLFW_KEY_F1) && f1KeyRealeased){
+    if(m_input->ProcessInput(GLFW_KEY_ESCAPE) && f1KeyRealeased){
         
         show_cursor = show_cursor == GLFW_CURSOR_DISABLED? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED;
         glfwSetInputMode(m_window->GetWindow(),GLFW_CURSOR,show_cursor);
         f1KeyRealeased = false;
     
-    }else if (m_input->ProcessInput(GLFW_KEY_F1,GLFW_RELEASE) && f1KeyRealeased == false){
+    }else if (m_input->ProcessInput(GLFW_KEY_ESCAPE,GLFW_RELEASE) && f1KeyRealeased == false){
         f1KeyRealeased = true;
         
     }
-
+    if(m_input->ProcessInput(GLFW_KEY_ENTER,GLFW_RELEASE)){
+        enterReleased = true;   
+    }
     if(m_input->ProcessInput(GLFW_KEY_1)){
         basic_block->global_data.fill_type = GL_FILL;
     }else if(m_input->ProcessInput(GLFW_KEY_2)){
          basic_block->global_data.fill_type = GL_LINE;
     }
-
 }
 
 void bObject::RenderGUI(){
@@ -120,8 +122,9 @@ void bObject::RenderGUI(){
         ImGui::Begin("Scene handler");
         ImGui::Text("Current scene -> %s",  basic_block->global_data.active_scene->scene_data.scene_name.data());
         ImGui::InputText("load scene path", &scene_path[0],150);
-        if(ImGui::Button("Load Scene")){
+        if(ImGui::Button("Load Scene") || (enterReleased && m_input->ProcessInput(GLFW_KEY_ENTER))){
             Scene::ChangeScene(scene_path, basic_block);
+            enterReleased = false;
         }
         ImGui::End();
     }

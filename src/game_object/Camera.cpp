@@ -41,8 +41,8 @@ void Camera::LookAt(glm::vec3 target){
 
 const glm::mat4 Camera::GetProjection(){
     //Checks if there are changes in the aspect ratio given a threshold
-    if(this->width > (this->m_window->GetWidth() + 40) || this->height > (this->m_window->GetHeight() + 40) ||
-        this->width < (this->m_window->GetWidth() - 40) || this->height < (this->m_window->GetHeight() - 40)){
+    if(this->m_window->GetHeight() > 0 && this->m_window->GetWidth() > 0 &&(abs(this->width - this->m_window->GetWidth()) > 40 || 
+    abs(this->height - this->m_window->GetHeight() > 40))){
         this->m_projection->MakePerspective(this->projection_fov,(float)this->m_window->GetWidth()/this->m_window->GetHeight());
         this->width = this->m_window->GetWidth();
         this->height = this->m_window->GetHeight();

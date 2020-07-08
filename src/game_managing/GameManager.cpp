@@ -41,7 +41,7 @@ void GameManager::EngineInit(){
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LEQUAL);
-    use_threads = true;
+    use_threads = false;
    
     //V-sync
     glfwSwapInterval(1);
@@ -103,18 +103,10 @@ void GameManager::EngnieStart(){
         std::cout<<"Engine is not ready to start run EngineInit\n";
         exit(-1);
     }
-    Shader* shader = new Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/BasicLight.frag");
     std::string name;
     //Shader for the post processing effects
     Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
-    //Shader for the skybox
-    //Shader skybox_shader = Shader("shaders/vertex_shaders/SkyBox.vert","shaders/fragment_shaders/SkyBox.frag");
-    //Creates the quad to render scene
     Model plane = Model("models/plane/Plane.obj");
-    //Model TexCube = Model("models/box/TexCube.obj");
-
-    //CubeMap cube_map = CubeMap("textures/skybox2",&TexCube,&skybox_shader);
-    //CubeMap cube_map = CubeMap(cubemap_tex,&TexCube,&skybox_shader);
     
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());

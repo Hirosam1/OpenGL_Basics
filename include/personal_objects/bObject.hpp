@@ -20,6 +20,7 @@ class bObject : public GameObject{
     long long CurrentPhysMem;
     
     bool f1KeyRealeased = true;
+    bool enterReleased = false;
     GLenum show_cursor = GLFW_CURSOR_DISABLED;
     bool show_another_window = false;
     std::string scene_path = "scenes/scene_boxes.snsc";
