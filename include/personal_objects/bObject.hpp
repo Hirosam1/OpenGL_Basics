@@ -24,7 +24,8 @@ class bObject : public GameObject{
     GLenum show_cursor = GLFW_CURSOR_DISABLED;
     bool show_another_window = false;
     std::string scene_path = "scenes/scene_boxes.snsc";
-
+    float timeElpased = 0;
+    float FPS;
     void Update() override;
     void Ready() override;
     private:

@@ -23,6 +23,8 @@ void bObject::Ready(){
 }
 
 void bObject::Update(){
+    timeElpased += m_time->delta_time;
+
     #ifdef __unix__
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
     if(m_input->ProcessInput(GLFW_KEY_9,GLFW_PRESS)){
@@ -54,6 +56,9 @@ void bObject::Update(){
         basic_block->global_data.fill_type = GL_FILL;
     }else if(m_input->ProcessInput(GLFW_KEY_2)){
          basic_block->global_data.fill_type = GL_LINE;
+    }
+    if(timeElpased > 0.6){
+        timeElpased = 0;
     }
 }
 
@@ -110,7 +115,10 @@ void bObject::RenderGUI(){
             ImGui::SliderFloat("Light Intensity", &light->light_intensity,0.0f,1.0f);
             ImGui::NewLine();
         }
-        ImGui::Text("FPS: %.2f", 1/m_time->delta_time);
+        if(timeElpased > 0.6){
+            FPS = 1/m_time->delta_time;
+        }
+        ImGui::Text("FPS: %.2f", FPS);
         ImGui::Checkbox("Change scene", &show_another_window);
         if(ImGui::Button("Close Application")){
             basic_block->should_close = true;
