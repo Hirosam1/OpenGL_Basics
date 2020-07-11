@@ -22,4 +22,4 @@ The resource.snres file handles all the shaders, models, textures, and the proje
 * For window rendering and inputs I use [GLFW](https://github.com/glfw/glfw).
 * For openGL operatoin loader I am using [GLAD](https://github.com/Dav1dde/glad)
 * [GLM](https://github.com/g-truc/glm) is used for mathematical calculations
-* **_Thanks for all the forementioned Tolls_**
+* **_Thanks for all the forementioned Tools_**
