@@ -20,6 +20,6 @@ The resource.snres file handles all the shaders, models, textures, and the proje
 * For the model loading, I am using [Assimp](https://github.com/assimp/assimp).
 * For the GUI I am using [ImGUI](https://github.com/ocornut/imgui).
 * For window rendering and inputs I use [GLFW](https://github.com/glfw/glfw).
-* For openGL operatoin loader I am using [GLAD](https://github.com/Dav1dde/glad)
+* For openGL operations loader I am using [GLAD](https://github.com/Dav1dde/glad)
 * [GLM](https://github.com/g-truc/glm) is used for mathematical calculations
-* **_Thanks for all the forementioned Tools_**
+* **_Thanks for all the forementioned Tools and theit devs_**
