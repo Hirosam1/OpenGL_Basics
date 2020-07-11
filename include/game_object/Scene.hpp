@@ -18,7 +18,8 @@ class Scene{
         SceneData scene_data;
         void AddGameObject();
         void AddLightObject();
-        static void ChangeScene(std::string scene_path, BasicsBlock* basic_block);
+        static bool ChangeScene(std::string scene_path, BasicsBlock* basic_block);
+        bool isReady;
     private:
         std::string scene_path;
         //void LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block);

@@ -19,6 +19,7 @@
 + GO 4 #Creates a box, with texture
     >camera main_camera
     > model "box"
+    #position
     >position 3 1 1
     > size 1.5 1.0 1.0
     > shader "basic light"

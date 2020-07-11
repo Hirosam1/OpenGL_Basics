@@ -16,8 +16,7 @@
 
 
 namespace SceneLoader {
-    void LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data);
-    void Testetemplates(BasicsBlock* bb ,Camera* main_camera);
+    bool LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data);
 };
 
 

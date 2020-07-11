@@ -2,12 +2,17 @@
 
 Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene_path){
     Camera* m_camera = new Camera(basic_block->m_window);
+    isReady = true;
     m_camera->camera_pos = glm::vec3(-3.0f,2.0f,20.0f);
     m_camera->camera_front = glm::vec3(0,0,-1);
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     scene_data.main_camera = m_camera;
+    if(!SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data)){
+        isReady = false;
+        std::cout<<"FILE::SCENE::LOADER:ERROR->" <<"Could not open file \""<<scene_path<<"\" \n";
+        return;
+    }
     std::cout<<"Loading scene-> "<< scene_path.substr(scene_path.find_last_of("/"), scene_path.length()) <<"\n";
-    SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data);
     
 }
 
@@ -39,9 +44,13 @@ Scene::~Scene(){
     delete this->scene_data.main_camera;
 }
 
-void Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
+bool Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
     //Load the scene out os sync with the main thread
     Scene* new_scene = new Scene(scene_path,  basic_block);
+    if(!new_scene->isReady){
+        return false;
+        delete new_scene;
+    }
     std::unique_lock<std::mutex>lck (basic_block->scene_mutex);
     //Delete and reset scene in sync with the main thread
     delete basic_block->global_data.active_scene;
@@ -53,4 +62,5 @@ void Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
     }
     basic_block->GUI_gameObject->ReadyObject();
     lck.unlock();
+    return true;
 }

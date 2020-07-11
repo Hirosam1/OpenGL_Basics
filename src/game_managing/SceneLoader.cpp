@@ -19,17 +19,23 @@ char addingShaderState(char current_state, std::string line);
 char addingModelState(char current_state, std::string line);
 char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_block, SceneData* scene_data);
 
+bool MakeModel(BasicsBlock* basic_block, SceneData* scene_data, std::string parameters);
+float* GetVec3(std::vector<std::string> tokens);
+
 void ClearGoELemetns();
 
 //Elements to be used on the game Object creation
 GameObjectElements goElements;
 LightElements light_elemtents;
 int line_number;
-void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data){
+bool SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data){
     line_number = 0;
     scene_data->scene_name = scene_path.substr(scene_path.find_last_of("/")+1,scene_path.length());
     int current_state = SceneReaderState::waiting;
     std::ifstream infile(scene_path);
+    if(infile.fail()){
+        return false;
+    }
     std::string line;
     std::string output;
     GameObject* go;
@@ -58,11 +64,9 @@ void SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_b
         }
 
     }
+    return true;
 }
 
-void SceneLoader::Testetemplates(BasicsBlock* bb ,Camera* main_camera){
-    GameObjectFactory::GetObjectFromID(4,bb,main_camera,nullptr,new float[3]{0,0,0},nullptr);
-}
 
 char waitingState(char current_state, std::string line, std::string* output){
     //Resets the elements from goElemnts
@@ -123,35 +127,11 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                }
                //defines the model to be used
            }else if(tokens[0] == "model"){
-               //Apply the regex rule
-                std::regex_search(parameters,matches,reg);
-                if (matches.ready()){
-                    //Searches if it is in loaded models
-                    if(scene_data->loaded_models.count(matches.str(1))){
-                        //If it is give it to goElements
-                        goElements.model = scene_data->loaded_models[matches.str(1)];
-                    }else{
-                        if(basic_block->global_data.models_path.count(matches.str(1))){
-                            Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
-                            scene_data->loaded_models[matches.str(1)] = loaded_model;
-                            goElements.model = loaded_model;
-                        }else{
-                            std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
-                        }
-                    }
-                    
-                }
-                else{
-                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
-                }
+              MakeModel(basic_block,scene_data,parameters);
             //NECESSARY (Should it be?) sets the initial position
            }else if(tokens[0] == "position"){
                if(tokens.size() > 3){
-                   float* position = new float[3];
-                   position[0] = std::stof(tokens[1]);
-                   position[1] = std::stof(tokens[2]);
-                   position[2] = std::stof(tokens[3]);
-                   goElements.initial_pos = position;
+                   goElements.initial_pos = GetVec3(tokens);
                }
                
             //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
@@ -164,11 +144,7 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                 }
            }else if(tokens[0] == "size"){
                 if(tokens.size() > 3){
-                   float* size = new float[3];
-                   size[0] = std::stof(tokens[1]);
-                   size[1] = std::stof(tokens[2]);
-                   size[2] = std::stof(tokens[3]);
-                   goElements.size = glm::vec3(glm::make_vec3(size));
+                   goElements.size = glm::vec3(glm::make_vec3(GetVec3(tokens)));
                }else if (tokens.size() > 1){
                     float size;
                     size = std::stof(tokens[1]);
@@ -244,45 +220,15 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                }
                //defines the model to be used
            }else if(tokens[0] == "model"){
-               //Apply the regex rule
-                std::regex_search(parameters,matches,reg);
-                if (matches.ready()){
-                    //Searches if it is in loaded models
-                    if(scene_data->loaded_models.count(matches.str(1))){
-                        //If it is give it to goElements
-                        goElements.model = scene_data->loaded_models[matches.str(1)];
-                    }else{
-                        if(basic_block->global_data.models_path.count(matches.str(1))){
-                            Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
-                            scene_data->loaded_models[matches.str(1)] = loaded_model;
-                            goElements.model = loaded_model;
-                        }else{
-                            std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
-                        }
-                    }
-                    
-                }
-                else{
-                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
-                }
+               MakeModel(basic_block,scene_data,parameters);
             //NECESSARY (Should it be?) sets the initial position
            }else if(tokens[0] == "position"){
                if(tokens.size() > 3){
-                   float* position = new float[3];
-                   position[0] = std::stof(tokens[1]);
-                   position[1] = std::stof(tokens[2]);
-                   position[2] = std::stof(tokens[3]);
-                   goElements.initial_pos = position;
+                   goElements.initial_pos = GetVec3(tokens);
                }
-               
-            
            }else if(tokens[0] == "size"){
                 if(tokens.size() > 3){
-                   float* size = new float[3];
-                   size[0] = std::stof(tokens[1]);
-                   size[1] = std::stof(tokens[2]);
-                   size[2] = std::stof(tokens[3]);
-                   goElements.size = glm::vec3(glm::make_vec3(size));
+                   goElements.size = glm::vec3(glm::make_vec3(GetVec3(tokens)));
                }else if (tokens.size() > 1){
                     float size;
                     size = std::stof(tokens[1]);
@@ -301,11 +247,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                if(tokens.size() > 3){
                    std::string to_remove = " ";
                    FileManagementTools::RemoveFromString(parameters,to_remove.data());
-                   float* direction = new float[3];
-                   direction[0] = std::stof(tokens[1]);
-                   direction[1] = std::stof(tokens[2]);
-                   direction[2] = std::stof(tokens[3]);
-                   light_elemtents.light_direction = direction;
+                   light_elemtents.light_direction = GetVec3(tokens);
             //This  sets the direction equal to the objet position
             }else if(parameters == "this_position"){
                 light_elemtents.light_direction_is_position = true;
@@ -313,11 +255,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
         //Sets the color of the light
         }else if(tokens[0] == "color"){
             if(tokens.size() > 3){
-                float* color = new float[3];
-                color[0] = std::stof(tokens[1]);
-                color[1] = std::stof(tokens[2]);
-                color[2] = std::stof(tokens[3]);
-                light_elemtents.light_color = glm::vec3(glm::make_vec3(color));
+                light_elemtents.light_color = glm::vec3(glm::make_vec3(GetVec3(tokens)));
             }
          //Sets the intensity of the light
         }else if(tokens[0] == "intensity"){
@@ -394,27 +332,7 @@ char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_
         parameters = line.substr(line.find(tokens[1]),line.length());
         if(tokens.size() >1){
             if(tokens[0] == "model"){
-               //Apply the regex rule
-                std::regex_search(parameters,matches,reg);
-                if (matches.ready()){
-                    //Searches if it is in loaded models
-                    if(scene_data->loaded_models.count(matches.str(1))){
-                        //If it is give it to goElements
-                        goElements.model = scene_data->loaded_models[matches.str(1)];
-                    }else{
-                        if(basic_block->global_data.models_path.count(matches.str(1))){
-                            Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
-                            scene_data->loaded_models[matches.str(1)] = loaded_model;
-                            goElements.model = loaded_model;
-                        }else{
-                            std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
-                        }
-                    }
-                    
-                }
-                else{
-                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
-                }
+             MakeModel(basic_block,scene_data,parameters);
             //NECESSARY (Should it be?) sets the initial position
            }else if(tokens[0] == "shader"){
                 std::regex_search(parameters,matches,reg);
@@ -451,6 +369,45 @@ char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_
     return current_state;
 }
 
+
+bool MakeModel(BasicsBlock* basic_block, SceneData* scene_data, std::string parameters){
+    //Regex to catch elements in between ""
+    std::regex reg ("\"(.*)\"");
+    std::smatch matches;
+    //Apply the regex rule
+    std::regex_search(parameters,matches,reg);
+    if (matches.ready()){
+        //Searches if it is in loaded models
+        if(scene_data->loaded_models.count(matches.str(1))){
+            //If it is give it to goElements
+            goElements.model = scene_data->loaded_models[matches.str(1)];
+            return true;
+        }else{
+            if(basic_block->global_data.models_path.count(matches.str(1))){
+                Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
+                scene_data->loaded_models[matches.str(1)] = loaded_model;
+                goElements.model = loaded_model;
+                return true;
+            }else{
+                std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded model \""<<matches.str(1)<<"\"\n";
+                return false;
+            }
+        }
+        
+    }
+    else{
+        return false;
+        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
+    }
+}
+
+float* GetVec3(std::vector<std::string> tokens){
+    float* vec3 = new float[3];
+    vec3[0] = std::stof(tokens[1]);
+    vec3[1] = std::stof(tokens[2]);
+    vec3[2] = std::stof(tokens[3]);
+    return vec3;
+}
 
 void ClearGoELemetns(){
     goElements.basic_block = nullptr;
