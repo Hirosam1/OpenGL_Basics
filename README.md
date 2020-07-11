@@ -13,7 +13,7 @@ The resource.snres file handles all the shaders, models, textures, and the proje
 * Inside de creation of the game object, you can choose the position, shader, model, size, the camera to use. Some of those like model and shader are referenced from the resource file, to save memory.
 
 ### On Model Loading
-* This program uses [Assimp](assimp_link) to load models, for now, the best file type is .obj.
+* This program uses [Assimp](https://github.com/assimp/assimp) to load models, for now, the best file type is .obj.
 * All used textures need to be in the same folder as the object. See the examples inside the "models" folder.
 
 ## 3rd Party Tools Used
