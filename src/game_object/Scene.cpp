@@ -25,23 +25,25 @@ Scene::~Scene(){
     for(unsigned int i =0; i < this->scene_data.AllObjects.size(); i++){
         delete this->scene_data.AllObjects.at(i);
     }
-    
     for(auto it = this->scene_data.loaded_models.begin(); it != this->scene_data.loaded_models.end(); it++){
         delete it->second;
     }
+    std::cout<<"HIT 3\n";
+    int i = 0;
     for(auto it = this->scene_data.loaded_textures.begin(); it != this->scene_data.loaded_textures.end(); it++){
+        std::cout<<++i<<"\n";
         if(it->second != nullptr){
             it->second->UnloadTexture();
-            delete it->second;
+            //delete it->second;
             it->second = nullptr;
         }
     }
     this->scene_data.AllObjects.clear();
     this->scene_data.AllLights.clear(); 
     this->scene_data.AllOpaques.clear();
-    delete this->scene_data.cube_map;
-    //Delete the camera list when I have one
-    //for(unsigned int i =0; i <)
+    if(this->scene_data.cube_map != nullptr)
+        delete this->scene_data.cube_map;
+
     this->scene_data.loaded_textures.clear();
     this->scene_data.loaded_models.clear();
     delete this->scene_data.main_camera;

@@ -16,11 +16,6 @@
     > intensity 0.6
 | "directional light"
 
-+ CubeMap
-    > model "TexBox"
-    > shader "sky box"
-| "cube map1"
-
 + GO 4
     > model "mushroom boi"
     > position -1 2 -2
@@ -28,6 +23,11 @@
     >size 0.5
     > add_texture "cube map1" 4
 |"mushroom boi" 
+
++ CubeMap
+    > model "TexBox"
+    > shader "sky box"
+| "cube map1"
 
 + GO 1 #Camera movment #Program responsible with the movment of the camera
     >position 0 0 0
