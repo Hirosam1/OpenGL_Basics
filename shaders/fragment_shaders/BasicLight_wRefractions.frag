@@ -131,7 +131,7 @@ uniform SpotLight spotLight;
 
 uniform int hasSpotLight;
 
-const float ref_factor = 0.6;
+const float ref_factor = 0.25;
 const float ratio = 1.0/1.05;
 
 void main()

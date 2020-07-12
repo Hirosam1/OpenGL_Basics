@@ -61,7 +61,7 @@ void GameManager::SetUpObjects(){
     
     std::cout<<"creating game objects...\n";
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
-    basic_block->global_data.active_scene = new Scene("scenes/scene_mushroom.snsc",basic_block);
+    basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
 
     //UI needs to be last?
     basic_block->GUI_gameObject = new bObject(basic_block,basic_block->global_data.active_scene->scene_data.main_camera,nullptr,new float[3]{0,0,0},nullptr);

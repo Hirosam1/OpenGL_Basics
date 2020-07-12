@@ -28,10 +28,7 @@ Scene::~Scene(){
     for(auto it = this->scene_data.loaded_models.begin(); it != this->scene_data.loaded_models.end(); it++){
         delete it->second;
     }
-    std::cout<<"HIT 3\n";
-    int i = 0;
     for(auto it = this->scene_data.loaded_textures.begin(); it != this->scene_data.loaded_textures.end(); it++){
-        std::cout<<++i<<"\n";
         if(it->second != nullptr){
             it->second->UnloadTexture();
             //delete it->second;

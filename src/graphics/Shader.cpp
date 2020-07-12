@@ -12,6 +12,7 @@ Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path)
     LoadShader(&vertex_shader_path, GL_VERTEX_SHADER);
     LoadShader(&fragment_shader_path, GL_FRAGMENT_SHADER);
     LinkShaders();
+    //Sets the uniform block to the shader, as index 0
     unsigned int camera_index = glGetUniformBlockIndex(this->shader_program,"Camera");
     if(camera_index == GL_INVALID_INDEX){
     }

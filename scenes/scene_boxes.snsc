@@ -12,7 +12,7 @@
     > position -0.5 -1 -0.1
     #sets the direction the same as the position, so when you change the position you change the direction, usefull here since the position does not matter
     > direction this_position
-    > color 0.65 0.93 1.0
+    > color 0.65 0.73 1.0
     > intensity 0.6
 | "directional light"
 
