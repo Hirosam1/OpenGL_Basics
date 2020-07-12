@@ -158,7 +158,7 @@ void GameManager::EngnieStart(){
          
         this->main_input->ResetValues();
         if(this->basic_block->was_resized){
-            //frame_buffer.ResetBuffers(this->main_window->GetWidth(),this->main_window->GetHeight());
+            frame_buffer.ResetBuffers(this->main_window->GetWidth(),this->main_window->GetHeight());
             this->basic_block->was_resized = false;
         }
 
