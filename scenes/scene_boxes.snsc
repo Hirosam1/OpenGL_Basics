@@ -34,7 +34,7 @@
 + CubeMap
     > model "TexBox"
     > shader "sky box"
-| "cube map1"
+| "cube map2"
 
 + GO 1 #Camera movment #Program responsible with the movment of the camera
     >position 0 0 0

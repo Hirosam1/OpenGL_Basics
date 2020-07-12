@@ -99,7 +99,7 @@ class GameManager{
             unsigned int supported_concurrency,Window* window,
             std::mutex *mtx,std::condition_variable *wait_main);
 
-
+        void UpdateGlobalUniforms();
         void RenderObjects();
 
         //Mkaes sure opaques are last

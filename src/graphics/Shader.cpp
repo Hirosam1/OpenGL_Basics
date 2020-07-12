@@ -8,11 +8,16 @@ Shader::Shader(){
     this->shader_program = 0;
 }
 
-Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path){
+Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path): vertex_path(vertex_shader_path), fragment_path(fragment_shader_path){
     LoadShader(&vertex_shader_path, GL_VERTEX_SHADER);
     LoadShader(&fragment_shader_path, GL_FRAGMENT_SHADER);
     LinkShaders();
+    unsigned int camera_index = glGetUniformBlockIndex(this->shader_program,"Camera");
+    if(camera_index == GL_INVALID_INDEX){
+    }
+    glUniformBlockBinding(this->shader_program,camera_index,0);
 }
+
 
 unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
     unsigned int shader_id;
@@ -68,7 +73,7 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
         glGetProgramiv(shader_program,GL_INFO_LOG_LENGTH,&logLength);
         auto errorLog = new char[logLength];
         glGetProgramInfoLog(shader_program,logLength,&logLength,errorLog);
-        std::cout<<"Error at linking the shaders: " <<shader_program<<std::endl<<"INFO-> "<<errorLog<<std::endl;
+        std::cout<<"Error at linking the shaders: " <<vertex_path << " and " <<fragment_path <<std::endl<<"INFO-> "<<errorLog<<std::endl;
         throw "Error at linking the shaders:";
     }
 

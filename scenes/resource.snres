@@ -10,7 +10,7 @@ Add_Model: "TexBox", "models/box/TexCube.obj"
 Add_Shader: "basic light", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight.frag"
 Add_Shader: "lamp shader", "shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag"
 Add_Shader: "sky box", "shaders/vertex_shaders/SkyBox.vert", "shaders/fragment_shaders/SkyBox.frag"
-Add_Shader: "reflections", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight_wReflections.frag"
+Add_Shader: "reflections", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight_wRefractions.frag"
 
 #Adds textures
 Add_Texture: "cube map1", "textures/skybox1"

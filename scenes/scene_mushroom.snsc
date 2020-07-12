@@ -19,14 +19,14 @@
 + CubeMap
     > model "TexBox"
     > shader "sky box"
-| "cube map2"
+| "cube map1"
 
 + GO 4
     > model "mushroom boi"
     > position -1 2 -2
     > shader "reflections"
     >size 0.5
-    > add_texture "cube map2" 4
+    > add_texture "cube map1" 4
 |"mushroom boi" 
 
 + GO 1 #Camera movment #Program responsible with the movment of the camera

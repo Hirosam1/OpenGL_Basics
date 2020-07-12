@@ -7,17 +7,29 @@ Camera::Camera(Window* aWindow, float initial_pos[3]):m_window(aWindow){
     camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
     this->projection_fov = glm::radians(45.0f);
     this->m_projection = new Projection(this->projection_fov,(float)this->m_window->GetWidth()/this->m_window->GetHeight());
-    UpdateView();
-
-    
+    glGenBuffers(1,&uniform_buffer);
 }
 
 const glm::mat4 Camera::GetView(){
     return this->m_view;
 }
 
-void Camera::UpdateView(){
+Camera::~Camera(){
+    glDeleteBuffers(1,&this->uniform_buffer);
+}
 
+void Camera::ReadyCameraUniform(){
+    glBindBuffer(GL_UNIFORM_BUFFER,uniform_buffer);
+    glBufferData(GL_UNIFORM_BUFFER,2* sizeof(glm::mat4),NULL,GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER,0); 
+    glBindBufferBase(GL_UNIFORM_BUFFER,0,uniform_buffer);
+}
+
+void Camera::UpdateCameraUniform(){
+    glBindBuffer(GL_UNIFORM_BUFFER,uniform_buffer);
+    glBufferSubData(GL_UNIFORM_BUFFER,0,sizeof(glm::mat4),glm::value_ptr(this->m_projection->GetProjection()));
+    glBufferSubData(GL_UNIFORM_BUFFER,sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(this->m_view));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
 void Camera::LookAt(float target[3]){

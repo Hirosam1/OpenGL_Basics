@@ -26,6 +26,7 @@ class Shader{
         void SetUniformVec3f(std::string* uniform_name,glm::vec3 vec3);
         //Creates a texture object and uses the path name to apply it
     protected:
+        std::string vertex_path, fragment_path;
         unsigned int shader_comp;
         unsigned int vertex_shader;
         unsigned int fragment_shader;

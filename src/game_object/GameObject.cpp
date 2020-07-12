@@ -48,8 +48,8 @@ GameObject::~GameObject(){
  }
 
 void GameObject::BufferData(){
-   this->m_shader->SetUniformMat4f(&basic_block->View_string,m_camera->GetView());
-   this->m_shader->SetUniformMat4f(&basic_block->Projection_string, m_camera->GetProjection());
+  /* this->m_shader->SetUniformMat4f(&basic_block->View_string,m_camera->GetView());
+   this->m_shader->SetUniformMat4f(&basic_block->Projection_string, m_camera->GetProjection());*/
    this->m_shader->SetUniformMat4f(&basic_block->Model_string,model_mat);
    this->m_shader->SetUniformVec3f(&basic_block->Mat_specular,glm::vec3(1.0,1.0,1.0));
    this->m_shader->SetUniform1f(&basic_block->Mat_shininess,64);

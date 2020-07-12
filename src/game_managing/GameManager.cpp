@@ -60,15 +60,11 @@ void GameManager::EngineInit(){
 void GameManager::SetUpObjects(){
     
     std::cout<<"creating game objects...\n";
-    //Model* box = new Model("models/box/Box.obj");
-    //cubemap_tex = new CubeMapTexture("textures/skybox1");
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
     basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
-    //current_scene_data = basic_block->global_data.active_scene->scene_data;
 
     //UI needs to be last?
     basic_block->GUI_gameObject = new bObject(basic_block,basic_block->global_data.active_scene->scene_data.main_camera,nullptr,new float[3]{0,0,0},nullptr);
-    //all_objs->push_back(GUIObject);
 
 }
 
@@ -138,6 +134,7 @@ void GameManager::EngnieStart(){
 
         //Render all objects in scene
         glPolygonMode(GL_FRONT_AND_BACK, basic_block->global_data.fill_type);
+        this->UpdateGlobalUniforms();
         this->RenderObjects();
         if(basic_block->global_data.active_scene->scene_data.cube_map != nullptr){
             basic_block->global_data.active_scene->scene_data.cube_map->UseCubeTexture(basic_block->global_data.active_scene->scene_data.cube_map->m_shader,
@@ -161,7 +158,7 @@ void GameManager::EngnieStart(){
          
         this->main_input->ResetValues();
         if(this->basic_block->was_resized){
-            frame_buffer.ResetBuffers(this->main_window->GetWidth(),this->main_window->GetHeight());
+            //frame_buffer.ResetBuffers(this->main_window->GetWidth(),this->main_window->GetHeight());
             this->basic_block->was_resized = false;
         }
 
@@ -170,8 +167,14 @@ void GameManager::EngnieStart(){
     
 }
 
+void GameManager::UpdateGlobalUniforms(){
+    //Update global uniform of camera
+    this->basic_block->global_data.active_scene->scene_data.main_camera->UpdateCameraUniform();
+}
+
 void GameManager::RenderObjects(){
     glEnable(GL_CULL_FACE);
+
      //Render non opaque Objects
     if(this->basic_block->global_data.active_scene->scene_data.AllObjects.size() > 0){
         for(auto it = this->basic_block->global_data.active_scene->scene_data.AllObjects.begin(); it != this->basic_block->global_data.active_scene->scene_data.AllObjects.end();it++){

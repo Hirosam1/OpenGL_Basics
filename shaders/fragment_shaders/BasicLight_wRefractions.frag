@@ -9,7 +9,11 @@ in vec2 TexCoord;
 in vec3 aNormal;
 in vec3 FragPos;
 
-uniform mat4 View;
+layout(std140) uniform Camera{
+    mat4 Projection; 
+    mat4 View;
+};
+
 uniform samplerCube skybox;
 struct Material{
     bool has_TexDiffuse;
@@ -127,8 +131,8 @@ uniform SpotLight spotLight;
 
 uniform int hasSpotLight;
 
-const float ref_factor = 0.5;
-const float ratio = 1.0/1.1;
+const float ref_factor = 0.6;
+const float ratio = 1.0/1.05;
 
 void main()
 {

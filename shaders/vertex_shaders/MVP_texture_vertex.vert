@@ -3,9 +3,17 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 normal;
 layout (location = 2) in vec2 aTexCoord;
 
+
+layout(std140) uniform Camera{
+                        //base alignment    //aligned offset
+    mat4 Projection;    //16                //0
+    mat4 View;          //16                //16
+                        //32
+};
+
 uniform mat4 Model;
-uniform mat4 View;
-uniform mat4 Projection;
+//uniform mat4 View;
+//uniform mat4 Projection;
 
 out vec2 TexCoord;
 out vec3 aNormal;

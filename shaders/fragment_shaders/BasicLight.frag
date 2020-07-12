@@ -9,6 +9,8 @@ in vec2 TexCoord;
 in vec3 aNormal;
 in vec3 FragPos;
 
+
+
 struct Material{
     bool has_TexDiffuse;
     sampler2D texture_diffuse1;
