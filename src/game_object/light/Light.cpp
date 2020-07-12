@@ -36,5 +36,4 @@ void Light::LampColorBuffering(){
     }
 }
 
-void Light::Update(){
-}
+void Light::Update(){}

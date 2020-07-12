@@ -114,6 +114,7 @@ void GameManager::EngnieStart(){
         (*it)->ReadyObject();
     }
     basic_block->GUI_gameObject->ReadyObject();
+
     while(!glfwWindowShouldClose(this->main_window->GetWindow())){
         glfwSetWindowShouldClose(this->main_window->GetWindow(),basic_block->should_close);
         //Clear the screen
@@ -187,7 +188,7 @@ void GameManager::RenderObjects(){
                 Light* is_light = dynamic_cast<Light*>(*it);
                 if(is_light == NULL){
                     for(auto lit = this->basic_block->global_data.active_scene->scene_data.AllLights.begin(); lit != this->basic_block->global_data.active_scene->scene_data.AllLights.end(); lit++){
-                        (*lit)->LightBuffering((*it));
+                        //(*lit)->LightBuffering((*it));
                     }
                 }else{
                     is_light->LampColorBuffering();

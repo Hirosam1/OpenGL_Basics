@@ -55,7 +55,7 @@ class BasicsBlock{
         BasicsBlock(Window* window, InputManager* input, Time* time);
         bool was_resized = false;
         void WindowResized();
-        
+        unsigned int uniform_buffer_light;
         bool should_close = false;
         Window* m_window;
         InputManager* m_input;
@@ -81,29 +81,7 @@ class BasicsBlock{
         std::string Mat_specular;
         std::string Mat_shininess;
 
-        std::string DirLight_prefix;
-        std::string PointLights_prefix;
-        std::string SpotLight_prefix;
-
-        std::string Light_ambient;
-        std::string Light_diffuse;
-        std::string Light_specular;
-
-        std::string Light_pos;
-
-        std::string Light_direction;
-
-        std::string Basic_tex;
-
-        std::string Light_constant;
-        std::string Light_linear;
-        std::string Light_quadratic;
-
-        std::string Light_CutOff;
-        std::string Light_OutCutoff;
-
         std::string LampColor;
         
-        std::string n_point_lights_string;
 
 };

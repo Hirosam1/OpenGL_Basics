@@ -15,7 +15,10 @@ DirLight::DirLight(BasicsBlock* basic_block, Camera* m_camera, float direction[3
      this->light_ambient = this->light_color * 0.05f;
 }
 
-void DirLight::LightBuffering(GameObject* go){
+void DirLight::LightBuffering(){
+    glBindBuffer(GL_UNIFORM_BUFFER,basic_block->uniform_buffer_light);
+    glBufferSubData(GL_UNIFORM_BUFFER,192+16,16,this->direction);
+    /*
     if(go->m_shader != nullptr){
         std::string uniform_name = basic_block->DirLight_prefix + basic_block->Light_ambient;
         go->m_shader->SetUniformVec3f(&uniform_name,this->light_ambient);
@@ -28,5 +31,6 @@ void DirLight::LightBuffering(GameObject* go){
 
         uniform_name = basic_block->DirLight_prefix + basic_block->Light_direction;
         go->m_shader->SetUniformVec3f(&uniform_name, glm::vec3(go->m_camera->GetView() * glm::vec4(glm::make_vec3(this->direction),0)));
-    }
+    }*/
+     glBindBuffer(GL_UNIFORM_BUFFER,0);
 }

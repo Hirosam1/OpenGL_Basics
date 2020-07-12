@@ -14,30 +14,15 @@ m_window(window),m_input(input),m_time(time){
     this->Mat_specular = std::string("material.specular");
     this->Mat_shininess = std::string("material.shininess");
 
-
-    this->Basic_tex = std::string("material.texture1");
-
-    this->DirLight_prefix = std::string("dirLight");
-    this->PointLights_prefix = std::string("pointLights[%d]");
-    this->SpotLight_prefix = std::string("spotLight");
-
-    this->Light_ambient =  std::string(".ambient");
-    this->Light_diffuse =  std::string(".diffuse");
-    this->Light_specular = std::string(".specular");
-    
-    this->Light_pos = std::string(".positionVS");
-    this->Light_direction = std::string(".directionVS");
-
-    this->Light_constant = std::string(".constant");
-    this->Light_linear = std::string(".linear");
-    this->Light_quadratic = std::string(".quadratic");
-
-    this->Light_CutOff = std::string(".cutOff");
-    this->Light_OutCutoff = std::string(".outerCutOff");
-
     this->LampColor = std::string("LampColor");
 
-    this->n_point_lights_string = std::string("n_point_lights");
+    //Create the uniform buffer for light rendering, maybe change the location(??)
+    glGenBuffers(1,&uniform_buffer_light);
+    glBindBuffer(GL_UNIFORM_BUFFER,uniform_buffer_light);
+    glBufferData(GL_UNIFORM_BUFFER,380,NULL,GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
+    glBindBufferBase(GL_UNIFORM_BUFFER,1,uniform_buffer_light);
+
     
 }
 

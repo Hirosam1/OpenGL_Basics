@@ -2,13 +2,11 @@
 #define MAX_POINT_LIGHTS 2
 //We declare an output, we only need one
 out vec4 FragColor;
-uniform int n_point_lights;
-
+//uniform int n_point_lights;
 in vec2 TexCoord;
 
 in vec3 aNormal;
 in vec3 FragPos;
-
 
 
 struct Material{
@@ -21,40 +19,45 @@ struct Material{
     float shininess;
 };
 
-struct DirLight{
-    vec3 directionVS;
+struct DirLight{        //192
+                        //Base aligment //aligned offset
+    vec3 directionVS;   //16            //0
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 ambient;       //16            //32
+    vec3 diffuse;       //16            //48
+    vec3 specular;      //16            //64
+                                        //80
 };
 
-struct PointLight{
-    vec3 positionVS;
+struct PointLight{      //0
+                        //Base aligment //aligned offset
+    vec3 positionVS;    //16            //0
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 ambient;       //16            //32
+    vec3 diffuse;       //16            //48
+    vec3 specular;      //16            //64
 
-    float constant;
-    float linear;
-    float quadratic;
-  
+    float constant;     //4             //80
+    float linear;       //4             //84
+    float quadratic;    //4             //88
+                                        //92
 };
 
-struct SpotLight{
-    vec3 positionVS;
-    vec3 directionVS;
-    vec3 diffuse;
-    vec3 specular;
+struct SpotLight{       //288
+                        //Base aligment //aligned offset
+    vec3 positionVS;    //16            //0
 
-    float constant;
-    float linear;
-    float quadratic;
+    vec3 directionVS;   //16            //32
+    vec3 diffuse;       //16            //48
+    vec3 specular;      //16            //64
 
-    float cutOff;
-    float outerCutOff;
-};
+    float constant;     //4             //80
+    float linear;       //4             //84
+    float quadratic;    //4             //88
+
+    float cutOff;       //4             //92
+    float outerCutOff;  //4             //96
+};                                      //100
 
 uniform Material material;
 
@@ -120,11 +123,17 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 texDiffColor
     return (diffuse + specular);
 }
 
-uniform PointLight pointLights[MAX_POINT_LIGHTS];
-uniform DirLight dirLight;
-uniform SpotLight spotLight;
+layout(std140) uniform Lights{                  //Base aligment //aligned offset
+    PointLight pointLights[MAX_POINT_LIGHTS];   //92            //0
+                                                //92            //92->96
+    DirLight dirLight;                          //80            //188->192
+    SpotLight spotLight;                        //100           //272->288
 
-uniform int hasSpotLight;
+    int hasSpotLight;                           //4             //372
+    int n_point_lights;                         //4             //376
+                                                                //380
+};
+
 void main()
 {
     vec4 texDiffColor = vec4(1);

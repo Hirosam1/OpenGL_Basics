@@ -2,14 +2,17 @@
 #define MAX_POINT_LIGHTS 2
 //We declare an output, we only need one
 out vec4 FragColor;
-uniform int n_point_lights;
 
 in vec2 TexCoord;
 
 in vec3 aNormal;
 in vec3 FragPos;
 
-uniform mat4 View;
+layout(std140) uniform Camera{
+    mat4 Projection; 
+    mat4 View;
+};
+
 uniform samplerCube skybox;
 struct Material{
     bool has_TexDiffuse;
@@ -121,12 +124,16 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 texDiffColor
     return (diffuse + specular);
 }
 
-uniform PointLight pointLights[MAX_POINT_LIGHTS];
-uniform DirLight dirLight;
-uniform SpotLight spotLight;
+layout(std140) uniform Lights{                  //Base aligment //aligned offset
+    PointLight pointLights[MAX_POINT_LIGHTS];   //92            //0
+                                                //92            //92->96
+    DirLight dirLight;                          //80            //188->192
+    SpotLight spotLight;                        //100           //272->288
 
-uniform int hasSpotLight;
-
+    int hasSpotLight;                           //4             //372
+    int n_point_lights;                         //4             //376
+                                                                //380
+};
 const float ref_factor = 0.07;
 
 void main()

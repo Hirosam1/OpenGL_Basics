@@ -29,7 +29,7 @@ class Light : public GameObject{
         glm::vec3 light_specular;
     protected:
         //Handles buffering of shader of given GameObject
-        virtual void LightBuffering(GameObject* go) = 0;
+        virtual void LightBuffering() = 0;
         //Buffer of the lamp game object, this will render the light game object, so it can appear on the scene
         void LampColorBuffering();
         void Update() override;
@@ -46,7 +46,7 @@ class PointLight : public Light{
         int index;
         
     private:
-        void LightBuffering(GameObject *go) override;
+        void LightBuffering() override;
         std::string LightPrefix;
 };
 
@@ -57,7 +57,7 @@ class DirLight : public Light{
         DirLight(BasicsBlock* bb, Camera* m_camera, float direction[3]);
         float* direction;
     private:
-        void LightBuffering(GameObject *go) override;
+        void LightBuffering() override;
 };
 
 class SpotLight : public Light{
@@ -67,10 +67,6 @@ class SpotLight : public Light{
         SpotLight(BasicsBlock* bb, Camera* m_camera, float initial_pos[3], float direction[3]);
         float* direction;
     private:
-        void LightBuffering(GameObject* go) override;
+        void LightBuffering() override;
 };
 
-namespace LightFactory{
-    
-    template<class T> Light* GetLightByType(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], Shader* m_shader, float direction[3]);
-};

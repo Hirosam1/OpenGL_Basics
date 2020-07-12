@@ -14,7 +14,8 @@ SpotLight::SpotLight(BasicsBlock* basic_block, Camera* m_camera, float initial_p
 
 }
 
-void SpotLight::LightBuffering(GameObject* go){
+void SpotLight::LightBuffering(){
+    /*
     if(go->m_shader != nullptr){
         std::string uniform_name = basic_block->SpotLight_prefix + basic_block->Light_diffuse;
         go->m_shader->SetUniformVec3f(&uniform_name,this->light_color * this->light_intensity);
@@ -42,5 +43,5 @@ void SpotLight::LightBuffering(GameObject* go){
 
         go->m_shader->SetUniform1i(&uniform_name,1);
 
-    }
+    }*/
 }
