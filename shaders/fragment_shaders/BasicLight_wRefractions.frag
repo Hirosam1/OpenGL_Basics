@@ -125,14 +125,14 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 texDiffColor
 }
 
 layout(std140) uniform Lights{                  //Base aligment //aligned offset
-    PointLight pointLights[MAX_POINT_LIGHTS];   //92            //0
-                                                //92            //92->96
-    DirLight dirLight;                          //80            //188->192
-    SpotLight spotLight;                        //100           //272->288
+    PointLight pointLights[MAX_POINT_LIGHTS];   //76            //0
+                                                //76            //76->80
+    DirLight dirLight;                          //64            //156->160
+    SpotLight spotLight;                        //84            //224
 
-    int hasSpotLight;                           //4             //372
-    int n_point_lights;                         //4             //376
-                                                                //380
+    int hasSpotLight;                           //4             //308
+    int n_point_lights;                         //4             //312
+                                                                //(316)
 };
 
 const float ref_factor = 0.25;

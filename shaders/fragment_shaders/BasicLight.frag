@@ -19,45 +19,45 @@ struct Material{
     float shininess;
 };
 
-struct DirLight{        //192
+struct DirLight{        //160
                         //Base aligment //aligned offset
     vec3 directionVS;   //16            //0
 
-    vec3 ambient;       //16            //32
-    vec3 diffuse;       //16            //48
-    vec3 specular;      //16            //64
-                                        //80
+    vec3 ambient;       //16            //16
+    vec3 diffuse;       //16            //32
+    vec3 specular;      //16            //48
+                                        //64
 };
 
 struct PointLight{      //0
                         //Base aligment //aligned offset
     vec3 positionVS;    //16            //0
 
-    vec3 ambient;       //16            //32
-    vec3 diffuse;       //16            //48
-    vec3 specular;      //16            //64
+    vec3 ambient;       //16            //16
+    vec3 diffuse;       //16            //32
+    vec3 specular;      //16            //48
 
-    float constant;     //4             //80
-    float linear;       //4             //84
-    float quadratic;    //4             //88
-                                        //92
+    float constant;     //4             //64
+    float linear;       //4             //68
+    float quadratic;    //4             //72
+                                        //76
 };
 
-struct SpotLight{       //288
+struct SpotLight{       //224
                         //Base aligment //aligned offset
     vec3 positionVS;    //16            //0
 
-    vec3 directionVS;   //16            //32
-    vec3 diffuse;       //16            //48
-    vec3 specular;      //16            //64
+    vec3 directionVS;   //16            //16
+    vec3 diffuse;       //16            //32
+    vec3 specular;      //16            //48
 
-    float constant;     //4             //80
-    float linear;       //4             //84
-    float quadratic;    //4             //88
+    float constant;     //4             //64
+    float linear;       //4             //68
+    float quadratic;    //4             //72
 
-    float cutOff;       //4             //92
-    float outerCutOff;  //4             //96
-};                                      //100
+    float cutOff;       //4             //76
+    float outerCutOff;  //4             //80
+};                                      //84
 
 uniform Material material;
 
@@ -124,14 +124,14 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 texDiffColor
 }
 
 layout(std140) uniform Lights{                  //Base aligment //aligned offset
-    PointLight pointLights[MAX_POINT_LIGHTS];   //92            //0
-                                                //92            //92->96
-    DirLight dirLight;                          //80            //188->192
-    SpotLight spotLight;                        //100           //272->288
+    PointLight pointLights[MAX_POINT_LIGHTS];   //76            //0
+                                                //76            //76->80
+    DirLight dirLight;                          //64            //156->160
+    SpotLight spotLight;                        //84            //224
 
-    int hasSpotLight;                           //4             //372
-    int n_point_lights;                         //4             //376
-                                                                //380
+    int hasSpotLight;                           //4             //308
+    int n_point_lights;                         //4             //312
+                                                                //(316)
 };
 
 void main()

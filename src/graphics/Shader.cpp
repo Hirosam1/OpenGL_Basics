@@ -17,6 +17,8 @@ Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path)
     if(camera_index == GL_INVALID_INDEX){
     }
     glUniformBlockBinding(this->shader_program,camera_index,0);
+    unsigned int lights_index = glGetUniformBlockIndex(this->shader_program,"Lights");
+    glUniformBlockBinding(this->shader_program,lights_index,1);
 }
 
 

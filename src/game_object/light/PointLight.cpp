@@ -10,31 +10,23 @@ Light(basic_block,m_camera,model,initial_pos,m_shader), constant(constant),linea
 }
 
 void PointLight::LightBuffering(){
-    /*
-    if(go->m_shader != nullptr){
-        //vvv Change the one to the numbers of light in the scene vvv
-        go->m_shader->SetUniform1i(&basic_block->n_point_lights_string,1);
-        //^^^ Change the one to the numbers of light in the scene ^^^
-        std::string uniform_name = this->LightPrefix + basic_block->Light_ambient;
-
-        go->m_shader->SetUniformVec3f(&uniform_name,this->light_ambient);
-        uniform_name = this->LightPrefix + basic_block->Light_diffuse;
-
-        go->m_shader->SetUniformVec3f(&uniform_name,this->light_color * this->light_intensity);
-        uniform_name = this->LightPrefix+ basic_block->Light_specular;
-
-        go->m_shader->SetUniformVec3f(&uniform_name,this->light_specular * this->light_intensity);
-        uniform_name = this->LightPrefix + basic_block->Light_pos;
-
-        go->m_shader->SetUniformVec3f(&uniform_name,glm::vec3(go->m_camera->GetView() * glm::vec4(glm::make_vec3(this->light_pos),1)));
-
-        uniform_name = this->LightPrefix + basic_block->Light_constant;
-        go->m_shader->SetUniform1f(&uniform_name,this->constant);
-
-        uniform_name = this->LightPrefix + basic_block->Light_linear;
-        go->m_shader->SetUniform1f(&uniform_name,this->linear);
-        uniform_name = this->LightPrefix+ basic_block->Light_quadratic;
-        go->m_shader->SetUniform1f(&uniform_name,this->quadratic);
-    }
-    */
+    int a = 1;
+    glBindBuffer(GL_UNIFORM_BUFFER,basic_block->uniform_buffer_light);
+    //Light direction
+    glBufferSubData(GL_UNIFORM_BUFFER,0+(index*80),16,glm::value_ptr(glm::vec3(basic_block->global_data.active_scene->scene_data.main_camera->GetView() * glm::vec4(glm::make_vec3(this->light_pos),1))));
+    //Light ambient
+    glBufferSubData(GL_UNIFORM_BUFFER,16+(index*80),16,glm::value_ptr(this->light_ambient));
+    //Light diffuse
+    glBufferSubData(GL_UNIFORM_BUFFER,32+(index*80),16,glm::value_ptr(this->light_color * this->light_intensity));
+    //Light specular
+    glBufferSubData(GL_UNIFORM_BUFFER,48+(index*80),16,glm::value_ptr(this->light_specular * this->light_intensity));
+    //Light constant
+    glBufferSubData(GL_UNIFORM_BUFFER,64+(index*80),4,&this->constant);
+    //Light linear
+    glBufferSubData(GL_UNIFORM_BUFFER,68+(index*80),4,&this->linear);
+    //Linear quadractic
+    glBufferSubData(GL_UNIFORM_BUFFER,72+(index*80),4,&this->quadratic);
+    //number of point lights;
+    glBufferSubData(GL_UNIFORM_BUFFER,308,4,&basic_block->global_data.active_scene->scene_data.n_point_lights);
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }

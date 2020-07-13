@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "game_object/GameObject.hpp"
+#include "game_object/Scene.hpp"
 
 class GameManager;
 
@@ -44,7 +45,6 @@ class PointLight : public Light{
         float quadratic;
         //Index of the n point lights
         int index;
-        
     private:
         void LightBuffering() override;
         std::string LightPrefix;
