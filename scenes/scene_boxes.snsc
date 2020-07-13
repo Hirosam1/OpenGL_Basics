@@ -7,6 +7,15 @@
     >shader "lamp shader"
 | "point light"
 
++ light spot
+    > model "box"
+    > size 0.25
+    > shader "lamp shader"
+    > position 0 0 0
+    > direction 1 0 0
+    > color 1 1 0
+| "spot light"
+
 + light directional #creates a directional light
     > camera main_camera
     > position -0.5 -1 -0.1

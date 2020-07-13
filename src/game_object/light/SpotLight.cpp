@@ -15,33 +15,27 @@ SpotLight::SpotLight(BasicsBlock* basic_block, Camera* m_camera, float initial_p
 }
 
 void SpotLight::LightBuffering(){
-    /*
-    if(go->m_shader != nullptr){
-        std::string uniform_name = basic_block->SpotLight_prefix + basic_block->Light_diffuse;
-        go->m_shader->SetUniformVec3f(&uniform_name,this->light_color * this->light_intensity);
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_specular;
-        go->m_shader->SetUniformVec3f(&uniform_name,this->light_specular * this->light_intensity);
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_pos;
-        go->m_shader->SetUniformVec3f(&uniform_name,glm::vec3(go->m_camera->GetView() * glm::vec4(glm::make_vec3(this->m_camera->camera_pos),1)));
+    int offset = 224;
+    glBindBuffer(GL_UNIFORM_BUFFER, basic_block->uniform_buffer_light);
+    //Light position
+    glBufferSubData(GL_UNIFORM_BUFFER,0+offset,16,glm::value_ptr(glm::vec3(basic_block->global_data.active_scene->scene_data.main_camera->GetView() * glm::vec4(glm::make_vec3(this->light_pos),1))));
+    //Light direction
+    glBufferSubData(GL_UNIFORM_BUFFER,16+offset,16, glm::value_ptr(glm::vec3(basic_block->global_data.active_scene->scene_data.main_camera->GetView() * glm::vec4(glm::make_vec3(this->direction),0))));
+    //Light diffuse
+    glBufferSubData(GL_UNIFORM_BUFFER,32+offset,16,glm::value_ptr(this->light_color * this->light_intensity));
+    //Light Specular
+    glBufferSubData(GL_UNIFORM_BUFFER,48+offset,16,glm::value_ptr(this->light_specular * this->light_intensity));
+    //Light constant
+    glBufferSubData(GL_UNIFORM_BUFFER,64+offset,4,&this->constant);
+    //Light Linear
+    glBufferSubData(GL_UNIFORM_BUFFER,68+offset,4,&this->linear);
+    //Light quadratic
+    glBufferSubData(GL_UNIFORM_BUFFER,72+offset,4,&this->quadratic);
+    //Light cutoff
+    glBufferSubData(GL_UNIFORM_BUFFER,76+offset,4,&this->cutoff);
+    //Light outer cutoff
+    glBufferSubData(GL_UNIFORM_BUFFER,80+offset,4,&this->outer_cutoff);
+     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    
 
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_direction;
-        go->m_shader->SetUniformVec3f(&uniform_name, glm::vec3(go->m_camera->GetView() * glm::vec4(glm::make_vec3(this->direction),0)));
-
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_CutOff;
-        go->m_shader->SetUniform1f(&uniform_name, glm::cos(glm::radians(7.0)));
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_OutCutoff;
-        go->m_shader->SetUniform1f(&uniform_name, glm::cos(glm::radians(12.0)));
-
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_constant;
-        go->m_shader->SetUniform1f(&uniform_name,1.0);
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_linear;
-        go->m_shader->SetUniform1f(&uniform_name,0.12);
-        uniform_name = basic_block->SpotLight_prefix + basic_block->Light_quadratic;
-        go->m_shader->SetUniform1f(&uniform_name,0.09);
-
-        uniform_name = "hasSpotLight";
-
-        go->m_shader->SetUniform1i(&uniform_name,1);
-
-    }*/
 }

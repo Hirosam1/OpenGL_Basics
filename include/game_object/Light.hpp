@@ -66,6 +66,11 @@ class SpotLight : public Light{
         SpotLight(BasicsBlock* bb, Camera* m_camera, Model* model, float initial_pos[3], Shader* m_shader);
         SpotLight(BasicsBlock* bb, Camera* m_camera, float initial_pos[3], float direction[3]);
         float* direction;
+        float constant = 1;
+        float linear = 0.12;
+        float quadratic = 0.09;
+        float cutoff = glm::cos(glm::radians(7.0));
+        float outer_cutoff =glm::cos(glm::radians(12.0));
     private:
         void LightBuffering() override;
 };

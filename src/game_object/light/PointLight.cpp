@@ -10,7 +10,6 @@ Light(basic_block,m_camera,model,initial_pos,m_shader), constant(constant),linea
 }
 
 void PointLight::LightBuffering(){
-    int a = 1;
     glBindBuffer(GL_UNIFORM_BUFFER,basic_block->uniform_buffer_light);
     //Light direction
     glBufferSubData(GL_UNIFORM_BUFFER,0+(index*80),16,glm::value_ptr(glm::vec3(basic_block->global_data.active_scene->scene_data.main_camera->GetView() * glm::vec4(glm::make_vec3(this->light_pos),1))));
@@ -26,7 +25,7 @@ void PointLight::LightBuffering(){
     glBufferSubData(GL_UNIFORM_BUFFER,68+(index*80),4,&this->linear);
     //Linear quadractic
     glBufferSubData(GL_UNIFORM_BUFFER,72+(index*80),4,&this->quadratic);
-    //number of point lights;
+    //number of point lights (why it is 308??)
     glBufferSubData(GL_UNIFORM_BUFFER,308,4,&basic_block->global_data.active_scene->scene_data.n_point_lights);
     glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
