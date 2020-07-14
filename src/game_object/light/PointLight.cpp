@@ -26,6 +26,6 @@ void PointLight::LightBuffering(){
     //Linear quadractic
     glBufferSubData(GL_UNIFORM_BUFFER,72+(index*80),4,&this->quadratic);
     //number of point lights (why it is 308??)
-    glBufferSubData(GL_UNIFORM_BUFFER,308,4,&basic_block->global_data.active_scene->scene_data.n_point_lights);
+    //glBufferSubData(GL_UNIFORM_BUFFER,308,4,&basic_block->global_data.active_scene->scene_data.n_point_lights);
     glBindBuffer(GL_UNIFORM_BUFFER,0);
 }

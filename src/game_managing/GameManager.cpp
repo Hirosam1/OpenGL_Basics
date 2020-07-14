@@ -173,6 +173,7 @@ void GameManager::UpdateGlobalUniforms(){
     for(int i = 0; i < basic_block->global_data.active_scene->scene_data.AllLights.size();i++){
         basic_block->global_data.active_scene->scene_data.AllLights[i]->LightBuffering();
     }
+    LightManager::UpdateLightNumbers(basic_block,basic_block->global_data.active_scene);
 }
 
 void GameManager::RenderObjects(){

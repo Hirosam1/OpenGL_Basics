@@ -17,7 +17,7 @@ SpotLight::SpotLight(BasicsBlock* basic_block, Camera* m_camera, float initial_p
 
 void SpotLight::LightBuffering(){
     int offset = 224;
-    int flag = 1;
+    int flag = 0;
     glBindBuffer(GL_UNIFORM_BUFFER, basic_block->uniform_buffer_light);
     //Light position
     glBufferSubData(GL_UNIFORM_BUFFER,0+offset,16,glm::value_ptr(glm::vec3(basic_block->global_data.active_scene->scene_data.main_camera->GetView() * glm::vec4(glm::make_vec3(this->light_pos),1))));
@@ -38,7 +38,7 @@ void SpotLight::LightBuffering(){
     //Light outer cutoff
     glBufferSubData(GL_UNIFORM_BUFFER,76+offset,4,&this->outer_cutoff);
     //has spotlight
-    glBufferSubData(GL_UNIFORM_BUFFER,304,4,&flag);
+    //glBufferSubData(GL_UNIFORM_BUFFER,304,4,&flag);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     
 

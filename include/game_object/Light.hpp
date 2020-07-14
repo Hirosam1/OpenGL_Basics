@@ -75,3 +75,6 @@ class SpotLight : public Light{
         void LightBuffering() override;
 };
 
+namespace LightManager{
+    void UpdateLightNumbers(BasicsBlock* basic_block, Scene* scene);
+};

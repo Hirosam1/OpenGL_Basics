@@ -13,6 +13,7 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
         std::cout<<"FILE::SCENE::LOADER:ERROR->" <<"Could not open file \""<<scene_path<<"\" \n";
         return;
     }
+    int flag = 0;
     m_camera->ReadyCameraUniform();
     std::cout<<"Loading scene-> "<< scene_path.substr(scene_path.find_last_of("/"), scene_path.length()) <<"\n";
     

@@ -27,7 +27,8 @@ struct SceneData{
     std::map<std::string, Camera*> all_cameras;
     Camera* main_camera;
     CubeMap* cube_map = nullptr;
-    int n_point_lights = 0;
+    unsigned int n_point_lights = 0;
+    unsigned int n_spot_lights = 0;
 };
 
 struct GlobalData{

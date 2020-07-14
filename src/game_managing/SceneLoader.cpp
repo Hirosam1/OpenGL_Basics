@@ -294,6 +294,7 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                         else{
                             gameObject_output = new SpotLight(basic_block,goElements.m_camera,goElements.model,goElements.initial_pos,goElements.m_shader,light_elemtents.light_direction);
                         }
+                        scene_data->n_spot_lights++;
                     }
                 }
                 if(gameObject_output == nullptr){
