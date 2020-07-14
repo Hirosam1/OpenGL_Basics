@@ -19,7 +19,7 @@ m_window(window),m_input(input),m_time(time){
     //Create the uniform buffer for light rendering, maybe change the location(??)
     glGenBuffers(1,&uniform_buffer_light);
     glBindBuffer(GL_UNIFORM_BUFFER,uniform_buffer_light);
-    glBufferData(GL_UNIFORM_BUFFER,316,NULL,GL_STATIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER,316,NULL,GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     glBindBufferBase(GL_UNIFORM_BUFFER,1,uniform_buffer_light);
 

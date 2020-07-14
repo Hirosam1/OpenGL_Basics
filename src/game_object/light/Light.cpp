@@ -39,6 +39,7 @@ void Light::LampColorBuffering(){
 void Light::Update(){}
 
 void LightManager::UpdateLightNumbers(BasicsBlock* basic_block, Scene* scene){
+    //Resets the light number correctly
     glBindBuffer(GL_UNIFORM_BUFFER,basic_block->uniform_buffer_light);
     glBufferSubData(GL_UNIFORM_BUFFER,304,4,&scene->scene_data.n_spot_lights);
     glBufferSubData(GL_UNIFORM_BUFFER,308,4,&scene->scene_data.n_point_lights);

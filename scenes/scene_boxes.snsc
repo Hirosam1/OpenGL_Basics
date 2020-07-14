@@ -40,6 +40,10 @@
     > shader "basic light"
 | "box 2"
 
++ GO 5
+ > position 0 0 0
+ |"Pulsating light"
+
 + CubeMap
     > model "TexBox"
     > shader "sky box"

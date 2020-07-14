@@ -20,7 +20,7 @@ Camera::~Camera(){
 
 void Camera::ReadyCameraUniform(){
     glBindBuffer(GL_UNIFORM_BUFFER,uniform_buffer);
-    glBufferData(GL_UNIFORM_BUFFER,2* sizeof(glm::mat4),NULL,GL_STATIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER,2* sizeof(glm::mat4),NULL,GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER,0); 
     glBindBufferBase(GL_UNIFORM_BUFFER,0,uniform_buffer);
 }
