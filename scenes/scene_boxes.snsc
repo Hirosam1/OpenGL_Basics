@@ -11,8 +11,8 @@
     > model "box"
     > size 0.25
     > shader "lamp shader"
-    > position 0 0 0
-    > direction 1 0 0
+    > position 0 3 1
+    > direction 0 -1 0
     > color 1 1 0
 | "spot light"
 

@@ -51,13 +51,13 @@ struct SpotLight{       //224
     vec3 diffuse;       //16            //32
     vec3 specular;      //16            //48
 
-    float constant;     //4             //64
-    float linear;       //4             //68
-    float quadratic;    //4             //72
+    float constant;     //4             //64 (60 ???)
+    float linear;       //4             //68 (64 ???)
+    float quadratic;    //4             //72 (70 ???)
 
-    float cutOff;       //4             //76
-    float outerCutOff;  //4             //80
-};                                      //84
+    float cutOff;       //4             //76 (72 ???)
+    float outerCutOff;  //4             //80 (76 ???)
+};                                      //84 (80 ???)
 
 uniform Material material;
 
@@ -127,11 +127,11 @@ layout(std140) uniform Lights{                  //Base aligment //aligned offset
     PointLight pointLights[MAX_POINT_LIGHTS];   //76            //0
                                                 //76            //76->80
     DirLight dirLight;                          //64            //156->160
-    SpotLight spotLight;                        //84            //224
+    SpotLight spotLight;                        //84 (80 ???)            //224
 
-    int hasSpotLight;                           //4             //308
-    int n_point_lights;                         //4             //312
-                                                                //(316)
+    int hasSpotLight;                           //4             //308   (304???)
+    int n_point_lights;                         //4             //312   (308???)
+                                                                //(316) (312???)
 };
 
 void main()

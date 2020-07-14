@@ -69,8 +69,8 @@ class SpotLight : public Light{
         float constant = 1;
         float linear = 0.12;
         float quadratic = 0.09;
-        float cutoff = glm::cos(glm::radians(7.0));
-        float outer_cutoff =glm::cos(glm::radians(12.0));
+        float cutoff;
+        float outer_cutoff;
     private:
         void LightBuffering() override;
 };
