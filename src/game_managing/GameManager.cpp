@@ -188,10 +188,6 @@ void GameManager::RenderObjects(){
             }
             if((*it)->m_shader != nullptr){
                 (*it)->UseShader();
-                Light* is_light = dynamic_cast<Light*>(*it);
-                if(is_light != NULL){
-                    is_light->LampColorBuffering();
-                }
                 if(!(*it)->isOpaque){
                     (*it)->BufferAndDraw();
                 }
