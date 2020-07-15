@@ -62,8 +62,6 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/game_tools/%.cpp
 $(OBJ_DIR)/%.o: $(SRC_DIR)/geometry/%.cpp
 	g++ -o $@ -c $< $(CXXFLAGS)
 
-#-static-libgcc -static-libstdc++
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/graphics/%.cpp	
 	g++ -o $@ -c $< $(CXXFLAGS)
 

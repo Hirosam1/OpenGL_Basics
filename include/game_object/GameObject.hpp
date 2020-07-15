@@ -93,7 +93,7 @@ class GameObject{
         void SetInitialMVP();
 
         //Buffer data into shader 
-        void BufferData();
+        void BufferData(glm::mat4 model);
 
         //path to the shaders
         std::string vertex_shader_path;

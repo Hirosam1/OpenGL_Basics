@@ -6,8 +6,6 @@ m_window(window),m_input(input),m_time(time){
     
     this->outline_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Outline.frag");
     this->Model_string = std::string("Model");
-    this->View_string = std::string("View");
-    this->Projection_string = std::string("Projection");
 
     this->Mat_ambient = std::string("material.ambient");
     this->Mat_diffuse = std::string("material.diffuse");

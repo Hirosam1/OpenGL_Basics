@@ -2,6 +2,7 @@
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include<string>
 #include "stdlib.h"
 #include "stdio.h"
@@ -18,3 +19,7 @@ class Debugging{
         static void SetPointsSize(const int size);
         static int GetMemoryUsage();
 };
+
+namespace Debug{
+    void Log(glm::mat4 mat4);
+}

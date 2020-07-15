@@ -23,18 +23,15 @@ GameObject::~GameObject(){
          glStencilMask(0xff);
       }
       
-      this->BufferData();
+      this->BufferData(this->model_mat);
       this->m_model->Draw(this->m_shader);
 
       if(isSelected){
-         glm::mat4 original_mat = this->model_mat;
-         this->model_mat = glm::scale(this->model_mat,glm::vec3(1.03));
          basic_block->outline_shader.UseShader();
          glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel that wasnt draw
          glStencilMask(0x00);//Disable stencil write
-         this->BufferData();
+         this->BufferData(glm::scale(this->model_mat,glm::vec3(1.03)));
          this->m_model->Draw(this->m_shader);
-         this->model_mat = original_mat;
          isSelected = false;
          glStencilMask(0xFF);
          glStencilFunc(GL_ALWAYS, 1, 0xFF);//Clear stencil
@@ -47,8 +44,8 @@ GameObject::~GameObject(){
    }
  }
 
-void GameObject::BufferData(){
-   this->m_shader->SetUniformMat4f(&basic_block->Model_string,model_mat);
+void GameObject::BufferData(glm::mat4 model){
+   this->m_shader->SetUniformMat4f(&basic_block->Model_string,model);
    this->m_shader->SetUniformVec3f(&basic_block->Mat_specular,glm::vec3(1.0,1.0,1.0));
    this->m_shader->SetUniform1f(&basic_block->Mat_shininess,64);
 }

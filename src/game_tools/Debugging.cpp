@@ -49,3 +49,14 @@ void Debugging::SetPointsSize(int size){
     glEnable(GL_PROGRAM_POINT_SIZE);
     glPointSize(size);
 }
+
+void Debug::Log(glm::mat4 model){
+    std::cout<<"<mat4>==============\n";
+    for(unsigned int i = 0; i < 4; i++){
+        std::cout<<"\n";
+        for(unsigned int j = 0; j < 4; j++){
+            std::cout<<model[i][j] << ", ";
+        }
+    }
+    std::cout<<"\n====================\n";
+}

@@ -74,8 +74,6 @@ class BasicsBlock{
         Shader outline_shader;
         //I probably should put those strings on a file?
         std::string Model_string;
-        std::string View_string;
-        std::string Projection_string;
 
         std::string Mat_ambient;
         std::string Mat_diffuse;
