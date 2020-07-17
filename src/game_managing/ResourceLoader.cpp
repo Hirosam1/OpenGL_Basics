@@ -59,6 +59,7 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
         }else if(line.find("Add_Shader") != std::string::npos){
             e = line.find(":");
             if (e != std::string::npos){
+                Shader* a_shader;
                 std::string vertex_shader, fragment_shader;
                 parameters = line.substr(e+1,line.length());
                 std::vector<std::string> tokens = FileManagementTools::ParseLine(parameters, ",");
@@ -72,8 +73,13 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                     success += check;
                     
                     if(success == 3){
-                        Shader* a_shader = new Shader(vertex_shader,fragment_shader);
+                        try{
+                        a_shader = new Shader(vertex_shader,fragment_shader);
                         basic_block->global_data.all_shaders[output] = a_shader;
+                        }catch(std::exception &exp){
+                            std::cout<<"Shader not loaded\n";
+                            Debug::WriteErrorLog(exp.what());
+                        }
                     }
                 }
             }

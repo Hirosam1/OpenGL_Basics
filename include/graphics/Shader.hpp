@@ -6,13 +6,14 @@
 #include <cstring>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <list>
+#include <vector>
 #include"game_tools/FileManagementTools.hpp"
 
 class Shader{
     public:
         Shader();
         Shader(std::string vertex_shader_path, std::string fragment_shader_path);
+        Shader(std::string vertex_shader_path, std::string geometry_shader_path,std::string fragment_shader_path);
         unsigned int LoadShader(std::string* shader_path, GLenum shder_type);
         int LinkShaders();
         //Uses shader before rendering
@@ -25,11 +26,14 @@ class Shader{
         void SetUniform1f(std::string* shader_name, float i);
         void SetUniformVec3f(std::string* uniform_name,glm::vec3 vec3);
         //Creates a texture object and uses the path name to apply it
+    private:
+        void SetUpUniformBuffers();
     protected:
         std::string vertex_path, fragment_path;
         unsigned int shader_comp;
-        unsigned int vertex_shader;
-        unsigned int fragment_shader;
+        //unsigned int vertex_shader;
+        //unsigned int fragment_shader;
+        std::vector<unsigned int> shader_programs;
         unsigned int shader_program;
-        unsigned int CreateShaderProgram(unsigned int vertex_shader, unsigned int fragment_shader);
+        unsigned int CreateShaderProgram();
 };

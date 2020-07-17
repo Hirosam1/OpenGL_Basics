@@ -16,8 +16,8 @@ void PulsingLight::Ready(){
 
 void PulsingLight::Update(){
     if(pointLight != nullptr){
-        float intensity = (sin(m_time->GetTime())+1)/2.0;
-        pointLight->light_intensity = intensity;
+        //float intensity = (sin(m_time->GetTime())+1)/2.0;
+        //pointLight->light_intensity = intensity;
 
         float x,y,z;
         x = sin(m_time->GetTime()*1)*3;

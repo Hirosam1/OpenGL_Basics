@@ -5,6 +5,7 @@
 #include<map>
 #include <regex>
 
+#include "game_tools/Debug.hpp"
 #include "game_object/Model.hpp"
 #include "graphics/Shader.hpp"
 #include "graphics/Texture.hpp"

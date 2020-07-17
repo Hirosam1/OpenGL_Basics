@@ -31,12 +31,12 @@ void GameManager::EngineInit(){
     this->supported_concurrency = std::thread::hardware_concurrency()-1;
     this->threads = new std::thread[this->supported_concurrency];
 
-
+    Debug::CleanErrorLog(); 
     SetUpObjects();
 
     this->ready_to_start = true;
     glEnable(GL_DITHER);
-    Debugging::SetPointsSize(10);    
+    Debug::SetPointsSize(10);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);  
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -85,7 +85,12 @@ void GameManager::UpdateObjects(int id, BasicsBlock* basic_block,
             while(basic_block->global_data.active_scene->scene_data.AllObjects.size() > 0 && pos < basic_block->global_data.active_scene->scene_data.AllObjects.size()){
                 pos = id + supported_concurrency * i++;
                 if (pos < basic_block->global_data.active_scene->scene_data.AllObjects.size()){
+                    try{
                     basic_block->global_data.active_scene->scene_data.AllObjects.at(pos)->Update();
+                    }catch(std::exception &exp){
+                        std::cout<<"Error Updating game object-> " <<  basic_block->global_data.active_scene->scene_data.AllObjects.at(pos)->object_name <<"\nError-> " << exp.what()<<"\n" ;
+                        Debug::WriteErrorLog("Error Updating game object-> " + basic_block->global_data.active_scene->scene_data.AllObjects.at(pos)->object_name + "\nError-> " + exp.what());
+                    }
                 }
             }
         }
@@ -183,8 +188,13 @@ void GameManager::RenderObjects(){
     if(this->basic_block->global_data.active_scene->scene_data.AllObjects.size() > 0){
         for(auto it = this->basic_block->global_data.active_scene->scene_data.AllObjects.begin(); it != this->basic_block->global_data.active_scene->scene_data.AllObjects.end();it++){
             if(!use_threads){
+                try{
                 //Use this when giving that weird lag bug VVV
                 (*it)->Update();
+                }catch(std::exception &exp){
+                    std::cout<<"Error Updating game object-> " <<  (*it)->object_name <<"\nError-> " << exp.what()<<"\n" ;
+                    Debug::WriteErrorLog("Error Updating game object-> "+ (*it)->object_name + "\nError-> " + exp.what());
+                }
             }
             if((*it)->m_shader != nullptr){
                 (*it)->UseShader();
@@ -235,7 +245,8 @@ void GameManager::TerminateEngine(){
 
 
 void GameManager::ErrorCallback(int error, const char* description){
-    std::cout<<"Error: " << error << " ->" << description<<"\n";
+    std::cout<<"GLFW Error: " << error << " ->" << description<<"\n";
+    Debug::WriteErrorLog("GLFW Error: " + std::to_string(error) + " ->" + description);
     exit(-1);
 }
 

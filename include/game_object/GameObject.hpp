@@ -11,7 +11,7 @@
 
 #include "game_tools/stb_image.h"
 #include "game_object/Camera.hpp"
-#include "game_tools/Debugging.hpp"
+#include "game_tools/Debug.hpp"
 #include "game_managing/InputManager.hpp"
 #include "graphics/Shader.hpp"
 #include "game_managing/Time.hpp"

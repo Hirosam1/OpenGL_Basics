@@ -4,6 +4,8 @@
 #include<GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include<string>
+#include <fstream>
+
 #include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
@@ -11,15 +13,13 @@
 #include <sys/resource.h>
 #include <iomanip>
 #endif
-class Debugging{
-    public:
-        static void SetPoly2Line();
-        static void SetPoly2Fill();
-        static void SetPoly2Points();
-        static void SetPointsSize(const int size);
-        static int GetMemoryUsage();
-};
-
 namespace Debug{
+    void SetPoly2Line();
+    void SetPoly2Fill();
+    void SetPoly2Points();
+    void SetPointsSize(int size);
+    int GetMemoryUsage();
+    void CleanErrorLog();
+    void WriteErrorLog(std::string line);
     void Log(glm::mat4 mat4);
 }

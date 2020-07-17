@@ -133,7 +133,6 @@ layout(std140) uniform Lights{                  //Base aligment //aligned offset
     int n_point_lights;                         //4             //312   (308???)
                                                                 //(316) (312???)
 };
-
 void main()
 {
     vec4 texDiffColor = vec4(1);

@@ -3,8 +3,6 @@
 
 Shader::Shader(){
     this->shader_comp = 0;
-    this->vertex_shader = 0;
-    this->fragment_shader = 0;
     this->shader_program = 0;
 }
 
@@ -12,7 +10,18 @@ Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path)
     LoadShader(&vertex_shader_path, GL_VERTEX_SHADER);
     LoadShader(&fragment_shader_path, GL_FRAGMENT_SHADER);
     LinkShaders();
-    //Sets the uniform block to the shader, as index 0
+    SetUpUniformBuffers();
+}
+
+Shader::Shader(std::string vertex_shader_path, std::string geometry_shader_path,std::string fragment_shader_path): vertex_path(vertex_shader_path), fragment_path(fragment_shader_path){
+    LoadShader(&vertex_shader_path, GL_VERTEX_SHADER);
+    LoadShader(&geometry_shader_path, GL_GEOMETRY_SHADER);
+    LoadShader(&fragment_shader_path, GL_FRAGMENT_SHADER);
+    LinkShaders();
+    SetUpUniformBuffers();
+}
+
+void Shader::SetUpUniformBuffers(){
     unsigned int camera_index = glGetUniformBlockIndex(this->shader_program,"Camera");
     if(camera_index == GL_INVALID_INDEX){
     }
@@ -20,7 +29,6 @@ Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path)
     unsigned int lights_index = glGetUniformBlockIndex(this->shader_program,"Lights");
     glUniformBlockBinding(this->shader_program,lights_index,1);
 }
-
 
 unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
     unsigned int shader_id;
@@ -40,10 +48,9 @@ unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
         auto errorLog = new char[logLength];
         glGetShaderInfoLog(shader_id,logLength,&logLength,errorLog);
         std::cout<<"Error at copiling the shader: " <<*shader_path<<std::endl<<"INFO-> "<<errorLog<<std::endl;
-        exit(-1);
+        throw std::runtime_error("Error at copiling the shader: " + *shader_path + "||INFO-> " + errorLog);
     }
-    if(shader_type == GL_VERTEX_SHADER){this->vertex_shader = shader_id;}
-    if(shader_type == GL_FRAGMENT_SHADER){this->fragment_shader = shader_id;}
+    this->shader_programs.push_back(shader_id);
 
     delete shader_source;
     this->shader_comp++;
@@ -51,23 +58,23 @@ unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
 }
 
 int Shader::LinkShaders(){
-    if(shader_comp < 2 || this->fragment_shader == 0 || this->vertex_shader == 0){
+    if(this->shader_programs.size() < 2){
         std::cout<<"Not enought compiled shaders!";
-        throw "Not enought compiled shaders!";
+        throw std::runtime_error("Not enought compiled shaders!");
         return -1;
     }
-    CreateShaderProgram(this->vertex_shader,this->fragment_shader);
+    CreateShaderProgram();
     return 1;
 }
 
-unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned int fragment_shader){
-    //unsigned int shader_program;
+unsigned int Shader::CreateShaderProgram(){
     int success;
 
     //Atacch and link the shaders
     this->shader_program = glCreateProgram();
-    glAttachShader(this->shader_program,this->vertex_shader);
-    glAttachShader(this->shader_program,this->fragment_shader);
+    for(int i = 0; i < this->shader_programs.size(); i++){
+        glAttachShader(this->shader_program,this->shader_programs[i]);
+    }
     glLinkProgram(this->shader_program);
 
     glGetProgramiv(this->shader_program,GL_LINK_STATUS,&success);
@@ -76,12 +83,12 @@ unsigned int Shader::CreateShaderProgram(unsigned int vertex_shader, unsigned in
         glGetProgramiv(shader_program,GL_INFO_LOG_LENGTH,&logLength);
         auto errorLog = new char[logLength];
         glGetProgramInfoLog(shader_program,logLength,&logLength,errorLog);
-        std::cout<<"Error at linking the shaders: " <<vertex_path << " and " <<fragment_path <<std::endl<<"INFO-> "<<errorLog<<std::endl;
-        throw "Error at linking the shaders:";
+        std::cout<<"Error at linking the shaders: " <<vertex_path << " and " <<fragment_path <<std::endl<<"\t INFO-> "<<errorLog<<std::endl;
+        throw std::runtime_error("Error at linking the shaders: " + vertex_path + " and " + fragment_path + " ||INFO-> " + errorLog);
     }
-
-    glDeleteShader(this->vertex_shader);
-    glDeleteShader(this->fragment_shader);
+    for(int i = 0; i < this->shader_programs.size(); i++){
+        glDeleteShader(this->shader_programs[i]);
+    }
     this->shader_comp = 0;
     return shader_program;
 }

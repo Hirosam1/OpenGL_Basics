@@ -15,7 +15,7 @@
 #include "game_managing/BasicsBlock.hpp"
 #include"game_object/GameObject.hpp"
 #include "game_object/Camera.hpp"
-#include "game_tools/Debugging.hpp"
+#include "game_tools/Debug.hpp"
 #include "game_managing/InputManager.hpp"
 #include "geometry/Shape.hpp"
 #include "game_managing/Time.hpp"

@@ -1,4 +1,4 @@
-#include "game_tools/Debugging.hpp"
+#include "game_tools/Debug.hpp"
 
 int parseLine(char* line){
     // This assumes that a digit will be found and the line ends in " Kb".
@@ -25,7 +25,7 @@ int getValueKB(){ //Note: this value is in KB!
     return result;
 }
 
-int Debugging::GetMemoryUsage(){
+int Debug::GetMemoryUsage(){
     #ifdef __unix__
     return getValueKB();
     #else 
@@ -33,19 +33,19 @@ int Debugging::GetMemoryUsage(){
     #endif
 }
 
-void Debugging::SetPoly2Line(){
+void Debug::SetPoly2Line(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 }
 
-void Debugging::SetPoly2Fill(){
+void Debug::SetPoly2Fill(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 
-void Debugging::SetPoly2Points(){
+void Debug::SetPoly2Points(){
     glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
 }
 
-void Debugging::SetPointsSize(int size){
+void Debug::SetPointsSize(int size){
     glEnable(GL_PROGRAM_POINT_SIZE);
     glPointSize(size);
 }
@@ -59,4 +59,17 @@ void Debug::Log(glm::mat4 model){
         }
     }
     std::cout<<"\n====================\n";
+}
+
+void Debug::WriteErrorLog(std::string line){
+    std::ofstream outfile;
+    outfile.open("ErrorLog.log", std::ofstream::out | std::ofstream::app);
+    outfile << line << "\n";
+    outfile.close();
+}
+
+void Debug::CleanErrorLog(){
+    std::ofstream outfile;
+    outfile.open("ErrorLog.log", std::ofstream::out | std::ofstream::trunc);
+    outfile.close();
 }
