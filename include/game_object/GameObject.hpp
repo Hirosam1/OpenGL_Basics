@@ -32,6 +32,7 @@ struct GameObjectElements{
     float* initial_pos;
     Shader* m_shader = nullptr;
     glm::vec3 size = glm::vec3(1.0);
+    bool isOpaque = false;
 };
 
 /*Basic game object
