@@ -5,12 +5,14 @@ Game_Name: "This is the game name"
 Add_Model: "box", "models/box/Box.obj"
 Add_Model: "mushroom boi", "models/mushroom_boy/mushroom_boy2.obj"
 Add_Model: "TexBox", "models/box/TexCube.obj"
+Add_Model: "Window", "models/window/Window.obj"
 
 #Sets the shaders programs
 Add_Shader: "basic light", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight.frag"
 Add_Shader: "lamp shader", "shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/lamp.frag"
 Add_Shader: "sky box", "shaders/vertex_shaders/SkyBox.vert", "shaders/fragment_shaders/SkyBox.frag"
 Add_Shader: "reflections", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight_wReflections.frag"
+Add_Shader: "Window", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/Window.frag"
 
 #Adds textures
 Add_Texture: "cube map1", "textures/skybox1"

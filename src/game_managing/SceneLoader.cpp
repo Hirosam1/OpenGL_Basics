@@ -4,7 +4,6 @@ enum SceneReaderState : char{
     waiting = 0,
     addingGO,
     addingLight,
-    addingOpaque,
     addingCamera,
     addingCubeMap
 };
@@ -13,7 +12,7 @@ enum SceneReaderState : char{
 char waitingState(char current_state, std::string line, std::string* output);
 char addingGOState(char current_state, std::string line, unsigned int object_id, GameObject* gameObject_output, BasicsBlock* basic_block, SceneData* scene_data);
 char addingLightState(char current_state, std::string line, std::string light_type, GameObject* gameObject_output, BasicsBlock* basic_block, SceneData* scene_data);
-char addingOpaqueState(char current_state, std::string line);
+//char addingOpaqueState(char current_state, std::string line);
 char addingCameraState(char current_state, std::string line);
 char addingShaderState(char current_state, std::string line);
 char addingModelState(char current_state, std::string line);
@@ -116,9 +115,11 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
         line.erase(0,e+1);
         //Parse the line by the whitespace char
         std::vector<std::string> tokens = FileManagementTools::ParseLine(line," ");
-        //It also gets the parameters as one string, in case we need string handling
-        parameters = line.substr(line.find(tokens[1]),line.length());
-        if(tokens.size() >1){
+        if(tokens.size() > 1){
+            //It also gets the parameters as one string, in case we need string handling
+            parameters = line.substr(line.find(tokens[1]),line.length());
+        }
+        if(tokens.size() >0){
             //NECESSARY sets what camera to use
            if(tokens[0] == "camera"){
                // sets the camera as the main one, setted on global settings (maybe should be scene NOT global)
@@ -150,7 +151,9 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                     size = std::stof(tokens[1]);
                     goElements.size = glm::vec3(size);
                }
-           }else if(tokens[0] == "add_texture" && goElements.model != nullptr){
+           }else if(tokens[0] == "make_opaque"){
+               goElements.isOpaque = true;
+           } else if(tokens[0] == "add_texture" && goElements.model != nullptr){
                std::regex_search(parameters,matches,reg);
                 if(scene_data->loaded_textures.count(matches.str(1))){
                     //Sets texture if loaded
@@ -169,6 +172,8 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                         std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find texture name \""<<matches.str(1)<<"\"\n"; 
                     }
                 }
+           }else{
+                std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Unknown operator \""<<tokens[0]<<"\"\n";
            }
         }
         //In the LAST line, it searchrs for a | the very next element is the name of given object using ""
@@ -188,6 +193,10 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                     gameObject_output->object_name = matches.str(1);
                     }
                     scene_data->AllObjects.push_back(gameObject_output);
+                    if(goElements.isOpaque){
+                        gameObject_output->isOpaque = true;
+                        scene_data->AllOpaques.push_back(gameObject_output);
+                    }
                 }
                 return SceneReaderState::waiting;
             }else{
@@ -417,6 +426,7 @@ void ClearGoELemetns(){
     goElements.m_shader = nullptr;
     goElements.model = nullptr;
     goElements.size = glm::vec3(1.0);
+    goElements.isOpaque = false;
 
     light_elemtents.light_direction = nullptr;
     light_elemtents.light_direction_is_position = false;

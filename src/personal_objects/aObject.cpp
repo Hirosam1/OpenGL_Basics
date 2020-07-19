@@ -73,6 +73,8 @@ void aObject::Update(){
         lastY = m_input->mouse_Ypos;
     }
 
+    m_camera->MakeProjection(glm::radians(fov));
+
 }
 
 void aObject::CalculateCam(){
@@ -101,6 +103,6 @@ void aObject::CalculateCam(){
     camera_front = glm::normalize(camera_front);
     fov -= m_input->scroll_y * (sensitivity * 20);
     fov = fov > 110 ? 110 : fov < 1 ? 1 : fov;
-    m_camera->MakeProjection(glm::radians(fov));
+    
 
 }

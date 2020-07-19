@@ -72,6 +72,7 @@ class BasicsBlock{
         GlobalData global_data;
         //Shader responsible for drawing the outline of objects
         Shader outline_shader;
+        Shader wireframe_shader;
         //I probably should put those strings on a file?
         std::string Model_string;
 

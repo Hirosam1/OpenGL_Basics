@@ -197,7 +197,12 @@ void GameManager::RenderObjects(){
                 }
             }
             if((*it)->m_shader != nullptr){
-                (*it)->UseShader();
+                if(basic_block->global_data.fill_type != GL_LINE){
+                    (*it)->UseShader();
+                }else{
+                    basic_block->wireframe_shader.UseShader();
+                }
+                
                 if(!(*it)->isOpaque){
                     (*it)->BufferAndDraw();
                 }
@@ -221,7 +226,12 @@ void GameManager::RenderOpaques(){
     }       
 
     for(std::map<float,GameObject*>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it){
-        it->second->UseShader();
+        
+        if(basic_block->global_data.fill_type != GL_LINE){
+            it->second->UseShader();
+        }else{
+            basic_block->wireframe_shader.UseShader();
+        }
         it->second->BufferAndDraw();
     }
     glUseProgram(0);

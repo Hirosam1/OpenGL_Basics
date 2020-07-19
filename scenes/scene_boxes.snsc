@@ -25,6 +25,22 @@
     > intensity 0.6
 | "directional light"
 
++ GO 4
+    > make_opaque
+    > model "Window"
+    > shader "Window"
+    > position 0 0 4
+    > size 2
+| "Window1"
+
++ GO 4
+    > make_opaque
+    > model "Window"
+    > shader "Window"
+    > position -2 1 3
+    > size 2
+| "Window2"
+
 + GO 4 #Creates a box, with texture
     >camera main_camera
     > model "box"

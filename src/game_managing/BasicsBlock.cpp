@@ -5,6 +5,7 @@ BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time):
 m_window(window),m_input(input),m_time(time){
     
     this->outline_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Outline.frag");
+    this->wireframe_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/WireFrame.frag");
     this->Model_string = std::string("Model");
 
     this->Mat_ambient = std::string("material.ambient");
