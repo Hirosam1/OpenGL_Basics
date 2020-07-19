@@ -5,8 +5,7 @@
 * You can also move the objects in real-time with the program (Saving the changes is to come).
 
 ## How to use it
-* To create a scene, for now, you need to write the code that SANIL interprets. 
-* To create a scene, for now, you need to write the code that SANIL interprets. 
+* To create a scene, for now, you need to write the code that SNAIL interprets. 
 The resource.snres file handles all the shaders, models, textures, and the project name. You use this file among the scene files.
 * The .snsc file handles the scenes, in them, you add **GameObjects** (named GO inside the file) **Light**, **CubeMap** with the "**+**" operand.
 * You have o close all "**+**" with a "**|**" operand followed by the object name *except* the **CubeMap** creation, that you close with the name of the texture to use on the cube map name, referenced in the resource file.
