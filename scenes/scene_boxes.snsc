@@ -26,7 +26,6 @@
 | "directional light"
 
 + GO 4
-    > asdasd
     > make_opaque
     > model "Window"
     > shader "Window"
