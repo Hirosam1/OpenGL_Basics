@@ -106,7 +106,7 @@ void GameManager::EngnieStart(){
     }
     std::string name;
     //Shader for the post processing effects
-    Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
+    //Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
     Model plane = Model("models/plane/Plane.obj");
     
     //Creates a frame buffer
@@ -151,9 +151,9 @@ void GameManager::EngnieStart(){
         glBindFramebuffer(GL_FRAMEBUFFER,0);
         glClear(GL_COLOR_BUFFER_BIT);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        screen_shader.UseShader();
+        basic_block->global_data.frame_buffer_shader->UseShader();
         glDisable(GL_DEPTH_TEST);
-        plane.Draw(&screen_shader);
+        plane.Draw(basic_block->global_data.frame_buffer_shader);
         //Frame buffer End
         //Last object, the GUI, needs to be Updated on main thread
         basic_block->GUI_gameObject->Update();
@@ -197,6 +197,7 @@ void GameManager::RenderObjects(){
                 }
             }
             if((*it)->m_shader != nullptr){
+                //Check if we are rendering wireframe mode
                 if(basic_block->global_data.fill_type != GL_LINE){
                     (*it)->UseShader();
                 }else{

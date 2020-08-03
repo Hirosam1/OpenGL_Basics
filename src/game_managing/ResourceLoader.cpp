@@ -63,7 +63,8 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                 std::string vertex_shader, fragment_shader;
                 parameters = line.substr(e+1,line.length());
                 std::vector<std::string> tokens = FileManagementTools::ParseLine(parameters, ",");
-                if(tokens.size() == 3){
+                if(tokens.size() >= 3){
+                    std::vector<std::string> shaders_paths;
                     int check = 0;
                     output = find_match(tokens[0],reg,&check).str(1);
                     int success = check;
@@ -71,11 +72,12 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                     success += check;
                     fragment_shader = find_match(tokens[2],reg,&check).str(1);
                     success += check;
+                    shaders_paths.push_back(vertex_shader);
+                    shaders_paths.push_back(fragment_shader);
                     
-                    if(success == 3){
+                    if(success >= 3){
                         try{
-                        a_shader = new Shader(vertex_shader,fragment_shader);
-                        basic_block->global_data.all_shaders[output] = a_shader;
+                        basic_block->global_data.shaders_path[output] = shaders_paths;
                         }catch(std::exception &exp){
                             std::cout<<"Shader not loaded\n";
                             Debug::WriteErrorLog(exp.what());

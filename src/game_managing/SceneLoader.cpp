@@ -20,6 +20,8 @@ char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_
 
 bool MakeModel(BasicsBlock* basic_block, SceneData* scene_data, std::string parameters);
 float* GetVec3(std::vector<std::string> tokens);
+bool MakeShader(BasicsBlock* basic_block, SceneData* scene_data, std::string parameters);
+
 
 void ClearGoELemetns();
 
@@ -137,12 +139,12 @@ char addingGOState(char current_state, std::string line, unsigned int object_id,
                
             //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
            }else if(tokens[0] == "shader"){
-               std::regex_search(parameters,matches,reg);
-                if(basic_block->global_data.all_shaders.count(matches.str(1))){
-                    goElements.m_shader = basic_block->global_data.all_shaders[matches.str(1)];
-                }else{
-                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
-                }
+               try{
+                   MakeShader(basic_block,scene_data,parameters);
+               }catch(std::exception &exp){
+                    std::cout<<"Shader not loaded. Error at line " << line_number <<"\n";
+                    Debug::WriteErrorLog(exp.what());
+               }
            }else if(tokens[0] == "size"){
                 if(tokens.size() > 3){
                    goElements.size = glm::vec3(glm::make_vec3(GetVec3(tokens)));
@@ -245,12 +247,12 @@ char addingLightState(char current_state, std::string line, std::string light_ty
                }
                //Sets shader to be used in this model, similarly to model, it searches if the shader metioned exists
            }else if(tokens[0] == "shader"){
-               std::regex_search(parameters,matches,reg);
-                if(basic_block->global_data.all_shaders.count(matches.str(1))){
-                    goElements.m_shader = basic_block->global_data.all_shaders[matches.str(1)];
-                }else{
-                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
-                }
+                try{
+                   MakeShader(basic_block,scene_data,parameters);
+               }catch(std::exception &exp){
+                    std::cout<<"Shader not loaded. Error at line " << line_number <<"\n";
+                    Debug::WriteErrorLog(exp.what());
+               }
            //Sets the direction of the light, unessessary if it is a point light
            }else if(tokens[0] == "direction"){
                if(tokens.size() > 3){
@@ -345,12 +347,12 @@ char addingCubeMapState(char current_state, std::string line,BasicsBlock* basic_
              MakeModel(basic_block,scene_data,parameters);
             //NECESSARY (Should it be?) sets the initial position
            }else if(tokens[0] == "shader"){
-                std::regex_search(parameters,matches,reg);
-                if(basic_block->global_data.all_shaders.count(matches.str(1))){
-                    goElements.m_shader = basic_block->global_data.all_shaders[matches.str(1)];
-                }else{
-                    std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
-                }
+                try{
+                   MakeShader(basic_block,scene_data,parameters);
+               }catch(std::exception &exp){
+                    std::cout<<"Shader not loaded. Error at line " << line_number <<"\n";
+                    Debug::WriteErrorLog(exp.what());
+               }
             }
         }
     }else if((e = line.find("|")) != std::string::npos){
@@ -409,6 +411,32 @@ bool MakeModel(BasicsBlock* basic_block, SceneData* scene_data, std::string para
         return false;
         std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cant match \"name of model\"\n";
     }
+}
+
+
+bool MakeShader(BasicsBlock* basic_block, SceneData* scene_data, std::string parameters){
+    //Regex to catch elements in between ""
+    std::regex reg ("\"(.*)\"");
+    std::smatch matches;
+    std::regex_search(parameters,matches,reg);
+    Shader* output = nullptr;
+    if(scene_data->loaded_shaders.count(matches.str(1))){
+        goElements.m_shader = scene_data->loaded_shaders[matches.str(1)];
+    }else if(basic_block->global_data.shaders_path.count(matches.str(1))){
+        std::string vertex_path = basic_block->global_data.shaders_path[matches.str(1)][0];
+        std::string fragment_path = basic_block->global_data.shaders_path[matches.str(1)][1];
+        if(basic_block->global_data.shaders_path[matches.str(1)].size() > 2){
+
+        }else{
+                scene_data->loaded_shaders[matches.str(1)] = new Shader(vertex_path,fragment_path);
+                goElements.m_shader = scene_data->loaded_shaders[matches.str(1)];
+        }
+    }
+    else{
+        std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
+        return false;
+    }
+    return true;
 }
 
 float* GetVec3(std::vector<std::string> tokens){

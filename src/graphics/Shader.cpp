@@ -6,6 +6,10 @@ Shader::Shader(){
     this->shader_program = 0;
 }
 
+void Shader::UnLoadShader(){
+    glDeleteShader(this->shader_program);
+}
+
 Shader::Shader(std::string vertex_shader_path, std::string fragment_shader_path): vertex_path(vertex_shader_path), fragment_path(fragment_shader_path){
     LoadShader(&vertex_shader_path, GL_VERTEX_SHADER);
     LoadShader(&fragment_shader_path, GL_FRAGMENT_SHADER);

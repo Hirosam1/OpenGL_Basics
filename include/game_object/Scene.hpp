@@ -21,6 +21,7 @@ class Scene{
         static bool ChangeScene(std::string scene_path, BasicsBlock* basic_block);
         bool isReady;
     private:
+        BasicsBlock* basic_block;
         std::string scene_path;
         //void LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block);
 };

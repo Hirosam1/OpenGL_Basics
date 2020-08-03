@@ -24,6 +24,7 @@ struct SceneData{
     std::vector<GameObject*> AllOpaques;
     std::map<std::string, Model*> loaded_models;
     std::map<std::string, Texture*> loaded_textures;
+    std::map<std::string, Shader*> loaded_shaders;
     std::map<std::string, Camera*> all_cameras;
     Camera* main_camera;
     CubeMap* cube_map = nullptr;
@@ -36,9 +37,10 @@ struct GlobalData{
    std::string game_name;
    
    std::map<std::string,std::string> models_path;
-   std::map<std::string, Shader*> all_shaders;
+   std::map<std::string, std::vector<std::string>> shaders_path;
    std::map<std::string, std::string> textures_path;
-   
+   Shader* frame_buffer_shader = nullptr;
+
    Scene *active_scene = nullptr;
 };
 /*

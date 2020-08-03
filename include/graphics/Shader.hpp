@@ -15,6 +15,7 @@ class Shader{
         Shader(std::string vertex_shader_path, std::string fragment_shader_path);
         Shader(std::string vertex_shader_path, std::string geometry_shader_path,std::string fragment_shader_path);
         unsigned int LoadShader(std::string* shader_path, GLenum shder_type);
+        void UnLoadShader();
         int LinkShaders();
         //Uses shader before rendering
         void UseShader(bool use_texture = true);

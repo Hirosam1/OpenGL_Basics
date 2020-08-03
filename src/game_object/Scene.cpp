@@ -1,13 +1,13 @@
 #include"game_object/Scene.hpp"
 
-Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene_path){
+Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene_path), basic_block(basic_block){
     Camera* m_camera = new Camera(basic_block->m_window);
     isReady = true;
     m_camera->camera_pos = glm::vec3(-3.0f,2.0f,20.0f);
     m_camera->camera_front = glm::vec3(0,0,-1);
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     scene_data.main_camera = m_camera;
-    
+    basic_block->global_data.frame_buffer_shader = new Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
     if(!SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data)){
         isReady = false;
         std::cout<<"FILE::SCENE::LOADER:ERROR->" <<"Could not open file \""<<scene_path<<"\" \n";
@@ -36,6 +36,10 @@ Scene::~Scene(){
             it->second = nullptr;
         }
     }
+    for(auto it = this->scene_data.loaded_shaders.begin(); it != this->scene_data.loaded_shaders.end(); it++){
+        it->second->UnLoadShader();
+    }
+     basic_block->global_data.frame_buffer_shader->UnLoadShader();
     this->scene_data.AllObjects.clear();
     this->scene_data.AllLights.clear(); 
     this->scene_data.AllOpaques.clear();
