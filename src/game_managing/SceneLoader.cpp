@@ -424,16 +424,21 @@ bool MakeShader(BasicsBlock* basic_block, SceneData* scene_data, std::string par
         goElements.m_shader = scene_data->loaded_shaders[matches.str(1)];
     }else if(basic_block->global_data.shaders_path.count(matches.str(1))){
         std::string vertex_path = basic_block->global_data.shaders_path[matches.str(1)][0];
-        std::string fragment_path = basic_block->global_data.shaders_path[matches.str(1)][1];
+        std::cout<<"Loading shader: " << matches.str(1) << "\n";
         if(basic_block->global_data.shaders_path[matches.str(1)].size() > 2){
-
+            std::string geometry_shader = basic_block->global_data.shaders_path[matches.str(1)][1];
+            std::string fragment_path = basic_block->global_data.shaders_path[matches.str(1)][2]; 
+            scene_data->loaded_shaders[matches.str(1)] = new Shader(vertex_path,geometry_shader,fragment_path);
+            goElements.m_shader = scene_data->loaded_shaders[matches.str(1)];
         }else{
+                std::string fragment_path = basic_block->global_data.shaders_path[matches.str(1)][1];
                 scene_data->loaded_shaders[matches.str(1)] = new Shader(vertex_path,fragment_path);
                 goElements.m_shader = scene_data->loaded_shaders[matches.str(1)];
         }
     }
     else{
         std::cout<<"FILE::SCENE::INTEPRETER:ERROR::LINE(" << line_number <<") -> Cannot find loaded shader \""<<matches.str(1)<<"\"\n";
+        Debug::WriteErrorLog("FILE::SCENE::INTEPRETER:ERROR::LINE(" + std::to_string(line_number) + ") -> Cannot find loaded shader \"" + matches.str(1) + "\"");
         return false;
     }
     return true;

@@ -13,6 +13,7 @@ Add_Shader: "lamp shader", "shaders/vertex_shaders/MVP_texture_vertex.vert","sha
 Add_Shader: "sky box", "shaders/vertex_shaders/SkyBox.vert", "shaders/fragment_shaders/SkyBox.frag"
 Add_Shader: "reflections", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/BasicLight_wReflections.frag"
 Add_Shader: "Window", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/fragment_shaders/Window.frag"
+Add_Shader: "Explode", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shaders/geometry_shaders/Exploding.geom" ,"shaders/fragment_shaders/BasicLight.frag"
 
 #Adds textures
 Add_Texture: "cube map1", "textures/skybox1"

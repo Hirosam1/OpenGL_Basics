@@ -48,6 +48,8 @@ void GameObject::BufferData(glm::mat4 model){
    this->m_shader->SetUniformMat4f(&basic_block->Model_string,model);
    this->m_shader->SetUniformVec3f(&basic_block->Mat_specular,glm::vec3(1.0,1.0,1.0));
    this->m_shader->SetUniform1f(&basic_block->Mat_shininess,64);
+   std::string time = "time";
+   this->m_shader->SetUniform1f(&time,m_time->GetTime());
 }
 
  void GameObject::UseShader(){

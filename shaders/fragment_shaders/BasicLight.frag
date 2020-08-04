@@ -2,11 +2,12 @@
 #define MAX_POINT_LIGHTS 2
 //We declare an output, we only need one
 out vec4 FragColor;
-//uniform int n_point_lights;
-in vec2 TexCoord;
 
-in vec3 aNormal;
-in vec3 FragPos;
+in VS_OUT{
+    vec2 TexCoord;
+    vec3 aNormal;
+    vec3 FragPos;
+} fr_in;
 
 
 struct Material{
@@ -63,7 +64,7 @@ uniform Material material;
 
 
 vec3 CalcDirLight(DirLight light,vec3 normal, vec3 texDiffColor, vec3 texSpecColor){
-    vec3 viewDir = normalize(-FragPos);
+    vec3 viewDir = normalize(-fr_in.FragPos);
     vec3 lightDir = normalize(-light.directionVS);
     //Ambient
     vec3 ambient = light.ambient *texDiffColor* material.ambient;
@@ -78,9 +79,9 @@ vec3 CalcDirLight(DirLight light,vec3 normal, vec3 texDiffColor, vec3 texSpecCol
 }
 
 vec3 CalcPointLight(PointLight light,vec3 normal, vec3 fragPos, vec3 texDiffColor, vec3 texSpecColor){
-    vec3 viewDir = normalize(-FragPos);
+    vec3 viewDir = normalize(-fr_in.FragPos);
     vec3 lightDir = normalize(light.positionVS - fragPos);
-    float distance = length(light.positionVS - FragPos);
+    float distance = length(light.positionVS - fr_in.FragPos);
     float constant = clamp(light.constant,0.0,1.0);
 
     float attenuation = 1.0/(constant + (light.linear * distance) + (light.quadratic * (distance * distance)));
@@ -138,20 +139,20 @@ void main()
     vec4 texDiffColor = vec4(1);
     vec4 texSpecColor = vec4(1);
     if(material.has_TexDiffuse){
-        texDiffColor = texture(material.texture_diffuse1,TexCoord);
+        texDiffColor = texture(material.texture_diffuse1,fr_in.TexCoord);
     }
     if(material.has_TexSpecular){
-        texSpecColor = texture(material.texture_specular1,TexCoord);
+        texSpecColor = texture(material.texture_specular1,fr_in.TexCoord);
     }
     
-    vec3 norm = normalize(aNormal);
+    vec3 norm = normalize(fr_in.aNormal);
     vec3 result = CalcDirLight(dirLight, norm,vec3(texDiffColor),vec3(texSpecColor));
 
     if (hasSpotLight > 0 ){
-        result += CalcSpotLight(spotLight, norm, FragPos,vec3(texDiffColor),vec3(texSpecColor));
+        result += CalcSpotLight(spotLight, norm, fr_in.FragPos,vec3(texDiffColor),vec3(texSpecColor));
     }
     for(int i = 0; i < n_point_lights && i < MAX_POINT_LIGHTS; i++){
-        result += CalcPointLight(pointLights[i], norm, FragPos,vec3(texDiffColor),vec3(texSpecColor));
+        result += CalcPointLight(pointLights[i], norm, fr_in.FragPos,vec3(texDiffColor),vec3(texSpecColor));
     }
 
     FragColor = vec4(result,1);

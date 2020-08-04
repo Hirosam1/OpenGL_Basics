@@ -60,28 +60,35 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
             e = line.find(":");
             if (e != std::string::npos){
                 Shader* a_shader;
-                std::string vertex_shader, fragment_shader;
+                std::string vertex_shader, fragment_shader, geometry_shader;
                 parameters = line.substr(e+1,line.length());
                 std::vector<std::string> tokens = FileManagementTools::ParseLine(parameters, ",");
                 if(tokens.size() >= 3){
                     std::vector<std::string> shaders_paths;
                     int check = 0;
+                    int frag_pos = 2;
+                    //Take the name of the shader program
                     output = find_match(tokens[0],reg,&check).str(1);
+                    //Check if it was sucessefull 
                     int success = check;
+                    //Check the vertex shader
                     vertex_shader = find_match(tokens[1],reg,&check).str(1);
                     success += check;
-                    fragment_shader = find_match(tokens[2],reg,&check).str(1);
-                    success += check;
                     shaders_paths.push_back(vertex_shader);
+                    //Check if we have more than 2 shaders      
+                    if(tokens.size() > 3){
+                        //if it has than take the geometry shader
+                        geometry_shader = find_match(tokens[2],reg,&check).str(1);
+                        success += check;
+                        shaders_paths.push_back(geometry_shader);
+                        //Increments the fragment position to be the last
+                        frag_pos++;
+                    }
+                    fragment_shader = find_match(tokens[frag_pos],reg,&check).str(1);
+                    success += check; 
                     shaders_paths.push_back(fragment_shader);
-                    
                     if(success >= 3){
-                        try{
                         basic_block->global_data.shaders_path[output] = shaders_paths;
-                        }catch(std::exception &exp){
-                            std::cout<<"Shader not loaded\n";
-                            Debug::WriteErrorLog(exp.what());
-                        }
                     }
                 }
             }

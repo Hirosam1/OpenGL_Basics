@@ -19,7 +19,7 @@
 + GO 4
     > model "mushroom boi"
     > position -1 2 -2
-    > shader "reflections"
+    > shader "Explode"
     >size 0.5
     > add_texture "cube map1" 4
 |"mushroom boi" 

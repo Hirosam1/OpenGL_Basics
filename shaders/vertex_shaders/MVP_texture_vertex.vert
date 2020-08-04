@@ -15,14 +15,16 @@ uniform mat4 Model;
 //uniform mat4 View;
 //uniform mat4 Projection;
 
-out vec2 TexCoord;
-out vec3 aNormal;
-out vec3 FragPos;
+out VS_OUT{
+    vec2 TexCoord;
+    vec3 aNormal;
+    vec3 FragPos;
+} vs_out;
 
 void main()
 {
-    aNormal = mat3(transpose(inverse(View * Model))) * normal; 
-    FragPos = vec3(View * Model * vec4(aPos,1.0));
-    gl_Position = Projection * vec4(FragPos,1.0);
-    TexCoord = aTexCoord;
+    vs_out.aNormal = mat3(transpose(inverse(View * Model))) * normal; 
+    vs_out.FragPos = vec3(View * Model * vec4(aPos,1.0));
+    gl_Position = Projection * vec4(vs_out.FragPos,1.0);
+    vs_out.TexCoord = aTexCoord;
 }

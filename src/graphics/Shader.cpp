@@ -51,8 +51,9 @@ unsigned int Shader::LoadShader(std::string* shader_path, GLenum shader_type){
         glGetShaderiv(shader_id,GL_INFO_LOG_LENGTH,&logLength);
         auto errorLog = new char[logLength];
         glGetShaderInfoLog(shader_id,logLength,&logLength,errorLog);
-        std::cout<<"Error at copiling the shader: " <<*shader_path<<std::endl<<"INFO-> "<<errorLog<<std::endl;
-        throw std::runtime_error("Error at copiling the shader: " + *shader_path + "||INFO-> " + errorLog);
+        std::string shader_tpye_str = shader_type == GL_VERTEX_SHADER? "vertex shader" : shader_type == GL_GEOMETRY_SHADER? "geometry shader" : "fragment shader";
+        std::cout<<"Error at copiling the " << shader_tpye_str << " : " <<*shader_path<<std::endl<<"INFO-> "<<errorLog<<std::endl;
+        throw std::runtime_error("Error at copiling the -"+ shader_tpye_str + "-: " + *shader_path + "||INFO-> " + errorLog);
     }
     this->shader_programs.push_back(shader_id);
 
