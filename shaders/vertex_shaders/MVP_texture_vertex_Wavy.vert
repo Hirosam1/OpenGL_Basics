@@ -19,11 +19,19 @@ out VS_OUT{
     vec3 FragPos;
 } vs_out;
 
+const float MAGNETUDE = .5;
+uniform float time;
+
+vec4 Distort(vec4 position){
+    vec3 direction =  vs_out.aNormal * (sin(time + aPos.x + aPos.y +aPos.z )/3+0.3)* MAGNETUDE;
+    return position + vec4(direction.xy,0,0);
+
+}
+
 void main()
 {
     vs_out.aNormal = mat3(transpose(inverse(View * Model))) * normal; 
     vs_out.FragPos = vec3(View * Model * vec4(aPos,1.0));
-    gl_Position = Projection * vec4(vs_out.FragPos,1.0);
-    global_pos = aPos;
+    gl_Position = Distort(Projection * vec4(vs_out.FragPos,1.0));
     vs_out.TexCoord = aTexCoord;
 }

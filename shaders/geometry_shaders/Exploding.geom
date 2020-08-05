@@ -22,34 +22,24 @@ vec3 GetNormal(){
     return normalize(cross(a, b));
 }
 
-vec4 explode(vec4 position, vec3 normal){
+vec4 explode(vec4 position, vec3 normal, int index){
     float magnitude = 1.0;
     vec3 direction = normal * ((sin(time) + 1.0) / 2.0) * magnitude; 
+    gm_out.TexCoord = gm_in[index].TexCoord;
+    gm_out.aNormal = gm_in[index].aNormal;
+    gm_out.FragPos = gm_in[index].FragPos;
     return position + vec4(direction.xy,0,0.0);
 }
 
 void main(){
-    //vec3 normal = GetNormal();
-    gl_Position = explode(gl_in[0].gl_Position,gm_in[0].aNormal);
-    //gl_Position = explode(gl_in[0].gl_Position,normal);
-    //gl_Position = gl_in[0].gl_Position;
-    gm_out.TexCoord = gm_in[0].TexCoord;
-    gm_out.aNormal = gm_in[0].aNormal;
-    gm_out.FragPos = gm_in[0].FragPos;
+    vec3 normal = GetNormal();
+    gl_Position = explode(gl_in[0].gl_Position,normal,0);
     EmitVertex();
-    gl_Position = explode(gl_in[1].gl_Position,gm_in[1].aNormal);
-    //gl_Position = explode(gl_in[1].gl_Position,normal);
-    //gl_Position = gl_in[1].gl_Position;
-    gm_out.TexCoord = gm_in[1].TexCoord;
-    gm_out.aNormal = gm_in[1].aNormal;
-    gm_out.FragPos = gm_in[1].FragPos;
+    gl_Position = explode(gl_in[1].gl_Position,normal,1);
+
     EmitVertex();
-    gl_Position = explode(gl_in[2].gl_Position,gm_in[2].aNormal);
-    //gl_Position = explode(gl_in[2].gl_Position,normal);
-    //gl_Position = gl_in[2].gl_Position;
-    gm_out.TexCoord = gm_in[2].TexCoord;
-    gm_out.aNormal = gm_in[2].aNormal;
-    gm_out.FragPos = gm_in[2].FragPos;
+    gl_Position = explode(gl_in[2].gl_Position,normal,2);
+
     EmitVertex();
     EndPrimitive();
 }
