@@ -17,7 +17,8 @@ enum TextureID : unsigned int{
     DiffuseID = 1,
     SpecularID,
     ScreenID,
-    CubeMapID
+    CubeMapID,
+    ToonTextureID
 };
 
 void ObjectsManager::InitializeAllObjects(){
@@ -47,6 +48,7 @@ GameObject* GameObjectFactory::GetObjectFromID(unsigned int id, BasicsBlock* bas
         case GameObjectsID::PulsingLightID:
             go = new PulsingLight(basic_block,m_camera,m_model,initial_pos,m_shader);
             break;
+
     }
 
     return go;
@@ -72,6 +74,9 @@ Texture* TextureFactory::GetObjectFromID(unsigned id, std::string texture_path){
             break;
         case TextureID::CubeMapID:
             tex = new CubeMapTexture(texture_path);
+            break;
+        case TextureID::ToonTextureID:
+            tex =  new ToonTexture(texture_path);
             break;
 
     }

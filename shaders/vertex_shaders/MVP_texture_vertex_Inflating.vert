@@ -22,16 +22,16 @@ out VS_OUT{
 const float MAGNETUDE = .5;
 uniform float time;
 
-vec4 Distort(vec4 position){
-    vec3 direction =  vs_out.aNormal * (sin(time + aPos.x*0.9 + aPos.y*1.2 +aPos.z*0.8 )/3+0.3)* MAGNETUDE;
-    return position + vec4(direction.xy,0,0);
-
+vec4 inflate(vec4 position, vec3 normal){
+    float magnitude = 1.0;
+    vec3 direction = normal * ((sin(time) + 1.0) / 2.0) * magnitude; 
+    return position + vec4(direction.xy,0,0.0);
 }
 
 void main()
 {
     vs_out.aNormal = mat3(transpose(inverse(View * Model))) * normal; 
     vs_out.FragPos = vec3(View * Model * vec4(aPos,1.0));
-    gl_Position = Distort(Projection * vec4(vs_out.FragPos,1.0));
+    gl_Position = inflate(Projection * vec4(vs_out.FragPos,1.0),vs_out.aNormal);
     vs_out.TexCoord = aTexCoord;
 }

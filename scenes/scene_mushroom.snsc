@@ -19,9 +19,9 @@
 + GO 4
     > model "mushroom boi"
     > position -1 2 -2
-    > shader "Wavy"
     >size 0.5
-    > add_texture "cube map1" 4
+    > shader "Toon"
+    > add_texture "Toon_tex2" 5
 |"mushroom boi" 
 
 + CubeMap
