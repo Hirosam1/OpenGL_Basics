@@ -23,7 +23,7 @@ void bObject::Ready(){
 }
 
 void bObject::Update(){
-    timeElpased += m_time->delta_time;
+    timeElpased += Time::delta_time;
 
     #ifdef __unix__
     //BE CAREFULL WHEN USING THIS, IT SIMULATES MEMORY LEAK
@@ -116,7 +116,7 @@ void bObject::RenderGUI(){
             ImGui::NewLine();
         }
         if(timeElpased > 0.6){
-            FPS = 1/m_time->delta_time;
+            FPS = 1/Time::delta_time;
         }
         ImGui::Text("FPS: %.2f", FPS);
         ImGui::Checkbox("Change scene", &show_another_window);

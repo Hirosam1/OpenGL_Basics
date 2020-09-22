@@ -98,8 +98,20 @@ unsigned int Shader::CreateShaderProgram(){
     return shader_program;
 }
 
-void Shader::UseShader(bool use_texture){
+void Shader::UseShader(){
     glUseProgram(this->shader_program);
+
+}
+
+void Shader::BufferShader(glm::mat4 model_mat){
+    std::string Mat_specular = std::string("material.specular");
+    std::string Mat_shininess = std::string("material.shininess");
+    std::string Model_string = std::string("Model");
+    this->SetUniformMat4f(&Model_string,model_mat);
+    this->SetUniformVec3f(&Mat_specular,glm::vec3(1.0,1.0,1.0));
+    this->SetUniform1f(&Mat_shininess,64);
+    std::string time = "time";
+    this->SetUniform1f(&time,Time::GetTime());
 }
 
 void Shader::SetUniform1i(std::string* uniform_name,int i){

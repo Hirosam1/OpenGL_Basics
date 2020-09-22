@@ -16,14 +16,11 @@ void PulsingLight::Ready(){
 
 void PulsingLight::Update(){
     if(pointLight != nullptr){
-        //float intensity = (sin(m_time->GetTime())+1)/2.0;
-        //pointLight->light_intensity = intensity;
-
         float x,y,z;
-        x = sin(m_time->GetTime()*1)*3;
-        y = sin(m_time->GetTime()*2)*1.3;
-        z = cos(m_time->GetTime()*1)*3;
-
+        
+        x = sin(Time::GetTime()*1)*3;
+        y = sin(Time::GetTime()*2)*1.3;
+        z = cos(Time::GetTime()*1)*3;
 
         x += this->model_mat[3][0];
         y += this->model_mat[3][1];

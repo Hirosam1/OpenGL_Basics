@@ -68,9 +68,6 @@ class GameManager{
         //The current scene data
         //SceneData current_scene_data;
 
-        //Global time manager
-        Time* main_time;
-
         //Mutex to controll threads
         std::mutex mtx;
 

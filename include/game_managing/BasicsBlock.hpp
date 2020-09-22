@@ -8,7 +8,6 @@
 
 class Window;
 class InputManager;
-class Time;
 class GameObject;
 class Texture;
 class Camera;
@@ -55,14 +54,13 @@ This class contain critical and default information of the engine, such as:
 */
 class BasicsBlock{
     public:
-        BasicsBlock(Window* window, InputManager* input, Time* time);
+        BasicsBlock(Window* window, InputManager* input);
         bool was_resized = false;
         void WindowResized();
         unsigned int uniform_buffer_light;
         bool should_close = false;
         Window* m_window;
         InputManager* m_input;
-        Time* m_time;
 
         //GUI game object
         GameObject* GUI_gameObject;
@@ -76,12 +74,10 @@ class BasicsBlock{
         Shader outline_shader;
         Shader wireframe_shader;
         //I probably should put those strings on a file?
-        std::string Model_string;
+        
 
         std::string Mat_ambient;
         std::string Mat_diffuse;
-        std::string Mat_specular;
-        std::string Mat_shininess;
 
         std::string LampColor;
         

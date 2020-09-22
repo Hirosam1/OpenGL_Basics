@@ -1,17 +1,16 @@
 #include "game_managing/BasicsBlock.hpp"
 #include "personal_objects/bObject.hpp"
 
-BasicsBlock::BasicsBlock(Window* window, InputManager* input, Time* time):
-m_window(window),m_input(input),m_time(time){
+BasicsBlock::BasicsBlock(Window* window, InputManager* input):
+m_window(window),m_input(input){
     
     this->outline_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/Outline.frag");
     this->wireframe_shader = Shader("shaders/vertex_shaders/MVP_texture_vertex.vert","shaders/fragment_shaders/WireFrame.frag");
-    this->Model_string = std::string("Model");
+    
 
     this->Mat_ambient = std::string("material.ambient");
     this->Mat_diffuse = std::string("material.diffuse");
-    this->Mat_specular = std::string("material.specular");
-    this->Mat_shininess = std::string("material.shininess");
+
 
     this->LampColor = std::string("LampColor");
 

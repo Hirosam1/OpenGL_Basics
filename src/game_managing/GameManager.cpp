@@ -22,9 +22,8 @@ void GameManager::EngineInit(){
     }
 
     this->main_input = new InputManager(this->main_window);
-    this->main_time = new Time();
 
-    this->basic_block = new BasicsBlock(main_window,main_input,main_time);
+    this->basic_block = new BasicsBlock(main_window,main_input);
 
     glfwSetWindowUserPointer(this->main_window->GetWindow(),this->basic_block);
 
@@ -124,7 +123,7 @@ void GameManager::EngnieStart(){
         //Clear the screen
         glClearColor(0.03f,0.07f,0.07,1.0f);
 
-        this->main_time->UpdateDelta();
+        Time::UpdateDelta();
         glfwPollEvents();
         //Lock here
         lck.lock();

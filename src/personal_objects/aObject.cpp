@@ -46,21 +46,21 @@ void aObject::Update(){
             this->test_speed = 2;
         }
         if(this->m_input->ProcessInput(GLFW_KEY_D,GLFW_PRESS)){
-            m_camera->camera_pos += glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
+            m_camera->camera_pos += glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * Time::delta_time); 
     
         }else if(this->m_input->ProcessInput(GLFW_KEY_A,GLFW_PRESS)){  
-            m_camera->camera_pos -= glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * m_time->delta_time); 
+            m_camera->camera_pos -= glm::normalize(glm::cross(m_camera->camera_front, m_camera->camera_up)) * (float)(test_speed * Time::delta_time); 
         }
         if(this->m_input->ProcessInput(GLFW_KEY_S,GLFW_PRESS)){
-            m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * m_camera->camera_front;
+            m_camera->camera_pos -= (float)(test_speed * Time::delta_time) * m_camera->camera_front;
 
         }else if(this->m_input->ProcessInput(GLFW_KEY_W,GLFW_PRESS)){
-            m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * m_camera->camera_front;
+            m_camera->camera_pos += (float)(test_speed * Time::delta_time) * m_camera->camera_front;
         }
         if(this->m_input->ProcessInput(GLFW_KEY_Q)){
-            m_camera->camera_pos += (float)(test_speed * m_time->delta_time) * m_camera->camera_up;
+            m_camera->camera_pos += (float)(test_speed * Time::delta_time) * m_camera->camera_up;
         }else if(m_input->ProcessInput(GLFW_KEY_E)){
-            m_camera->camera_pos -= (float)(test_speed * m_time->delta_time) * m_camera->camera_up;
+            m_camera->camera_pos -= (float)(test_speed * Time::delta_time) * m_camera->camera_up;
         }
     }
     m_camera->camera_front = camera_front;

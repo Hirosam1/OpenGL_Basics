@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include"game_tools/FileManagementTools.hpp"
+#include "game_managing/Time.hpp"
 
 class Shader{
     public:
@@ -18,7 +19,8 @@ class Shader{
         void UnLoadShader();
         int LinkShaders();
         //Uses shader before rendering
-        void UseShader(bool use_texture = true);
+        void UseShader();
+        void virtual BufferShader(glm::mat4 model);
         //Sets the uniform of 1 int
         void SetUniform1i(std::string* uniform_name,int i);
         //Sets the uniform of a mat 4
@@ -26,7 +28,6 @@ class Shader{
         //Sets the uniform of a float
         void SetUniform1f(std::string* shader_name, float i);
         void SetUniformVec3f(std::string* uniform_name,glm::vec3 vec3);
-        //Creates a texture object and uses the path name to apply it
     private:
         void SetUpUniformBuffers();
     protected:

@@ -58,14 +58,14 @@ class GameObject{
         /*Shared attributes*/
         //The camera containing the view matrix
         Camera* m_camera;
-        //Time object
-        Time* m_time;
         //The material of the object
         Material* m_material;
         //Shader Object
         Shader *m_shader = nullptr;
         //Model of the object
         Model* m_model = nullptr;
+        //General data
+        BasicsBlock* basic_block;
 
         /*Personal attributes*/
         //The model matrix
@@ -94,7 +94,7 @@ class GameObject{
         void SetInitialMVP();
 
         //Buffer data into shader 
-        void BufferData(glm::mat4 model);
+        //void BufferData(glm::mat4 model);
 
         //path to the shaders
         std::string vertex_shader_path;
@@ -102,7 +102,7 @@ class GameObject{
 
     protected:
         
-        BasicsBlock* basic_block;
+        
         void BufferAndDraw();
         
         //Window where the object will get inputs
