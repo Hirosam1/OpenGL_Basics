@@ -9,6 +9,7 @@
 #include <vector>
 #include"game_tools/FileManagementTools.hpp"
 #include "game_managing/Time.hpp"
+#include "graphics/Material.hpp"
 
 class Shader{
     public:
@@ -21,6 +22,7 @@ class Shader{
         //Uses shader before rendering
         void UseShader();
         void virtual BufferShader(glm::mat4 model);
+        void virtual BufferShader(Material* material);
         //Sets the uniform of 1 int
         void SetUniform1i(std::string* uniform_name,int i);
         //Sets the uniform of a mat 4

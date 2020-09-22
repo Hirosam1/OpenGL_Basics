@@ -41,10 +41,11 @@ void Mesh::Draw(Shader* shader){
         textures[i]->UseTexture(i, shader);
         
     }
-    name = "material.diffuse";
+    /*name = "material.diffuse";
     shader->SetUniformVec3f(&name, m_material.main_color);
     name = "material.ambient";
-    shader->SetUniformVec3f(&name, m_material.ambient_color);
+    shader->SetUniformVec3f(&name, m_material.ambient_color);*/
+    shader->BufferShader(&m_material);
     vao->UseVAO();
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);

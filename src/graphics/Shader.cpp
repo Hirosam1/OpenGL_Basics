@@ -104,14 +104,21 @@ void Shader::UseShader(){
 }
 
 void Shader::BufferShader(glm::mat4 model_mat){
-    std::string Mat_specular = std::string("material.specular");
-    std::string Mat_shininess = std::string("material.shininess");
     std::string Model_string = std::string("Model");
     this->SetUniformMat4f(&Model_string,model_mat);
-    this->SetUniformVec3f(&Mat_specular,glm::vec3(1.0,1.0,1.0));
-    this->SetUniform1f(&Mat_shininess,64);
+
     std::string time = "time";
     this->SetUniform1f(&time,Time::GetTime());
+}
+void Shader::BufferShader(Material* material){
+    std::string Mat_specular = std::string("material.specular");
+    std::string Mat_shininess = std::string("material.shininess");
+    this->SetUniformVec3f(&Mat_specular,glm::vec3(1.0,1.0,1.0));
+    this->SetUniform1f(&Mat_shininess,64);
+    std::string name  = "material.diffuse";
+    this->SetUniformVec3f(&name, material->main_color);
+    name = "material.ambient";
+    this->SetUniformVec3f(&name, material->ambient_color);
 }
 
 void Shader::SetUniform1i(std::string* uniform_name,int i){
@@ -129,3 +136,4 @@ void Shader::SetUniform1f(std::string* uniform_name, float i ){
 void Shader::SetUniformVec3f(std::string* uniform_name, glm::vec3 vec3 ){
     glUniform3f(glGetUniformLocation(this->shader_program,uniform_name->data()),vec3.x,vec3.y,vec3.z);
 }
+
