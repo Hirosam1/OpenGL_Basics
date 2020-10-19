@@ -23,6 +23,7 @@ class Model{
         //Draw the Model instanced by the maount
         void InstancedDraw(unsigned int amount);
         void InstancedDraw(Shader* shder, InstacingInformation inst_info);
+        void TestThing(InstacingInformation inst_info, float* data);
         bool repeat;
         bool use_texture;
         std::vector<Texture*> textures_loaded;

@@ -17,6 +17,7 @@ Add_Shader: "Explode", "shaders/vertex_shaders/MVP_texture_vertex.vert", "shader
 Add_Shader: "Wavy", "shaders/vertex_shaders/MVP_texture_vertex_Wavy.vert","shaders/fragment_shaders/BasicLight.frag"
 Add_Shader: "Inflating", "shaders/vertex_shaders/MVP_texture_vertex_Inflating.vert","shaders/fragment_shaders/BasicLight.frag"
 Add_Shader: "Toon", "shaders/vertex_shaders/MVP_texture_vertex_Wavy.vert", "shaders/fragment_shaders/BasicLight_Toon.frag"
+Add_Shader: "Instanced", "shaders/vertex_shaders/Instanced.vert", "shaders/fragment_shaders/BasicLight.frag"
 
 #Adds textures
 Add_Texture: "cube map1", "textures/skybox1"

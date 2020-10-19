@@ -18,6 +18,7 @@ struct Vertex {
 
 class Mesh{
     public:
+        glm::vec2 translations[100];
         /* Mesh Data */
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
@@ -31,6 +32,7 @@ class Mesh{
         void Draw();
         //Draw the mesh instanced given shader
         void InstacedDraw(Shader* shader, InstacingInformation inst_infot);
+        void TestThing(InstacingInformation int_info, float* data);
         Material m_material;
         bool has_texDiff;
         bool has_texSpec;

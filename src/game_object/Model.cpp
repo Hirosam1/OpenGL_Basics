@@ -15,6 +15,12 @@ void Model::Draw(){
 void Model::InstancedDraw(unsigned int amount){
 }
 
+void Model::TestThing(InstacingInformation inst_info, float* data){
+    for(unsigned int i = 0; i < meshes.size() ; i++){
+        meshes[i].TestThing(inst_info,data);
+    }
+}
+
 void Model::InstancedDraw(Shader* shader,InstacingInformation inst_info){     
     for(unsigned int i = 0; i < meshes.size() ; i++){
         meshes[i].InstacedDraw(shader,inst_info);

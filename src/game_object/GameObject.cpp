@@ -24,13 +24,14 @@ GameObject::~GameObject(){
       }
       
       this->m_shader->BufferShader(model_mat);
-      if(this->instancing_info.IsInstanced())
+      if(this->instancing_info.IsInstanced()){
          this->m_model->InstancedDraw(this->m_shader,this->instancing_info);
-      else
+      }
+      else{
          this->m_model->Draw(this->m_shader);
+      }
 
       if(isSelected){
-         std::cout<<"What the actual feck\n";
          glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel that wasnt draw
          glStencilMask(0x00);//Disable stencil write
          basic_block->outline_shader.UseShader();
@@ -66,14 +67,15 @@ void GameObject::ReadyObject(){
 
  void GameObject::MakeInstaced(float* data,unsigned int amount,float elements_per_vertex,unsigned int vertex_indice ){
     if(this->m_model != nullptr){
-      unsigned int instaced_vbo = instancing_info.instace_vbo;
-      glGenBuffers(1,&instaced_vbo);
-      glBindBuffer(GL_ARRAY_BUFFER, instaced_vbo);
-      glBufferData(GL_ARRAY_BUFFER,sizeof(float) * amount, data,GL_STATIC_DRAW);
+      glGenBuffers(1,&instancing_info.instace_vbo);
+      glBindBuffer(GL_ARRAY_BUFFER, instancing_info.instace_vbo);
+      glBufferData(GL_ARRAY_BUFFER,sizeof(float) * amount * elements_per_vertex, data,GL_STATIC_DRAW);
+      
       this->instancing_info.amount = amount;
       this->instancing_info.vertex_index = vertex_indice;
       this->instancing_info.element_per_vertex = elements_per_vertex;
-      this->instancing_info.game_object = this;     
+      this->instancing_info.game_object = this;
+      //this->m_model->TestThing(instancing_info,data);
     }
 
  }
