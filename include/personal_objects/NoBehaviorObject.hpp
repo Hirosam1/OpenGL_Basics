@@ -1,3 +1,4 @@
+#pragma once
 #include "game_object/GameObject.hpp"
 
 class NoBahaviorObject : public GameObject{

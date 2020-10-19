@@ -19,7 +19,7 @@
 #include "game_managing/BasicsBlock.hpp"
 #include "graphics/Material.hpp"
 #include "graphics/Texture.hpp"
-//#include "game_object/InstacingInformation.hpp"
+#include "game_object/InstacingInformation.hpp"
 
 #include "game_object/Model.hpp"
 

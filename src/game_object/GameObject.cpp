@@ -30,7 +30,7 @@ GameObject::~GameObject(){
          this->m_model->Draw(this->m_shader);
 
       if(isSelected){
-         
+         std::cout<<"What the actual feck\n";
          glStencilFunc(GL_NOTEQUAL,1,0xff); //Set rule for each pixel that wasnt draw
          glStencilMask(0x00);//Disable stencil write
          basic_block->outline_shader.UseShader();
