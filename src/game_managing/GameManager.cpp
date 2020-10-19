@@ -1,5 +1,6 @@
 #include "game_managing/GameManager.hpp"
 #include "game_managing/SceneLoader.hpp"
+
 GameManager::GameManager(std::string game_name,int width, int height)
 :game_name(game_name),width(width),height(height),current_width(width),current_height(height),ready_to_start(false){
 }
@@ -45,7 +46,6 @@ void GameManager::EngineInit(){
     //V-sync
     glfwSwapInterval(1);
 
-
     //Update their info
     for(int i = 0; i < this->supported_concurrency; i++){
         
@@ -58,7 +58,7 @@ void GameManager::EngineInit(){
 
 void GameManager::SetUpObjects(){
     
-    std::cout<<"creating game objects...\n";
+    std::cout<<"creating first scene...\n";
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
     basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
 
@@ -104,8 +104,7 @@ void GameManager::EngnieStart(){
         exit(-1);
     }
     std::string name;
-    //Shader for the post processing effects
-    //Shader screen_shader = Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
+
     Model plane = Model("models/plane/Plane.obj");
     
     //Creates a frame buffer
@@ -266,5 +265,3 @@ void GameManager::FrameBufferSizeCallback(GLFWwindow* windown, int width, int he
     here->main_window->SetWidthHeight(width,height);
     
 }
-
-

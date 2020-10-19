@@ -8,6 +8,7 @@
 #include "game_object/VAO.hpp"
 #include "graphics/Shader.hpp"
 #include "graphics/Material.hpp"
+#include "game_object/InstacingInformation.hpp"
 
 struct Vertex {
     glm::vec3 Position;
@@ -28,6 +29,8 @@ class Mesh{
         void Draw(Shader* shader);
         //Draw object not using any shader you have to set ip up yourself
         void Draw();
+        //Draw the mesh instanced given shader
+        void InstacedDraw(Shader* shader, InstacingInformation inst_infot);
         Material m_material;
         bool has_texDiff;
         bool has_texSpec;
@@ -35,6 +38,7 @@ class Mesh{
     private:
         /* Render  data */
         VAO* vao;
+        unsigned int vbo_instaced = 0;
         /* Methods*/
         void SetUpMesh();
 

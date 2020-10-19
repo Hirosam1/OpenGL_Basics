@@ -41,7 +41,7 @@
     > size 2
 | "Window2"
 
-+ GO 4 #Creates a box, with texture
++ GO 6 #Creates a box, with texture
     >camera main_camera
     > model "box"
     #position

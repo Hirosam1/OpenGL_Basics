@@ -5,6 +5,7 @@
 #include "graphics/Shader.hpp"
 #include "game_object/Mesh.hpp"
 #include "graphics/Material.hpp"
+#include "game_object/InstacingInformation.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -16,8 +17,12 @@ class Model{
             LoadModel(path);
         }
         ~Model();
+        //Draw Model
         void Draw(Shader* shader);
         void Draw();
+        //Draw the Model instanced by the maount
+        void InstancedDraw(unsigned int amount);
+        void InstancedDraw(Shader* shder, InstacingInformation inst_info);
         bool repeat;
         bool use_texture;
         std::vector<Texture*> textures_loaded;

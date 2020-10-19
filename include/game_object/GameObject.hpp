@@ -19,6 +19,7 @@
 #include "game_managing/BasicsBlock.hpp"
 #include "graphics/Material.hpp"
 #include "graphics/Texture.hpp"
+//#include "game_object/InstacingInformation.hpp"
 
 #include "game_object/Model.hpp"
 
@@ -40,7 +41,7 @@ struct GameObjectElements{
     You can create "empty" object, that has no Mesh or shaders, you can use this to only get input, or only manipulate other objects
     If you want to render a object, you need to pass a Mesh and a Shader
     It higly depends of a camera to make position calculations
-    You can use the same Mesh, Shader to render you ocject, in order to save resorces
+    You can use the same Mesh, Shader to render your object, in order to save resorces
 */
 class GameObject{
     public:
@@ -77,6 +78,8 @@ class GameObject{
 
         bool isOpaque = false;
 
+        void MakeInstaced(float* data,unsigned int amount,float elements_per_vertex = 1,unsigned int vertex_indice = 3);
+        InstacingInformation instancing_info;
         float* initial_pos;
     private:
         bool use_main_camera = false;

@@ -1,7 +1,6 @@
 #include "game_object/Model.hpp"
 
-void Model::Draw(Shader* shader){
-    
+void Model::Draw(Shader* shader){   
     for(unsigned int i = 0; i < meshes.size() ; i++){
         meshes[i].Draw(shader);
     }
@@ -10,6 +9,15 @@ void Model::Draw(Shader* shader){
 void Model::Draw(){
     for(unsigned int i = 0; i < meshes.size() ; i++){
         meshes[i].Draw();
+    }
+}
+
+void Model::InstancedDraw(unsigned int amount){
+}
+
+void Model::InstancedDraw(Shader* shader,InstacingInformation inst_info){     
+    for(unsigned int i = 0; i < meshes.size() ; i++){
+        meshes[i].InstacedDraw(shader,inst_info);
     }
 }
 

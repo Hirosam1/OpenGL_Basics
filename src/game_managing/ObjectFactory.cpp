@@ -4,13 +4,16 @@
 #include "personal_objects/cObject.hpp"
 #include "personal_objects/NoBehaviorObject.hpp"
 #include "personal_objects/PulsingLight.hpp"
+#include "personal_objects/InstancingObjects.hpp"
 //This file should be generated procedually 
 enum GameObjectsID : unsigned int{
     aOgjectID = 1,
     bObjectID,
     cObjectID,
     NoBahaviorObjectID,
-    PulsingLightID
+    PulsingLightID,
+    InstancingObjectsID
+
 };
 
 enum TextureID : unsigned int{
@@ -47,6 +50,9 @@ GameObject* GameObjectFactory::GetObjectFromID(unsigned int id, BasicsBlock* bas
             break;
         case GameObjectsID::PulsingLightID:
             go = new PulsingLight(basic_block,m_camera,m_model,initial_pos,m_shader);
+            break;
+        case GameObjectsID::InstancingObjectsID:
+            go = new InstancingObjects(basic_block,m_camera,m_model,initial_pos,m_shader);
             break;
 
     }

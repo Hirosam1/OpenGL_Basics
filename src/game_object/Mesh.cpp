@@ -41,10 +41,6 @@ void Mesh::Draw(Shader* shader){
         textures[i]->UseTexture(i, shader);
         
     }
-    /*name = "material.diffuse";
-    shader->SetUniformVec3f(&name, m_material.main_color);
-    name = "material.ambient";
-    shader->SetUniformVec3f(&name, m_material.ambient_color);*/
     shader->BufferShader(&m_material);
     vao->UseVAO();
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
@@ -58,4 +54,25 @@ void Mesh::Draw(){
     glDrawElements(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
     glActiveTexture(GL_TEXTURE0); 
+}
+
+void Mesh::InstacedDraw(Shader* shader, InstacingInformation inst_info){
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    std::string name;
+
+    for(unsigned int i = 0; i < textures.size() ; i++){
+        textures[i]->UseTexture(i, shader);
+        
+    }
+    shader->BufferShader(&m_material);
+    vao->UseVAO();
+    glBindBuffer(GL_ARRAY_BUFFER,inst_info.instace_vbo);
+    glVertexAttribPointer(inst_info.vertex_index,inst_info.element_per_vertex, GL_FLOAT,GL_FALSE, inst_info.element_per_vertex * sizeof(float), (void*)0);
+    glVertexAttribDivisor(inst_info.vertex_index,1);
+    glDrawElementsInstanced(GL_TRIANGLES, indices.size(),GL_UNSIGNED_INT,0,inst_info.amount);
+    glBindVertexArray(0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
 }
