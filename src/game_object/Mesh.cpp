@@ -55,17 +55,6 @@ void Mesh::Draw(){
     glBindVertexArray(0);
     glActiveTexture(GL_TEXTURE0); 
 }
-
-void Mesh::TestThing(InstacingInformation int_info, float* data){
-    std::cout<<"________________ HIT1\n";
-   
-    glBindBuffer(GL_ARRAY_BUFFER,int_info.instace_vbo);
-    glEnableVertexAttribArray(int_info.vertex_index);
-    glVertexAttribPointer(int_info.vertex_index,int_info.element_per_vertex, GL_FLOAT,GL_FALSE, int_info.element_per_vertex * sizeof(float), (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glVertexAttribDivisor(int_info.vertex_index,1);
-}
-
 void Mesh::InstacedDraw(Shader* shader, InstacingInformation inst_info){
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;

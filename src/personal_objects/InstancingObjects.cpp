@@ -7,7 +7,7 @@ InstancingObjects::InstancingObjects(BasicsBlock* basic_block,Camera* m_camera,M
 void InstancingObjects::Ready(){
     int amount = 100;
     int index = 0;
-    float offset = 0.5;
+    float offset = 2.3;
     for(int y = 0; y < 10; y += 1)
     {
         for(int x = 0; x < 10; x += 1)

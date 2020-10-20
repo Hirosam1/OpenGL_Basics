@@ -23,7 +23,7 @@ out VS_OUT{
 void main()
 {
     float offset = 0.5;
-    vec3 transPos = aPos + vec3(aOffset, 0.0);
+    vec3 transPos = aPos * ((100 - gl_InstanceID) / 100.0) + vec3(aOffset, 0.0);
     vs_out.aNormal = mat3(transpose(inverse(View * Model))) * normal; 
     vs_out.FragPos = vec3(View * Model * vec4(transPos,1.0));
     gl_Position = Projection * vec4(vs_out.FragPos,1.0);

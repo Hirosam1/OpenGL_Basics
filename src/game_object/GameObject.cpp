@@ -75,7 +75,6 @@ void GameObject::ReadyObject(){
       this->instancing_info.vertex_index = vertex_indice;
       this->instancing_info.element_per_vertex = elements_per_vertex;
       this->instancing_info.game_object = this;
-      //this->m_model->TestThing(instancing_info,data);
     }
 
  }

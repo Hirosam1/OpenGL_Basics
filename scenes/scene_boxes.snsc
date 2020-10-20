@@ -41,19 +41,19 @@
     > size 2
 | "Window2"
 
-+ GO 6 #Creates a box, with texture
++ GO 4 #Creates a box, with texture
     >camera main_camera
     > model "box"
     #position
     >position 3 1 1
     > size 1.5 1.0 1.0
-    > shader "Instanced"
+    > shader "basic light"
 | "box 1"
 
-+ GO 4 
++ GO 6 
     >model "box"
     >position -1 1 1
-    > shader "basic light"
+    > shader "Instanced"
 | "box 2"
 
 + GO 5
