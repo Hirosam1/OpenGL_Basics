@@ -12,6 +12,8 @@ class Projection{
         Projection(float fov, float aspect_ratio,float close = 0.1f, float far = 100.0f);
         void MakePerspective(float fov, float aspect_ratio,float close = 0.1f, float far = 100.0f);
         glm::mat4 GetProjection();
+        float close_plane;
+        float far_plane;
     private:
         glm::mat4 projection;
 };

@@ -24,7 +24,8 @@ class Camera{
         ~Camera();
         const glm::mat4 GetView();
         const glm::mat4 GetProjection();
-        void MakeProjection(float fov, float aspect_ratio = -1.0f,float close = 0.1f, float far = 100.0f);
+        void MakeProjection(float fov, float aspect_ratio = -1.0f);
+        void MakeProjection(float fov, float aspect_ratio,float close, float far);
         void LookAt(float target[3]); 
         void LookAt(glm::vec3 target);
         void ReadyCameraUniform();

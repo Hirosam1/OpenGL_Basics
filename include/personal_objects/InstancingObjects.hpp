@@ -8,7 +8,7 @@ class InstancingObjects : public GameObject{
         unsigned int amount_per_d = 0;
         InstancingObjects(BasicsBlock* bb, Camera* camera, Model* model, float initial_pos[3],Shader* m_shader);
 
-        ~InstancingObjects();
+        ~InstancingObjects() override;
         void Update() override;
         void Ready() override;
 };

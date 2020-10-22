@@ -5,7 +5,7 @@ InstancingObjects::InstancingObjects(BasicsBlock* basic_block,Camera* m_camera,M
 }
 
 void InstancingObjects::Ready(){
-    amount_per_d = 10;
+    amount_per_d = 1000;
     int index = 0;
     float offset = 2.3;
     translations = new glm::vec2[amount_per_d * amount_per_d];
@@ -24,11 +24,9 @@ void InstancingObjects::Ready(){
 }
 
 InstancingObjects::~InstancingObjects(){
-    std::cout<<"deleting instancing information\n";
     delete[] translations;
 }
 
 void InstancingObjects::Update(){
-    std::cout<<amount_per_d * amount_per_d <<"\n";
-    m_shader->SetUniform1f(&amount_str,amount_per_d * amount_per_d);
+    m_shader->SetUniform1i(&amount_str,amount_per_d * amount_per_d);
 }

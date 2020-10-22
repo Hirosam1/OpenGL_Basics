@@ -24,7 +24,7 @@ GameObject::~GameObject(){
       }
       
       this->m_shader->BufferShader(model_mat);
-      if(this->instancing_info.IsInstanced()){
+      if(this->instancing_info.IsInstanced() && basic_block->global_data.fill_type != GL_LINE){
          this->m_model->InstancedDraw(this->m_shader,this->instancing_info);
       }
       else{
@@ -41,6 +41,7 @@ GameObject::~GameObject(){
          glStencilMask(0xFF);
          glStencilFunc(GL_ALWAYS, 1, 0xFF);//Clear stencil
          glDisable(GL_STENCIL_TEST);
+         this->UseShader();
 
       }
 

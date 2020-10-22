@@ -53,7 +53,7 @@ class GameObject{
         GameObject(BasicsBlock* basic_block, Camera* m_camera,float initial_pos[3]);
         GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3], std::string vert_shader_path, std::string frag_shader_path);*/
         GameObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader);
-        ~GameObject();
+        virtual ~GameObject();
         //Creates the shader object, ready to use
         void CreateShaderObject(std::string* vertex_shader,std::string* fragment_shader);
         /*Shared attributes*/

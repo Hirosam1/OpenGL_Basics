@@ -185,15 +185,6 @@ void GameManager::RenderObjects(){
      //Render non opaque Objects
     if(this->basic_block->global_data.active_scene->scene_data.AllObjects.size() > 0){
         for(auto it = this->basic_block->global_data.active_scene->scene_data.AllObjects.begin(); it != this->basic_block->global_data.active_scene->scene_data.AllObjects.end();it++){
-            if(!use_threads){
-                try{
-                //Use this when giving that weird lag bug VVV
-                (*it)->Update();
-                }catch(std::exception &exp){
-                    std::cout<<"Error Updating game object-> " <<  (*it)->object_name <<"\nError-> " << exp.what()<<"\n" ;
-                    Debug::WriteErrorLog("Error Updating game object-> "+ (*it)->object_name + "\nError-> " + exp.what());
-                }
-            }
             if((*it)->m_shader != nullptr){
                 //Check if we are rendering wireframe mode
                 if(basic_block->global_data.fill_type != GL_LINE){
@@ -205,8 +196,17 @@ void GameManager::RenderObjects(){
                 if(!(*it)->isOpaque){
                     (*it)->BufferAndDraw();
                 }
-                glUseProgram(0);
             }
+            if(!use_threads){
+                try{
+                //Use this when giving that weird lag bug VVV
+                (*it)->Update();
+                }catch(std::exception &exp){
+                    std::cout<<"Error Updating game object-> " <<  (*it)->object_name <<"\nError-> " << exp.what()<<"\n" ;
+                    Debug::WriteErrorLog("Error Updating game object-> "+ (*it)->object_name + "\nError-> " + exp.what());
+                }
+            }
+            glUseProgram(0);
         }
     }
 

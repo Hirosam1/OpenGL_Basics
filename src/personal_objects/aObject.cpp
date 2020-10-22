@@ -73,7 +73,7 @@ void aObject::Update(){
         lastY = m_input->mouse_Ypos;
     }
 
-    m_camera->MakeProjection(glm::radians(fov));
+   m_camera->MakeProjection(glm::radians(fov));
 
 }
 
