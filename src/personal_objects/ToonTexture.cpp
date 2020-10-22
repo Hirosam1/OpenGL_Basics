@@ -1,7 +1,6 @@
 #include "personal_objects/ToonTexture.hpp"
 
 ToonTexture::ToonTexture(std::string texture_path, bool repeat,  GLenum img_type): Texture(texture_path,repeat,img_type){
-    std::cout<<"creating toon texture\n";
 }
 
 void ToonTexture::UseTexture(unsigned int texture_num, Shader* shader){

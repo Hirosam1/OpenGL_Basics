@@ -3,8 +3,12 @@
 
 class InstancingObjects : public GameObject{
     public:
-        glm::vec2 translations[100];
+        std::string amount_str = "amount";
+        glm::vec2 *translations;
+        unsigned int amount_per_d = 0;
         InstancingObjects(BasicsBlock* bb, Camera* camera, Model* model, float initial_pos[3],Shader* m_shader);
+
+        ~InstancingObjects();
         void Update() override;
         void Ready() override;
 };
