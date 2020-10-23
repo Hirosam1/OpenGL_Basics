@@ -5,7 +5,7 @@
 #include "game_object/GameObject.hpp"
 #include "graphics/Texture.hpp"
 
-#include "personal_objects/ToonTexture.hpp"
+
 
 namespace ObjectsManager{
     void InitializeAllObjects();

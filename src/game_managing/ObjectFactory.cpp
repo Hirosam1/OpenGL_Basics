@@ -5,6 +5,7 @@
 #include "personal_objects/NoBehaviorObject.hpp"
 #include "personal_objects/PulsingLight.hpp"
 #include "personal_objects/InstancingObjects.hpp"
+#include "personal_objects/ToonTexture.hpp"
 //This file should be generated procedually 
 enum GameObjectsID : unsigned int{
     aOgjectID = 1,

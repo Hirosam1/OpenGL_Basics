@@ -8,7 +8,7 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     scene_data.main_camera = m_camera;
     basic_block->global_data.frame_buffer_shader = new Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
-    if(!SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data)){
+    if(!SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data, &basic_block->global_data.active_scene->scene_data)){
         isReady = false;
         std::cout<<"FILE::SCENE::LOADER:ERROR->" <<"Could not open file \""<<scene_path<<"\" \n";
         return;
@@ -70,4 +70,26 @@ bool Scene::ChangeScene(std::string scene_path, BasicsBlock* basic_block){
     basic_block->GUI_gameObject->ReadyObject();
     lck.unlock();
     return true;
+}
+
+GameObject* Scene::AddGameObject(unsigned int GO_id, Camera* camera,Model* model,float initial_pos[3], Shader* shader, bool is_opaque ,glm::vec3 scale){
+    GameObject *gameObject = nullptr;
+    gameObject = GameObjectFactory::GetObjectFromID(GO_id,basic_block,camera,model,initial_pos,shader);
+    if(gameObject != nullptr){
+        //Apply scaling operation
+        gameObject->model_mat = glm::scale(gameObject->model_mat,scale);
+        scene_data.AllObjects.push_back(gameObject);
+        if(is_opaque){
+            gameObject->isOpaque = true;
+            scene_data.AllOpaques.push_back(gameObject);
+        }
+    }
+    return gameObject;
+}
+
+GameObject* Scene::AddGameObject(std::string GO_name, unsigned int GO_id, Camera* camera,Model* model,float initial_pos[3], Shader* shader,bool is_opaque ,glm::vec3 scale){
+    GameObject* gameObject;
+    gameObject = this->AddGameObject(GO_id,camera,model,initial_pos,shader,is_opaque,scale);
+    gameObject->object_name = GO_name;
+    return gameObject;
 }

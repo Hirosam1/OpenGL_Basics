@@ -28,8 +28,10 @@ void ClearGoELemetns();
 //Elements to be used on the game Object creation
 GameObjectElements goElements;
 LightElements light_elemtents;
+SceneData* old_scene_d;
 int line_number;
-bool SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data){
+bool SceneLoader::LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data, SceneData* old_scene_data){
+    old_scene_d = old_scene_data;
     line_number = 0;
     scene_data->scene_name = scene_path.substr(scene_path.find_last_of("/")+1,scene_path.length());
     int current_state = SceneReaderState::waiting;
@@ -394,7 +396,13 @@ bool MakeModel(BasicsBlock* basic_block, SceneData* scene_data, std::string para
             //If it is give it to goElements
             goElements.model = scene_data->loaded_models[matches.str(1)];
             return true;
-        }else{
+        //Checks if the last scene has the desired model
+        }else if(old_scene_d != nullptr && old_scene_d->loaded_models.count(matches.str(1))){
+            goElements.model = old_scene_d->loaded_models[matches.str(1)];
+            scene_data->loaded_models[matches.str(1)] = goElements.model;
+            old_scene_d->loaded_models.erase(matches.str(1));
+            return true;
+        } else{
             if(basic_block->global_data.models_path.count(matches.str(1))){
                 Model* loaded_model = new Model(basic_block->global_data.models_path[matches.str(1)]);
                 scene_data->loaded_models[matches.str(1)] = loaded_model;
@@ -420,9 +428,17 @@ bool MakeShader(BasicsBlock* basic_block, SceneData* scene_data, std::string par
     std::smatch matches;
     std::regex_search(parameters,matches,reg);
     Shader* output = nullptr;
+    //Checks if shader is alreadyloaded
     if(scene_data->loaded_shaders.count(matches.str(1))){
         goElements.m_shader = scene_data->loaded_shaders[matches.str(1)];
-    }else if(basic_block->global_data.shaders_path.count(matches.str(1))){
+    }
+    //Check if last scene has the desired shader
+    else if(old_scene_d != nullptr && old_scene_d->loaded_shaders.count(matches.str(1))){
+            goElements.m_shader = old_scene_d->loaded_shaders[matches.str(1)];
+            scene_data->loaded_shaders[matches.str(1)] = goElements.m_shader;
+            old_scene_d->loaded_shaders.erase(matches.str(1));
+            return true;
+    } else if(basic_block->global_data.shaders_path.count(matches.str(1))){
         std::string vertex_path = basic_block->global_data.shaders_path[matches.str(1)][0];
         std::cout<<"Loading shader: " << matches.str(1) << "\n";
         if(basic_block->global_data.shaders_path[matches.str(1)].size() > 2){

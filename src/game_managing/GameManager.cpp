@@ -60,6 +60,7 @@ void GameManager::SetUpObjects(){
     
     std::cout<<"creating first scene...\n";
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
+    basic_block->global_data.active_scene = nullptr;
     basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
 
     //UI needs to be last?

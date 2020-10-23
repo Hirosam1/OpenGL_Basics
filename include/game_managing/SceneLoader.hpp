@@ -16,7 +16,7 @@
 
 
 namespace SceneLoader {
-    bool LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data);
+    bool LoadSceneFromFile(std::string scene_path, BasicsBlock* basic_block,SceneData* scene_data, SceneData* old_scene_data);
 };
 
 
