@@ -5,7 +5,7 @@ InstancingObjects::InstancingObjects(BasicsBlock* basic_block,Camera* m_camera,M
 }
 
 void InstancingObjects::Ready(){
-    amount_per_d = 1000;
+    amount_per_d = 50;
     int index = 0;
     float offset = 2.3;
     translations = new glm::vec2[amount_per_d * amount_per_d];
