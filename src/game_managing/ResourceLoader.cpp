@@ -110,6 +110,15 @@ void ResourceLoader::LoadResourceFromFile(std::string res_path,BasicsBlock* basi
                     }
                 }
             } 
+        }else if(line.find("Initial_Scene") != std::string::npos){
+            e = line.find(":");
+            if (e != std::string::npos){
+                parameters = line.substr(e+1,line.length());
+                int check;
+                //Sets the initial scene
+                matches = find_match(parameters,reg,&check);
+                basic_block->global_data.initial_scene = check ? matches.str(1) : "NULL";
+            }
         }
 
     }

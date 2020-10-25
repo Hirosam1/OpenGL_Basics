@@ -61,7 +61,13 @@ void GameManager::SetUpObjects(){
     std::cout<<"creating first scene...\n";
     ResourceLoader::LoadResourceFromFile("scenes/resource.snres", basic_block);
     basic_block->global_data.active_scene = nullptr;
-    basic_block->global_data.active_scene = new Scene("scenes/scene_boxes.snsc",basic_block);
+    if(basic_block->global_data.initial_scene != "NULL"){
+        basic_block->global_data.active_scene = new Scene(basic_block->global_data.initial_scene,basic_block);
+    }else{
+        std::cout<<"GAME::INITIALIZING::ERROR -> No initial scene seleceted!!\n"; 
+        Debug::WriteErrorLog("GAME::INITIALIZING::ERROR -> No initial scene seleceted!!");
+        exit(0);
+    }
 
     //UI needs to be last?
     basic_block->GUI_gameObject = new bObject(basic_block,basic_block->global_data.active_scene->scene_data.main_camera,nullptr,new float[3]{0,0,0},nullptr);
@@ -111,8 +117,8 @@ void GameManager::EngnieStart(){
     //Creates a frame buffer
     FrameBuffer frame_buffer = FrameBuffer(main_window->GetWidth(),main_window->GetHeight());
     plane.meshes[0].textures.push_back(frame_buffer.texture_color);
-    
-    std::cout<<"Ready to start!\n";
+
+    std::cout<<"Engine start\n";
     //Execute Ready for all objects
     for(auto it = this->basic_block->global_data.active_scene->scene_data.AllObjects.begin(); it != this->basic_block->global_data.active_scene->scene_data.AllObjects.end();it++){
         (*it)->ReadyObject();

@@ -21,6 +21,8 @@ m_window(window),m_input(input){
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     glBindBufferBase(GL_UNIFORM_BUFFER,1,uniform_buffer_light);
 
+    global_data.initial_scene = "NULL";
+
     
 }
 

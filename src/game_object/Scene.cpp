@@ -11,6 +11,7 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
     if(!SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data, &basic_block->global_data.active_scene->scene_data)){
         isReady = false;
         std::cout<<"FILE::SCENE::LOADER:ERROR->" <<"Could not open file \""<<scene_path<<"\" \n";
+        Debug::WriteErrorLog("FILE::SCENE::LOADER:ERROR-> Could not open file \"" + scene_path);
         return;
     }
     int flag = 0;
