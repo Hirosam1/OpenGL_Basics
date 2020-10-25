@@ -408,6 +408,7 @@ Texture* MakeTexture(BasicsBlock* basic_block, SceneData* scene_data, std::strin
         //Check if texture is in old scene
         }else if(old_scene_d != nullptr && old_scene_d->loaded_textures.count(matches.str(1))){
             out_texture = old_scene_d->loaded_textures[matches.str(1)];
+            scene_data->loaded_textures[matches.str(1)] = out_texture;
             //Remove texture from old_scene to avoid deletion
             old_scene_d->loaded_textures.erase(matches.str(1));
         }else{
