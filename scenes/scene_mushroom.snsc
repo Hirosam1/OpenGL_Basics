@@ -7,6 +7,15 @@
     >shader "lamp shader"
 | "point light"
 
++ light point # Creates a point light
+    > camera main_camera
+    > model "box"
+    > size 0.25
+    > position 1 0.7 0.309
+    > color 1 0.9 0.1
+    >shader "lamp shader"
+| "point light"
+
 + light directional #creates a directional light
     > camera main_camera
     > position -0.5 -1 -0.1
@@ -27,7 +36,7 @@
 + CubeMap
     > model "TexBox"
     > shader "sky box"
-| "cube map1"
+| "cube map2"
 
 + GO 1 #Camera movment #Program responsible with the movment of the camera
     >position 0 0 0
