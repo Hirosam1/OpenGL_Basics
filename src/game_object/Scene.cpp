@@ -8,6 +8,7 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
     m_camera->LookAt(m_camera->camera_pos+ m_camera->camera_front);
     scene_data.main_camera = m_camera;
     basic_block->global_data.frame_buffer_shader = new Shader("shaders/vertex_shaders/Basic_FrameBuffer.vert","shaders/fragment_shaders/Basic_FrameBuffer.frag");
+    std::cout<<"============================================\n\t Loading scene: "<<  scene_path.substr(scene_path.find_last_of("/"), scene_path.length()) <<"\n";
     if(!SceneLoader::LoadSceneFromFile(scene_path,basic_block,&scene_data, &basic_block->global_data.active_scene->scene_data)){
         isReady = false;
         std::cout<<"FILE::SCENE::LOADER:ERROR->" <<"Could not open file \""<<scene_path<<"\" \n";
@@ -16,8 +17,7 @@ Scene::Scene(std::string scene_path, BasicsBlock* basic_block): scene_path(scene
     }
     int flag = 0;
     m_camera->ReadyCameraUniform();
-    std::cout<<"Loading scene-> "<< scene_path.substr(scene_path.find_last_of("/"), scene_path.length()) <<"\n";
-    
+    std::cout<<"============================================\n\t Finished Loading Scene\n";
 }
 
 

@@ -1,10 +1,10 @@
 #include "personal_objects/bObject.hpp"
-#include <sys/time.h> 
 #include <type_traits>
 #include <typeinfo>
 
 bObject::bObject(BasicsBlock* basic_block,Camera* m_camera,Model* model,float initial_pos[3],Shader* m_shader):GameObject
 (basic_block,m_camera,model,initial_pos,m_shader){
+    scene_path = basic_block->global_data.initial_scene;
     scene_path.resize(150);
     m_deque_test = new std::deque<char*>();
     didExit = false;

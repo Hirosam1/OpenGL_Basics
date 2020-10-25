@@ -23,7 +23,7 @@ class bObject : public GameObject{
     bool enterReleased = false;
     GLenum show_cursor = GLFW_CURSOR_DISABLED;
     bool show_another_window = false;
-    std::string scene_path = "scenes/scene_boxes.snsc";
+    std::string scene_path;
     float timeElpased = 0;
     float FPS;
     void Update() override;
